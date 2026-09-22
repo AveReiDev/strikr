@@ -384,9 +384,24 @@ async function registerServiceWorker() {
     }
 
     await primeCacheFromPage();
+    readSwVersion();
   } catch (err) {
     app.swStatus = `error: ${err.message}`;
   }
+}
+
+/** The SW already answers 'cache-status'; its version is the build number. */
+function readSwVersion() {
+  const sw = navigator.serviceWorker.controller;
+  if (!sw) return;
+  const handler = (e) => {
+    if (e.data?.type !== 'cache-status') return;
+    navigator.serviceWorker.removeEventListener('message', handler);
+    app.swVersion = e.data.version;
+    app.screens.settings?.refresh();
+  };
+  navigator.serviceWorker.addEventListener('message', handler);
+  sw.postMessage('cache-status');
 }
 
 async function primeCacheFromPage() {

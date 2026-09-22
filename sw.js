@@ -24,7 +24,7 @@
  *                       signal; updates land on the following launch.
  */
 
-const CACHE_VERSION = 'strikr-v1.3.3';
+const CACHE_VERSION = 'strikr-v1.4.0';
 
 /** Everything needed to run with no network. */
 const SHELL = [
@@ -47,6 +47,7 @@ const SHELL = [
   './src/store/settings.js',
   './src/store/library.js',
   './src/store/history.js',
+  './src/store/backup.js',
   './src/ui/router.js',
   './src/ui/components/picker.js',
   './src/ui/screens/home.js',
@@ -160,7 +161,9 @@ self.addEventListener('fetch', (event) => {
             setTimeout(() => reject(new Error('timeout')), 2000)
           ),
         ]);
-        cache.put(request, fresh.clone());
+        // Never let an error page (a 404 from a misconfigured server, say)
+        // replace the good cached shell.
+        if (fresh.ok) cache.put(request, fresh.clone());
         return fresh;
       } catch (_) {
         return cached ?? Response.error();

@@ -7,8 +7,7 @@
 
 import { CHOICES, GOAL_INTENSITIES, GOAL_ROUNDS, GOAL_ROUND_LENGTHS } from '../../store/settings.js';
 import { openPicker } from '../components/picker.js';
-
-export const APP_VERSION = '1.0.0';
+import { createBackup, backupFilename, parseBackup, restoreBackup } from '../../store/backup.js';
 
 export function createSettingsScreen({ root, settings, speech, onReset, onThemeChange, app: appRef }) {
   root.innerHTML = `
@@ -112,7 +111,7 @@ export function createSettingsScreen({ root, settings, speech, onReset, onThemeC
     <div class="card">
       <div class="row">
         <span class="row-title">About STRIKR</span>
-        <span class="row-value muted">v${APP_VERSION}</span>
+        <span class="row-value muted" id="app-version">—</span>
       </div>
       <div class="row">
         <span>
@@ -126,6 +125,25 @@ export function createSettingsScreen({ root, settings, speech, onReset, onThemeC
           <span class="row-sub" id="voice-name">—</span>
         </span>
       </div>
+    </div>
+
+    <div class="section-label">Your data</div>
+    <div class="card">
+      <button class="row" id="export-backup">
+        <span>
+          <span class="row-title">Export backup</span>
+          <span class="row-sub">Save settings, your combos and all history to a file</span>
+        </span>
+        <span class="row-value"><span class="chev">&rsaquo;</span></span>
+      </button>
+      <button class="row" id="import-backup">
+        <span>
+          <span class="row-title">Import backup</span>
+          <span class="row-sub">Merge a backup file into this device</span>
+        </span>
+        <span class="row-value"><span class="chev">&rsaquo;</span></span>
+      </button>
+      <input type="file" id="import-file" accept="application/json,.json" hidden>
     </div>
 
     <div class="section-label danger-label">Danger zone</div>
@@ -175,6 +193,11 @@ export function createSettingsScreen({ root, settings, speech, onReset, onThemeC
     root.querySelector('#dark-mode').setAttribute('aria-pressed', String(settings.get('darkMode')));
     root.querySelector('#voice-name').textContent = speech?.voiceName ?? '—';
     renderGoal();
+
+    // The service worker's cache version is the real build number — it is the
+    // one thing that must change on every release, so it cannot drift.
+    root.querySelector('#app-version').textContent =
+      appRef?.swVersion ? appRef.swVersion.replace(/^strikr-/, '') : '—';
 
     const offlineEl = root.querySelector('#offline-status');
     if (appRef) {
@@ -269,6 +292,61 @@ export function createSettingsScreen({ root, settings, speech, onReset, onThemeC
     settings.set('darkMode', !settings.get('darkMode'));
     onThemeChange?.(settings.get('darkMode'));
     render();
+  });
+
+  /* ---- backup ------------------------------------------------------- */
+
+  root.querySelector('#export-backup').addEventListener('click', async () => {
+    const text = JSON.stringify(createBackup(appRef.storage), null, 2);
+    const name = backupFilename();
+    const file = new File([text], name, { type: 'application/json' });
+    // On iOS the share sheet is the dependable route to "Save to Files";
+    // a download link inside a home-screen app can go nowhere.
+    if (navigator.canShare?.({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file], title: name });
+        return;
+      } catch (err) {
+        if (err?.name === 'AbortError') return;   // the user closed the sheet
+      }
+    }
+    const url = URL.createObjectURL(file);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+
+  const importInput = root.querySelector('#import-file');
+  root.querySelector('#import-backup').addEventListener('click', () => importInput.click());
+  importInput.addEventListener('change', async () => {
+    const file = importInput.files?.[0];
+    importInput.value = '';
+    if (!file) return;
+    const parsed = parseBackup(await file.text());
+    if (!parsed.ok) { alert(parsed.error); return; }
+
+    const when = parsed.backup.exportedAt
+      ? new Date(parsed.backup.exportedAt).toLocaleString()
+      : 'an unknown date';
+    const ok = confirm(
+      `Import the backup from ${when}?\n\n` +
+      'History and custom combos are merged with what is on this device — ' +
+      'nothing here is lost. Settings are replaced by the backup\'s.'
+    );
+    if (!ok) return;
+
+    const r = restoreBackup(appRef.storage, parsed.backup);
+    alert(
+      `Imported ${r.historyAdded} session${r.historyAdded === 1 ? '' : 's'} and ` +
+      `${r.customsAdded} custom combo${r.customsAdded === 1 ? '' : 's'}. The app will now reload.`
+    );
+    // The stores re-read and re-sanitise storage on load, so reloading is
+    // both the simplest refresh and the validation step.
+    location.reload();
   });
 
   root.querySelector('#reset-all').addEventListener('click', () => {

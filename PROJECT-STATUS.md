@@ -1,6 +1,6 @@
 # STRIKR — project summary
 
-Last updated 19 September 2026.
+Last updated 22 September 2026.
 
 ---
 
@@ -17,6 +17,7 @@ Last updated 19 September 2026.
 | 6A — Per-combo tracking | **Done**, tested on device |
 | 6B — Progressive training | **Done**, tested on device |
 | 6C — Constraint rounds | **Done**, awaiting device test |
+| Audit fixes (v1.4.0) | **Done**, awaiting device test |
 
 ### Installing it on your phone
 
@@ -34,7 +35,7 @@ tell that `app.css` is new. **After editing any file in the app, bump
 `CACHE_VERSION` at the top of `sw.js`.** Forget, and an installed phone may keep
 serving the old version. This is written at the top of `sw.js` too.
 
-**158 tests pass.** Run them with:
+**171 tests pass.** Run them with `npm test`, or:
 
 ```bash
 cd /Users/averylaptop/Desktop/Claude/strikr && node --test 'test/*.test.js'
@@ -262,7 +263,42 @@ on save.
 `sw.js` bumped to v1.3.0. Browser smoke-tested: focus picker renders per sport,
 jab drill workout calls correct single strikes, console clean.
 
+## Audit and fixes, 22 September 2026 (v1.3.1 → v1.4.0)
+
+The project is now a **git repository** (`git log` is the change history from
+here on). A pre-commit hook in `.githooks/` refuses a commit that changes
+shipped files without bumping `CACHE_VERSION`, or that adds a `src/` file
+missing from the SW `SHELL` list, and runs the tests. `CLAUDE.md` holds the
+rules future sessions need (serve with `serve.py`, never `http.server`, for
+the phone).
+
+- **Repetition fix (morning session, v1.3.1).** `noRepeatWindow` 3 → 8.
+- **Selector draws from non-recent combos only.** The old draw-then-redraw
+  loop gave up about one call in ten on a 10-combo pool and repeated anyway,
+  and skewed the tier mix. Recent combos are now excluded before the draw;
+  the window shrinks to pool size − 1. Tier tests back to ±3%.
+- **Home shows "N combos in rotation".** Beginner is only 10 per sport and a
+  focus can cut it to 1 — likely why the gym session felt repetitive.
+- **Progressive training no longer stalls.** Best day is ranked by stage
+  (intensity, then length, then rounds), not a blended score, which made
+  the 70% reset look like a regression and repeated "7 hard" for 14 days.
+- **Load always applies.** Rounds per workout is now 1–15; 7, 9, 11, 13, 14
+  were previously rejected silently.
+- **Repeat session** uses the planned rounds (new `roundsPlanned` field) and
+  restores the focus; history records now store `focus` and `focusWeak`.
+- **Backup.** Settings › Your data › Export / Import. History and custom
+  combos merge on import; settings are replaced. Do an export before the
+  serving address changes — localStorage is per origin.
+- About shows the SW cache version instead of a hard-coded 1.0.0; the SW no
+  longer caches an error response over the good `index.html`.
+
 ## Still open
+
+- **Stable address.** The dev cert expired 4 Sep and is tied to an old IP;
+  every IP change is a new origin with empty storage. Options: GitHub Pages /
+  Cloudflare Pages (real HTTPS, no Mac needed), or serving on
+  `Averys-MacBook-Air.local`. Export a backup first either way.
+- `gen.py` predates tags and singles — do not re-run it.
 
 - **6C needs a device test.**
 - **Voice speed at its extremes.** 0% may be too slow to be useful and 100% too
@@ -289,14 +325,14 @@ src/
     context.js          shared AudioContext: keep-alive tone and bell
     wakelock.js         screen stays on, re-acquires on return to foreground
   store/                localStorage, schema-versioned, every read defensive
-    storage.js  settings.js  library.js  history.js
+    storage.js  settings.js  library.js  history.js  backup.js
   ui/
     router.js  components/picker.js  screens/*.js
   main.js             wiring; the only file that owns a clock
 styles/
   tokens.css          every colour and size; light mode is a token override
   app.css             components only, no raw colours
-test/                 node --test, 158 tests
+test/                 node --test, 171 tests
 ```
 
 Three storage keys, independently readable so one corrupt value cannot brick the

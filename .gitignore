@@ -6,3 +6,6 @@ dev-key.pem
 .DS_Store
 node_modules/
 .claude/settings.local.json
+
+# Screenshots of a third-party app used as design reference — kept locally, not published
+reference/

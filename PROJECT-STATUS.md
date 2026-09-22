@@ -21,12 +21,19 @@ Last updated 22 September 2026.
 
 ### Installing it on your phone
 
-1. `python3 serve.py` on the Mac.
-2. Open the printed `https://…/index.html` address in **Safari** on the phone,
-   tapping past the certificate warning.
-3. Share → **Add to Home Screen**.
-4. Open it from the icon. It now runs offline — turn the Mac's server off and it
-   still works.
+The app is hosted on GitHub Pages at **https://avereidev.github.io/strikr/**
+(repo: github.com/AveReiDev/strikr). A real certificate, no Mac needed.
+
+1. Open that address in **Safari** on the phone.
+2. Share → **Add to Home Screen**.
+3. Open it from the icon. It runs offline from then on.
+
+**Releasing an update:** bump `CACHE_VERSION`, commit, `git push`. Pages
+redeploys in about a minute; the phone picks it up the next time the app is
+opened with signal (and fully on the launch after that).
+
+`python3 serve.py` still works for testing on the phone before pushing, but it
+is a different origin from the Pages app, so it has its own separate data.
 
 ### The one manual step, forever
 
@@ -38,13 +45,13 @@ serving the old version. This is written at the top of `sw.js` too.
 **171 tests pass.** Run them with `npm test`, or:
 
 ```bash
-cd /Users/averylaptop/Desktop/Claude/strikr && node --test 'test/*.test.js'
+node --test 'test/*.test.js'
 ```
 
 Serve the app (https is needed for wake lock on the phone):
 
 ```bash
-cd /Users/averylaptop/Desktop/Claude/strikr && python3 serve.py
+python3 serve.py
 ```
 
 If that reports the port is in use, a server is already running in another
@@ -297,7 +304,7 @@ the phone).
 - **Stable address.** The dev cert expired 4 Sep and is tied to an old IP;
   every IP change is a new origin with empty storage. Options: GitHub Pages /
   Cloudflare Pages (real HTTPS, no Mac needed), or serving on
-  `Averys-MacBook-Air.local`. Export a backup first either way.
+  the Mac's `.local` name. Export a backup first either way.
 - `gen.py` predates tags and singles — do not re-run it.
 
 - **6C needs a device test.**

@@ -4,10 +4,18 @@ Combat-sports combo-caller PWA. Plain static files, **no build step, no
 dependencies**. Read `PROJECT-STATUS.md` for history and design decisions before
 changing behaviour.
 
+## Hosting
+
+Live at https://avereidev.github.io/strikr/ (GitHub Pages, `main` branch, repo
+root). **`git push` to `main` publishes to the phone** — only push work that has
+passed tests and a browser smoke test, and confirm with the user first. The repo
+is public: never commit personal data, keys, or `reference/` (third-party
+screenshots, gitignored). Commits use the GitHub noreply email.
+
 ## Commands
 
 - Tests: `npm test` (runs `node --test 'test/*.test.js'`; it is node:test, not vitest/jest)
-- Serve to the phone: `python3 serve.py` → https on 8443. **Never tell the user to
+- Test on the phone before pushing: `python3 serve.py` → https on 8443. **Never tell the user to
   use `python3 -m http.server` for the phone** — plain http on a LAN IP has no
   service worker and no wake lock, and is a different origin from the installed
   app, so updates never reach it.

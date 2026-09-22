@@ -1,0 +1,97 @@
+/**
+ * Every colour, type size and spacing value in the app lives here.
+ * Nothing below this file should contain a raw colour or a pixel font size.
+ *
+ * Light mode is an override of these same names, not a second stylesheet.
+ */
+
+:root {
+  color-scheme: dark;
+
+  /* ---- surfaces ---------------------------------------------------- */
+  --bg:            #0d0d0d;   /* page, near-black */
+  --surface:       #161616;   /* cards, a shade lighter */
+  --surface-2:     #1e1e1e;   /* raised rows inside a card */
+  --line:          #2b2b2b;   /* hairline borders */
+  --line-strong:   #3a3a3a;
+
+  /* ---- text -------------------------------------------------------- */
+  --fg:            #f4f4f4;
+  --fg-dim:        #8c8c8c;   /* subtitles, section labels */
+  --fg-mute:       #666666;   /* inactive tabs */
+
+  /* ---- accent: one saturated red, nothing else ---------------------- */
+  --accent:        #ff2323;
+  --accent-fg:     #ffffff;
+
+  /* ---- selection inverts to white on black -------------------------- */
+  --invert-bg:     #efefef;
+  --invert-fg:     #0a0a0a;
+
+  /* ---- type -------------------------------------------------------- */
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --size-display:  clamp(2rem, 9vw, 2.5rem);   /* STRIKR, SETTINGS */
+  --size-huge:     clamp(2.5rem, 13vw, 4rem);  /* workout combo */
+  --size-clock:    clamp(3rem, 17vw, 5rem);    /* workout timer */
+  --size-lg:       1.1875rem;                  /* selection bar title */
+  --size-md:       1rem;
+  --size-sm:       0.8125rem;                  /* subtitles */
+  --size-xs:       0.6875rem;                  /* section labels, tabs */
+
+  --weight-black:  800;
+  --weight-bold:   700;
+  --weight-normal: 500;
+
+  --track-wide:    0.16em;    /* section labels */
+  --track-mid:     0.08em;
+  --track-tight:   -0.01em;   /* big display type */
+
+  --leading-tight: 1.05;
+  --leading-body:  1.4;
+
+  /* ---- spacing ----------------------------------------------------- */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+
+  --gutter: var(--sp-4);
+
+  /* ---- shape ------------------------------------------------------- */
+  /* The reference is uncompromisingly square. No radii anywhere. */
+  --radius: 0px;
+  --border: 1px solid var(--line);
+  --tap-min: 44px;            /* minimum touch target */
+
+  --tabbar-h: 56px;
+}
+
+/* Light mode is a token override. Same names, different values. */
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --bg:          #f7f7f7;
+  --surface:     #ffffff;
+  --surface-2:   #f0f0f0;
+  --line:        #dcdcdc;
+  --line-strong: #c4c4c4;
+
+  --fg:          #0d0d0d;
+  --fg-dim:      #6b6b6b;
+  --fg-mute:     #9a9a9a;
+
+  --accent:      #e00d0d;
+  --accent-fg:   #ffffff;
+
+  --invert-bg:   #141414;
+  --invert-fg:   #fafafa;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --motion: none; }
+}

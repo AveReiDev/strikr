@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0d0d0d">
+<meta name="apple-mobile-web-app-title" content="STRIKR">
+<meta name="format-detection" content="telephone=no">
+<title>STRIKR</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icons/icon-180.png">
+<link rel="icon" href="./icons/icon-192.png" type="image/png">
+<link rel="stylesheet" href="./styles/tokens.css">
+<link rel="stylesheet" href="./styles/app.css">
+</head>
+<body data-mode="browse">
+
+<main id="app">
+  <section class="screen" id="screen-home"></section>
+  <section class="screen" id="screen-workout"></section>
+  <section class="screen" id="screen-settings"></section>
+
+  <section class="screen" id="screen-combos"></section>
+
+  <section class="screen" id="screen-history"></section>
+</main>
+
+<nav id="tabbar">
+  <button class="tab" data-tab="home">
+    <svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z"/><path d="M9 21v-7h6v7"/></svg>
+    Home
+  </button>
+  <button class="tab" data-tab="combos">
+    <svg viewBox="0 0 24 24"><path d="M3 4h7v16H3z"/><path d="M14 4h7v16h-7z"/></svg>
+    Combos
+  </button>
+  <button class="tab" data-tab="history">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+    History
+  </button>
+  <button class="tab" data-tab="settings">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/></svg>
+    Settings
+  </button>
+</nav>
+
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>

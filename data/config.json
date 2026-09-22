@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+
+  "_comment_intensity": "Gap = time from END of the spoken callout to the START of the next one. This is EXECUTION time, not rest. Formula: baseGapMs + (perActionMs * combo.actions).",
+
+  "_comment_intensity_base": "baseGapMs raised by 300 after Phase 0: iOS was silently adding ~317ms of audio-session startup to every gap, so the timing that felt right on the bag was really base+300. Holding the audio session warm removed that, so it is added back explicitly. See PHASE0-REPORT.md section 5.",
+
+  "_comment_intensity_perAction": "perActionMs is deliberately the SAME at every intensity. It represents the time to physically throw one strike, which does not change because the user picked Hard. It was previously 700/600/500, which compressed execution time on harder settings — the shortfall multiplied by combo length and made 7-action combos impossible to complete on Hard. Intensity is now expressed purely through baseGapMs, i.e. how much recovery you get on top of the execution. If a whole intensity feels wrong, move its baseGapMs. Only move perActionMs if LONG combos feel wrong while SHORT ones feel right.",
+
+  "intensity": {
+    "light":  { "label": "LIGHT",  "baseGapMs": 2800, "perActionMs": 700 },
+    "medium": { "label": "MEDIUM", "baseGapMs": 1600, "perActionMs": 700 },
+    "hard":   { "label": "HARD",   "baseGapMs": 400,  "perActionMs": 700 },
+    "custom": { "label": "CUSTOM", "baseGapMs": 1600, "perActionMs": 700 }
+  },
+
+  "_comment_frequency": "Relative selection weight within a tier. NOT an absolute calls-per-minute rate.",
+  "frequencyWeights": { "occasional": 1, "common": 2, "constant": 3 },
+
+  "_comment_tierWeights": "Probability of drawing from each tier, relative to the tier the user selected. Renormalised over whichever tiers actually exist for the selection.",
+  "tierWeights": { "selected": 50, "oneBelow": 30, "twoBelow": 20 },
+
+  "_comment_noRepeat": "A combo id drawn within the last N calls is rejected and redrawn, up to maxRedraws attempts, then accepted anyway (guards against tiny pools).",
+  "noRepeatWindow": 8,
+  "maxRedraws": 10,
+
+  "_comment_lookahead": "Do not begin a new callout if the estimated time to speak it plus its gap would overrun the remaining round time by more than this. Prevents a combo being cut off by the bell.",
+  "roundEndLookaheadMs": 500,
+
+  "defaults": {
+    "sport": "muaythai",
+    "tier": "beginner",
+    "intensity": "medium",
+    "roundLengthMin": 2,
+    "roundsPerWorkout": 3,
+    "restBetweenRoundsSec": 30,
+    "countdownSec": 5,
+    "voiceGender": "male",
+    "voiceSpeedPct": 75,
+    "darkMode": true
+  },
+
+  "_comment_voiceSpeed": "voiceSpeedPct 0-100 maps linearly onto SpeechSynthesisUtterance.rate across this range.",
+  "voiceRateRange": { "min": 0.6, "max": 1.6 },
+
+  "_comment_speechEstimate": "How long a callout will take to speak, used ONLY by the round-end lookahead. estimatedMs = (fixedMs + msPerChar * characters) / rate. Fitted to measured iOS Safari speech in Phase 0 (predicted 1019ms vs 1022ms measured; all five test combos within ~5%). Refit if the voice or default speed changes substantially.",
+  "speechEstimate": { "fixedMs": 430, "msPerChar": 45 },
+
+  "_comment_voiceCandidates": "Preferred voice names per gender, in order. Matched case-insensitively as substrings against available en-* voices. Falls back to the first en voice, then the system default. Availability varies by device and iOS version, so never hard-code a name in logic.",
+  "voiceCandidates": {
+    "male":   ["Daniel", "Aaron", "Alex", "Arthur", "Google UK English Male", "Fred"],
+    "female": ["Samantha", "Karen", "Martha", "Moira", "Google UK English Female"]
+  },
+
+  "_comment_speechVolume": "Volume of spoken combo callouts, 0.0 to 1.0. Lowered from 1.0 so background music stays audible under the voice — iOS ducks other audio during speech and there is no web API to prevent it, but a quieter voice shifts the balance.",
+  "speechVolume": 0.55,
+
+  "_comment_audio": "Phase 0 finding: iOS tears down the system audio session ~2s after speech ends, costing ~317ms to restart (and ~631ms if a request lands exactly on the boundary). An inaudible tone held open for the workout keeps start latency at ~15ms. Frequency and gain are below audibility but must be non-zero.",
+  "audio": {
+    "keepAliveHz": 40,
+    "keepAliveGain": 0.0001,
+    "bellHz": 880,
+    "bellGain": 0.4,
+    "bellDecaySec": 0.9
+  },
+
+  "_comment_pronunciation": "Case-insensitive whole-word substitutions applied to the SPEECH string only, never the display string. Seeded with likely offenders; extend as Phase 0 and real use surface more.",
+  "pronunciation": {
+    "teep": "teep",
+    "up-elbow": "up elbow",
+    "step-up": "step up"
+  }
+}

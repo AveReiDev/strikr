@@ -1,0 +1,37 @@
+#!/bin/sh
+# Guards the two manual steps a no-build PWA depends on.
+#
+#   1. Any change to a file the app ships must come with a CACHE_VERSION bump
+#      in sw.js, or installed phones keep serving (or mixing) old files.
+#   2. Every file under src/ must be in the service worker's SHELL list, or it
+#      is missing offline.
+#
+# Enable once per clone:  git config core.hooksPath .githooks
+# Skip in an emergency:   git commit --no-verify
+
+fail=0
+
+# The very first commit has nothing to compare against.
+if git rev-parse --verify -q HEAD >/dev/null; then
+  shipped=$(git diff --cached --name-only --diff-filter=ACMRD -- \
+    index.html manifest.webmanifest sw.js src styles data icons)
+  if [ -n "$shipped" ] && ! git diff --cached -U0 -- sw.js | grep -q '^+const CACHE_VERSION'; then
+    echo "pre-commit: app files changed but CACHE_VERSION in sw.js was not bumped:"
+    echo "$shipped" | sed 's/^/  /'
+    fail=1
+  fi
+fi
+
+for f in $(git ls-files --cached -- 'src/*.js' 'src/**/*.js'); do
+  if ! grep -q "'./$f'" sw.js; then
+    echo "pre-commit: $f is not in the SHELL list in sw.js (it would be missing offline)"
+    fail=1
+  fi
+done
+
+if [ "$fail" -ne 0 ]; then exit 1; fi
+
+node --test 'test/*.test.js' >/dev/null 2>&1 || {
+  echo "pre-commit: tests failed — run: npm test"
+  exit 1
+}

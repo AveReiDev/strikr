@@ -1,0 +1,766 @@
+/* Components. Colours and sizes come from tokens.css only. */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font);
+  font-size: var(--size-md);
+  line-height: var(--leading-body);
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  /* Stops the whole page rubber-banding when a screen is scrolled to its end,
+     which is what makes an installed app feel like a web page. */
+  overscroll-behavior-y: contain;
+}
+
+/* Controls should not offer text selection, the magnifier, or the iOS
+   press-and-hold callout menu — none of them mean anything here. */
+button, .tab, .bar, .chip, .row, .tile, .round-chip {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+
+/* Text inputs must stay at 16px or iOS zooms the page in on focus and never
+   quite zooms back out. */
+input[type="search"], input[type="text"] { font-size: max(16px, var(--size-md)); }
+
+/* ---- app shell ------------------------------------------------------ */
+
+#app {
+  min-height: 100dvh;
+  padding: 0 var(--gutter);
+  padding-top: env(safe-area-inset-top);
+  /* Clear the tab bar, plus the docked action bar on screens that have one. */
+  padding-bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom) + var(--sp-6));
+}
+#app:has(#screen-home.active) {
+  padding-bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom) + 60px + var(--sp-8));
+}
+
+body[data-mode="workout"] #app { padding-bottom: var(--sp-6); }
+body[data-mode="workout"] #tabbar { display: none; }
+
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* ---- headings ------------------------------------------------------- */
+
+.page-title {
+  font-size: var(--size-display);
+  font-weight: var(--weight-black);
+  letter-spacing: var(--track-tight);
+  line-height: var(--leading-tight);
+  text-transform: uppercase;
+  margin: var(--sp-6) 0 var(--sp-5);
+}
+/* The dot sits tight against the wordmark, as in the reference. */
+.page-title .dot { color: var(--accent); }
+
+.section-label {
+  font-size: var(--size-xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--track-wide);
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  margin: var(--sp-6) 0 var(--sp-2);
+}
+
+/* ---- selection bars: full width, selected inverts ------------------- */
+
+.bars { display: flex; flex-direction: column; gap: var(--sp-2); }
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  width: 100%;
+  min-height: var(--tap-min);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--surface);
+  border: var(--border);
+  text-align: left;
+}
+.bar-text { display: block; }
+.bar-title {
+  display: block;              /* title and subtitle stack, never run together */
+  font-size: var(--size-lg);
+  font-weight: var(--weight-black);
+  letter-spacing: var(--track-mid);
+  text-transform: uppercase;
+  line-height: var(--leading-tight);
+}
+.bar-sub {
+  display: block;
+  font-size: var(--size-sm);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--track-mid);
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  margin-top: 3px;
+}
+.bar[aria-pressed="true"] {
+  background: var(--invert-bg);
+  color: var(--invert-fg);
+  border-color: var(--invert-bg);
+}
+.bar[aria-pressed="true"] .bar-sub { color: color-mix(in srgb, var(--invert-fg) 55%, transparent); }
+.bar[aria-pressed="true"] .marker { background: var(--accent); }
+
+.marker { width: 8px; height: 8px; border-radius: 50%; background: transparent; flex: none; }
+
+/* ---- grids of small choices ----------------------------------------- */
+
+/* minmax(0, 1fr) rather than 1fr: plain 1fr refuses to shrink below its
+   content, so a long word like ADVANCED pushes the column off screen. */
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-2); }
+.grid.wrap { display: flex; flex-wrap: wrap; }
+.grid.wrap .chip { flex: 0 0 auto; padding: var(--sp-2) var(--sp-3); }
+.focus-sep { display: flex; align-items: center; color: var(--fg-dim); font-size: var(--size-sm); padding: 0 var(--sp-1); }
+
+.chip {
+  min-height: var(--tap-min);
+  padding: var(--sp-3) var(--sp-2);
+  background: var(--surface);
+  border: var(--border);
+  font-weight: var(--weight-black);
+  letter-spacing: var(--track-mid);
+  text-transform: uppercase;
+  text-align: center;
+  min-width: 0;
+  /* break-word, not anywhere: only split a word when it genuinely cannot fit
+     on a line of its own, rather than eagerly mid-word. */
+  overflow-wrap: break-word;
+}
+.chip .chip-sub {
+  display: block;
+  font-size: var(--size-xs);
+  font-weight: var(--weight-bold);
+  color: var(--fg-dim);
+  margin-top: 2px;
+}
+.chip[aria-pressed="true"] {
+  background: var(--invert-bg);
+  color: var(--invert-fg);
+  border-color: var(--invert-bg);
+}
+.chip[aria-pressed="true"] .chip-sub { color: color-mix(in srgb, var(--invert-fg) 55%, transparent); }
+.chip.num { font-size: var(--size-lg); }
+
+/* Left-aligned chip with a title over a sub-line — the intensity presets. */
+.chip.stack { text-align: left; padding: var(--sp-3); }
+.chip.stack .chip-title {
+  display: block;
+  font-size: var(--size-md);
+  font-weight: var(--weight-black);
+  letter-spacing: var(--track-mid);
+  line-height: var(--leading-tight);
+}
+.chip.stack .chip-sub { letter-spacing: 0.02em; }
+
+/* ---- primary action -------------------------------------------------- */
+
+/* Spec 8: pinned above the tab bar, not scrolled away with the content. The
+   dock carries an opaque background so content scrolls under it cleanly rather
+   than showing through around the button. */
+.action-dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
+  z-index: 5;
+  padding: var(--sp-3) var(--gutter);
+  background: var(--bg);
+  border-top: var(--border);
+}
+
+.primary {
+  width: 100%;
+  min-height: 60px;
+  padding: var(--sp-4);
+  background: var(--accent);
+  color: var(--accent-fg);
+  border: 0;
+  font-size: 1.25rem;
+  font-weight: var(--weight-black);
+  letter-spacing: var(--track-wide);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3);
+}
+
+/* ---- settings rows ---------------------------------------------------- */
+
+.card { background: var(--surface); border: var(--border); }
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  width: 100%;
+  min-height: 60px;
+  padding: var(--sp-3) var(--sp-4);
+  background: none;
+  border: 0;
+  border-bottom: var(--border);
+  text-align: left;
+}
+.row:last-child { border-bottom: 0; }
+/* The text column takes the slack; the value stays hard right. */
+.row > span:first-child { flex: 1; min-width: 0; }
+.row-title {
+  display: block;              /* title and subtitle stack, never run together */
+  font-size: var(--size-md);
+  font-weight: var(--weight-black);
+  letter-spacing: var(--track-mid);
+  text-transform: uppercase;
+  line-height: var(--leading-tight);
+}
+.row-sub {
+  display: block;
+  font-size: var(--size-sm);
+  font-weight: var(--weight-normal);
+  letter-spacing: var(--track-mid);
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  margin-top: 3px;
+}
+.row-value {
+  font-weight: var(--weight-black);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.row-value .chev { color: var(--fg-dim); }
+.row-icon { color: var(--fg-dim); font-size: 1.125rem; }
+
+/* segmented pair (MALE / FEMALE) */
+.segment { display: flex; gap: 0; flex: none; }
+.segment button {
+  min-height: var(--tap-min);
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--surface);
+  border: var(--border);
+  font-weight: var(--weight-black);
+  letter-spacing: var(--track-mid);
+  text-transform: uppercase;
+  font-size: var(--size-sm);
+}
+.segment button + button { border-left: 0; }
+.segment button[aria-pressed="true"] {
+  background: var(--invert-bg);
+  color: var(--invert-fg);
+  border-color: var(--invert-bg);
+}
+
+/* square toggle, as in the reference */
+.toggle {
+  flex: none;
+  width: 64px;
+  height: 34px;
+  padding: 0;
+  border: var(--border);
+  background: var(--surface-2);
+  position: relative;
+}
+.toggle::after {
+  content: "";
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 28px; height: 28px;
+  background: var(--fg-mute);
+  transition: transform .12s ease, background .12s ease;
+}
+.toggle[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); }
+.toggle[aria-pressed="true"]::after { transform: translateX(30px); background: #fff; }
+
+.slider-row { display: block; padding: var(--sp-4); border-bottom: var(--border); }
+.slider-row:last-child { border-bottom: 0; }
+.slider-wrap { display: flex; align-items: center; gap: var(--sp-3); margin-top: var(--sp-3); }
+input[type="range"] { flex: 1; accent-color: var(--accent); min-height: var(--tap-min); }
+.slider-val { font-weight: var(--weight-black); min-width: 3.5ch; text-align: right; }
+
+/* ---- danger ----------------------------------------------------------- */
+
+.danger-label { color: var(--accent); }
+.danger {
+  width: 100%;
+  padding: var(--sp-4);
+  background: none;
+  border: 1px solid var(--accent);
+  text-align: left;
+}
+.danger .row-title { color: var(--accent); }
+
+/* ---- tab bar ----------------------------------------------------------- */
+
+#tabbar {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--bg);
+  border-top: var(--border);
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 10;
+}
+.tab {
+  min-height: var(--tabbar-h);
+  background: none;
+  border: 0;
+  color: var(--fg-mute);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-1);
+  font-size: var(--size-xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--track-mid);
+  text-transform: uppercase;
+}
+.tab svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+.tab[aria-current="page"] { color: var(--fg); }
+
+/* ---- workout ------------------------------------------------------------ */
+
+#screen-workout { padding-top: var(--sp-5); }
+.wk-top { display: flex; justify-content: space-between; align-items: baseline; }
+.wk-phase {
+  font-size: var(--size-xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--track-wide);
+  text-transform: uppercase;
+  color: var(--fg-dim);
+}
+.wk-clock {
+  font-size: var(--size-clock);
+  font-weight: var(--weight-black);
+  letter-spacing: var(--track-tight);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  margin: var(--sp-2) 0;
+}
+.wk-track { height: 6px; background: var(--surface-2); }
+.wk-bar { height: 100%; background: var(--accent); width: 0; }
+.wk-combo {
+  font-size: var(--size-huge);
+  font-weight: var(--weight-black);
+  letter-spacing: var(--track-tight);
+  line-height: var(--leading-tight);
+  text-transform: uppercase;
+  margin: var(--sp-6) 0;
+  min-height: 3.2em;
+  display: flex;
+  align-items: center;
+}
+.wk-actions { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-2); }
+.wk-actions button {
+  min-height: 56px;
+  background: var(--surface);
+  border: var(--border);
+  font-weight: var(--weight-black);
+  letter-spacing: var(--track-mid);
+  text-transform: uppercase;
+}
+.wk-actions .abort { border-color: var(--accent); color: var(--accent); }
+
+/* ---- history --------------------------------------------------------------- */
+
+.period-btn {
+  flex: none;
+  min-height: var(--tap-min);
+  padding: var(--sp-2) var(--sp-3);
+  background: none;
+  border: 0;
+  color: var(--fg-dim);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--track-mid);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  background: var(--surface);
+  border: var(--border);
+}
+.tile { padding: var(--sp-3) var(--sp-2); text-align: center; min-width: 0; }
+.tiles .tile + .tile { border-left: var(--border); }
+.tile-value {
+  font-size: 1.5rem;
+  font-weight: var(--weight-black);
+  letter-spacing: var(--track-tight);
+  line-height: 1.1;
+  overflow-wrap: break-word;
+}
+.tile-value.accent { color: var(--accent); }
+.tile-label {
+  /* Four columns on a 375px screen leaves ~85px per label, so this runs
+     tighter than the usual section label to keep "Total time" on one line. */
+  font-size: 0.625rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  margin-top: var(--sp-1);
+  white-space: nowrap;
+}
+
+.day-head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin: var(--sp-6) 0 var(--sp-3);
+  font-size: var(--size-xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--track-wide);
+  text-transform: uppercase;
+  color: var(--fg-dim);
+}
+.day-head .rule { flex: 1; height: 1px; background: var(--line); }
+
+.session-card {
+  background: var(--surface);
+  border: var(--border);
+  padding: var(--sp-4);
+  margin-bottom: var(--sp-3);
+}
+.session-card.incomplete { border-left: 3px solid var(--line-strong); }
+.session-top { display: flex; justify-content: space-between; gap: var(--sp-3); }
+.session-meta, .session-time {
+  font-size: var(--size-xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--track-mid);
+  text-transform: uppercase;
+  color: var(--fg-dim);
+}
+.session-title {
+  font-size: 1.375rem;
+  font-weight: var(--weight-black);
+  letter-spacing: var(--track-tight);
+  text-transform: uppercase;
+  line-height: var(--leading-tight);
+  margin: var(--sp-1) 0 var(--sp-3);
+}
+.tag-incomplete {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: var(--sp-2);
+  padding: 2px var(--sp-2);
+  border: 1px solid var(--line-strong);
+  color: var(--fg-dim);
+  font-size: var(--size-xs);
+  letter-spacing: var(--track-mid);
+}
+.session-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.session-stats .tile { padding: var(--sp-2) var(--sp-1); }
+.session-stats .tile + .tile { border-left: var(--border); }
+.session-stats .tile-value { font-size: 1.25rem; }
+
+.round-chips { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-3); }
+.round-chip {
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--invert-bg);
+  color: var(--invert-fg);
+  font-size: var(--size-sm);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--track-mid);
+}
+.session-combos {
+  font-size: var(--size-sm);
+  color: var(--fg-dim);
+  margin-top: var(--sp-3);
+}
+.repeat {
+  width: 100%;
+  min-height: 52px;
+  margin-top: var(--sp-3);
+  background: var(--invert-bg);
+  color: var(--invert-fg);
+  border: 0;
+  font-weight: var(--weight-black);
+  letter-spacing: var(--track-wide);
+  text-transform: uppercase;
+}
+
+/* ---- combo library --------------------------------------------------------- */
+
+.combos-head { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); }
+.add-btn {
+  flex: none;
+  width: 52px; height: 52px;
+  background: var(--invert-bg);
+  color: var(--invert-fg);
+  border: 0;
+  font-size: 1.75rem;
+  font-weight: var(--weight-black);
+  line-height: 1;
+}
+
+.search {
+  width: 100%;
+  min-height: var(--tap-min);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--surface);
+  border: var(--border);
+  color: var(--fg);
+  -webkit-appearance: none;
+  appearance: none;
+}
+.search::placeholder { color: var(--fg-mute); }
+
+#combo-summary { margin: var(--sp-3) 0; letter-spacing: var(--track-mid); text-transform: uppercase; }
+
+.group-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: var(--tap-min);
+  margin-top: var(--sp-5);
+  padding: var(--sp-2) 0;
+  background: none;
+  border: 0;
+  border-bottom: var(--border);
+}
+.group-name {
+  font-size: var(--size-xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--track-wide);
+  text-transform: uppercase;
+  color: var(--fg-dim);
+}
+.group-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--size-xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--track-mid);
+  color: var(--fg-dim);
+}
+
+.combo-card {
+  background: var(--surface);
+  border: var(--border);
+  border-top: 0;
+  padding: var(--sp-3) var(--sp-4);
+}
+.combo-card:first-of-type { border-top: var(--border); }
+.combo-card.off { opacity: .45; }
+
+.combo-top { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); }
+.combo-meta {
+  background: none;
+  border: 0;
+  padding: var(--sp-1) 0;
+  min-height: var(--tap-min);
+  font-size: var(--size-xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--track-wide);
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  text-align: left;
+}
+.combo-meta .freq { color: var(--fg); text-decoration: underline; text-underline-offset: 3px; }
+
+.combo-actions { display: flex; gap: var(--sp-2); flex: none; }
+.icon {
+  width: var(--tap-min);
+  height: var(--tap-min);
+  background: none;
+  border: 1px solid var(--line-strong);
+  color: var(--fg-dim);
+  font-size: 1rem;
+  line-height: 1;
+}
+.icon[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+.icon.danger-icon { border-color: var(--accent); color: var(--accent); }
+
+.combo-display {
+  font-size: var(--size-lg);
+  font-weight: var(--weight-black);
+  letter-spacing: var(--track-mid);
+  text-transform: uppercase;
+  line-height: var(--leading-tight);
+  margin-top: var(--sp-1);
+}
+.combo-speech {
+  font-size: var(--size-sm);
+  color: var(--fg-dim);
+  margin-top: var(--sp-1);
+}
+.combo-tags { display: flex; flex-wrap: wrap; gap: var(--sp-1); margin-top: var(--sp-2); }
+.tag-chip {
+  font-size: 0.625rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  background: var(--surface);
+  border: var(--border);
+  color: var(--fg-dim);
+}
+
+/* ---- combo form ------------------------------------------------------------ */
+
+.field { display: block; margin-bottom: var(--sp-4); }
+.field-label {
+  display: block;
+  font-size: var(--size-xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--track-wide);
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  margin-bottom: var(--sp-2);
+}
+.field-hint {
+  display: block;
+  font-size: var(--size-sm);
+  color: var(--fg-mute);
+  margin-top: var(--sp-2);
+}
+.preview { background: var(--surface-2); border: var(--border); padding: var(--sp-3); }
+.preview-display {
+  font-weight: var(--weight-black);
+  letter-spacing: var(--track-mid);
+  text-transform: uppercase;
+  line-height: var(--leading-tight);
+}
+.preview-speech { font-size: var(--size-sm); color: var(--fg-dim); margin-top: var(--sp-1); }
+
+.form-errors { color: var(--accent); font-size: var(--size-sm); margin-bottom: var(--sp-3); }
+.form-errors:empty { display: none; }
+#combo-form .primary { position: static; }
+/* Inside a sheet there is not room for three columns of words like
+   KICKBOXING and INTERMEDIATE. Let the grid fall to two columns rather than
+   squeeze three and break words mid-syllable. */
+#combo-form .grid { grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr)); }
+#combo-form .chip { font-size: var(--size-sm); letter-spacing: 0.02em; padding: var(--sp-3) var(--sp-2); }
+
+/* ---- picker sheet --------------------------------------------------------- */
+
+.sheet-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(0, 0, 0, .6);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: var(--gutter);
+  padding-bottom: calc(var(--gutter) + env(safe-area-inset-bottom));
+}
+.sheet {
+  width: 100%;
+  max-width: 480px;
+  max-height: 80dvh;
+  overflow-y: auto;
+  background: var(--bg);
+  border: var(--border);
+  padding: var(--sp-4);
+}
+.sheet-title {
+  font-size: var(--size-xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--track-wide);
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  margin-bottom: var(--sp-3);
+}
+.sheet-cancel {
+  width: 100%;
+  min-height: var(--tap-min);
+  margin-top: var(--sp-3);
+  background: none;
+  border: var(--border);
+  font-weight: var(--weight-black);
+  letter-spacing: var(--track-mid);
+  text-transform: uppercase;
+  color: var(--fg-dim);
+}
+
+/* ---- misc ---------------------------------------------------------------- */
+
+.notice {
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--surface);
+  border: var(--border);
+  border-left: 3px solid var(--accent);
+  font-size: var(--size-sm);
+  color: var(--fg-dim);
+  margin-top: var(--sp-4);
+}
+.placeholder {
+  padding: var(--sp-8) var(--sp-4);
+  color: var(--fg-dim);
+  font-size: var(--size-sm);
+  letter-spacing: var(--track-mid);
+  text-transform: uppercase;
+  text-align: center;
+}
+.muted { color: var(--fg-dim); font-size: var(--size-sm); }
+
+/* ---- suggestion card (6B) ------------------------------------------------- */
+
+.suggestion-card {
+  padding: var(--sp-4);
+  margin-bottom: var(--sp-2);
+}
+.suggestion-header {
+  font-size: var(--size-xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--track-wide);
+  text-transform: uppercase;
+  color: var(--fg-dim);
+}
+.suggestion-detail {
+  font-size: var(--size-lg);
+  font-weight: var(--weight-black);
+  letter-spacing: var(--track-mid);
+  text-transform: uppercase;
+  line-height: var(--leading-tight);
+  margin-top: var(--sp-2);
+}
+.suggestion-detail.highlight { color: var(--fg); }
+.suggestion-reason {
+  font-size: var(--size-sm);
+  color: var(--fg-dim);
+  margin-top: var(--sp-2);
+}
+.suggestion-actions {
+  display: flex;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+}
+.suggestion-btn {
+  flex: 1;
+  min-height: var(--tap-min);
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--surface-2);
+  border: var(--border);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--track-mid);
+  text-transform: uppercase;
+  font-size: var(--size-sm);
+}
+.suggestion-btn.primary-btn {
+  background: var(--accent);
+  color: var(--accent-fg);
+  border-color: var(--accent);
+}
+.goal-reached .suggestion-header { color: var(--accent); }

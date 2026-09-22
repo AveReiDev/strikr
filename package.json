@@ -1,0 +1,11 @@
+{
+  "name": "strikr",
+  "private": true,
+  "type": "module",
+  "description": "No-build PWA. This file only records dev commands; there are no dependencies.",
+  "scripts": {
+    "test": "node --test 'test/*.test.js'",
+    "serve": "python3 serve.py",
+    "smoke": "python3 -m http.server 8444"
+  }
+}

@@ -72,11 +72,10 @@ test('a two-combo pool still terminates', () => {
   const sel = createSelector({
     combos: two, sport: 'boxing', tier: 'beginner', config, rng: createRng(7),
   });
-  // noRepeatWindow exceeds the pool size, so avoiding a repeat is impossible.
-  // It must give up and return something rather than loop forever.
-  const got = Array.from({ length: 100 }, () => sel.next());
-  assert.equal(got.length, 100);
-  assert.ok(got.every((c) => c && (c.id === 'a' || c.id === 'b')));
+  // The window is larger than the pool, so it shrinks to one: the two must
+  // alternate rather than give up and repeat.
+  const got = Array.from({ length: 100 }, () => sel.next().id);
+  for (let i = 1; i < got.length; i++) assert.notEqual(got[i], got[i - 1], `repeat at ${i}`);
 });
 
 test('a single-combo pool still terminates', () => {
@@ -106,9 +105,9 @@ test('tier weighting at Advanced lands near 50/30/20', () => {
   const pctInt = (count.intermediate / N) * 100;
   const pctBeg = (count.beginner / N) * 100;
 
-  assert.ok(Math.abs(pctAdv - 50) < 7, `advanced ${pctAdv.toFixed(1)}%, expected ~50`);
-  assert.ok(Math.abs(pctInt - 30) < 7, `intermediate ${pctInt.toFixed(1)}%, expected ~30`);
-  assert.ok(Math.abs(pctBeg - 20) < 7, `beginner ${pctBeg.toFixed(1)}%, expected ~20`);
+  assert.ok(Math.abs(pctAdv - 50) < 3, `advanced ${pctAdv.toFixed(1)}%, expected ~50`);
+  assert.ok(Math.abs(pctInt - 30) < 3, `intermediate ${pctInt.toFixed(1)}%, expected ~30`);
+  assert.ok(Math.abs(pctBeg - 20) < 3, `beginner ${pctBeg.toFixed(1)}%, expected ~20`);
 });
 
 test('tier weighting at Intermediate renormalises over two tiers', () => {
@@ -118,8 +117,8 @@ test('tier weighting at Intermediate renormalises over two tiers', () => {
   const beg = draws.filter((c) => c.tier === 'beginner').length / N * 100;
   assert.equal(draws.filter((c) => c.tier === 'advanced').length, 0);
   // 50 and 30 renormalise to 62.5 / 37.5
-  assert.ok(Math.abs(inter - 62.5) < 7, `intermediate ${inter.toFixed(1)}%, expected ~62.5`);
-  assert.ok(Math.abs(beg - 37.5) < 7, `beginner ${beg.toFixed(1)}%, expected ~37.5`);
+  assert.ok(Math.abs(inter - 62.5) < 3, `intermediate ${inter.toFixed(1)}%, expected ~62.5`);
+  assert.ok(Math.abs(beg - 37.5) < 3, `beginner ${beg.toFixed(1)}%, expected ~37.5`);
 });
 
 test('Beginner yields 100% beginner', () => {
@@ -215,4 +214,19 @@ test('buildPool focus respects tier ceiling for singles', () => {
   const pool = buildPool(COMBOS, { sport: 'boxing', tier: 'beginner', focus: 'jab' });
   assert.ok(pool.length > 0);
   assert.ok(pool.every((c) => c.tier === 'beginner'));
+});
+
+test('a small pool never repeats inside the window', () => {
+  // Beginner is 10 combos per sport. The old draw-then-redraw loop gave up
+  // about one call in ten here and repeated a combo it had just called.
+  const w = config.noRepeatWindow;
+  for (const sport of ['boxing', 'muaythai', 'kickboxing']) {
+    for (let seed = 1; seed <= 20; seed++) {
+      const ids = drawMany(200, { sport, tier: 'beginner', seed }).map((c) => c.id);
+      for (let i = 1; i < ids.length; i++) {
+        const window = ids.slice(Math.max(0, i - w), i);
+        assert.ok(!window.includes(ids[i]), `${sport} seed ${seed}: ${ids[i]} repeated at ${i}`);
+      }
+    }
+  }
 });

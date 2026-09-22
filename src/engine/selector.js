@@ -92,31 +92,36 @@ export function groupByTier(pool, selectedTier, tierWeights) {
 /**
  * Stage 2 and 3: pick a tier, then a combo within it.
  *
- * `recent` is the list of ids called most recently, newest last. A combo that
- * appears in the last `noRepeatWindow` of them is rejected and redrawn, up to
- * `maxRedraws` times — then accepted anyway, so a pool of two combos still
- * terminates instead of spinning forever.
+ * `recent` is the list of ids called most recently, newest last. Anything in
+ * the last `noRepeatWindow` of them is removed BEFORE drawing, so a repeat is
+ * impossible whenever an alternative exists. (This used to draw first and
+ * redraw on a hit, giving up after a fixed number of tries — on a small pool
+ * it gave up about one call in ten and repeated anyway.)
+ *
+ * The window shrinks to one less than the pool, so there is always something
+ * eligible: a two-combo pool alternates, a one-combo pool repeats.
+ *
+ * Tiers are weighted over whichever still have an eligible combo, so the
+ * selected tier keeps its share until every combo in it is in the window.
  */
 export function selectCombo({ pool, tier, config, rng, recent = [], weakWeight }) {
   if (!pool.length) return null;
 
-  const groups = groupByTier(pool, tier, config.tierWeights);
+  const size = Math.min(config.noRepeatWindow, pool.length - 1);
+  const blocked = new Set(size > 0 ? recent.slice(-size) : []);
+  const eligible = pool.filter((c) => !blocked.has(c.id));
+
+  const groups = groupByTier(eligible, tier, config.tierWeights);
   if (!groups.length) return null;
 
-  const window = recent.slice(-config.noRepeatWindow);
   const freqWeight = (c) => {
     let w = config.frequencyWeights[c.frequency] ?? 1;
     if (weakWeight) w *= weakWeight(c);
     return w;
   };
 
-  let candidate = null;
-  for (let attempt = 0; attempt <= config.maxRedraws; attempt++) {
-    const group = pickWeighted(groups, (g) => g.weight, rng);
-    candidate = pickWeighted(group.combos, freqWeight, rng);
-    if (!window.includes(candidate.id)) return candidate;
-  }
-  return candidate;   // pool too small to avoid a repeat; accept it
+  const group = pickWeighted(groups, (g) => g.weight, rng);
+  return pickWeighted(group.combos, freqWeight, rng);
 }
 
 /**

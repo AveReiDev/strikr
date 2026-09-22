@@ -20,9 +20,8 @@
   "_comment_tierWeights": "Probability of drawing from each tier, relative to the tier the user selected. Renormalised over whichever tiers actually exist for the selection.",
   "tierWeights": { "selected": 50, "oneBelow": 30, "twoBelow": 20 },
 
-  "_comment_noRepeat": "A combo id drawn within the last N calls is rejected and redrawn, up to maxRedraws attempts, then accepted anyway (guards against tiny pools).",
+  "_comment_noRepeat": "A combo called within the last N calls is not eligible for the next draw. Shrinks automatically to one less than the pool size, so tiny pools still work.",
   "noRepeatWindow": 8,
-  "maxRedraws": 10,
 
   "_comment_lookahead": "Do not begin a new callout if the estimated time to speak it plus its gap would overrun the remaining round time by more than this. Prevents a combo being cut off by the bell.",
   "roundEndLookaheadMs": 500,

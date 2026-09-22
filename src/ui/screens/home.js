@@ -45,6 +45,7 @@ export function createHomeScreen({ root, settings, config, library, history, onS
     <div class="section-label">Round length (min)</div>
     <div class="grid" data-group="roundLengthMin"></div>
 
+    <div class="muted pool-size" id="pool-size"></div>
     <div id="home-notice"></div>
     <div class="action-dock">
       <button class="primary" id="start-round">&#9654; Start round</button>
@@ -120,6 +121,24 @@ export function createHomeScreen({ root, settings, config, library, history, onS
       settings.set('focus', null);
       renderFocusPicker();
     }
+    renderPoolSize();
+  }
+
+  /**
+   * How many combos this workout will actually draw from. A Beginner pool is
+   * 10 per sport and a focus can shrink it to a handful — without this the
+   * repetition that follows looks like a broken shuffle.
+   */
+  const poolSizeEl = root.querySelector('#pool-size');
+  function renderPoolSize() {
+    const n = buildPool(library.activePool(), {
+      sport: settings.get('sport'),
+      tier: settings.get('tier'),
+      focus: settings.get('focus') || null,
+    }).length;
+    poolSizeEl.textContent = n
+      ? `${n} combo${n === 1 ? '' : 's'} in rotation`
+      : 'No combos match these choices';
   }
 
   /** A left-aligned chip carrying a title and a sub-line, as in the reference. */
@@ -243,6 +262,7 @@ export function createHomeScreen({ root, settings, config, library, history, onS
         for (const el of [...groups.focus.children]) {
           el.setAttribute('aria-pressed', String(el.dataset.value === value));
         }
+        renderPoolSize();
       });
       groups.focus.appendChild(b);
     };
@@ -368,9 +388,11 @@ export function createHomeScreen({ root, settings, config, library, history, onS
     refreshIntensitySubs();
     renderCustom();
     renderSuggestion();
+    renderPoolSize();
   }
 
   renderSuggestion();
+  renderPoolSize();
 
   return {
     refresh() {

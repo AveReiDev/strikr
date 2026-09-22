@@ -764,3 +764,9 @@ input[type="range"] { flex: 1; accent-color: var(--accent); min-height: var(--ta
   border-color: var(--accent);
 }
 .goal-reached .suggestion-header { color: var(--accent); }
+
+/* Home: how many combos the workout will draw from. */
+.pool-size {
+  margin-top: var(--sp-4);
+  text-align: center;
+}

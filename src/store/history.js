@@ -118,6 +118,11 @@ function sanitiseHistory(raw) {
     };
     const ids = sanitiseCombosCalledIds(r.combosCalledIds);
     if (ids) rec.combosCalledIds = ids;
+    // Added after v1.3: what was planned, not just what was finished, so
+    // Repeat can rebuild the same workout. Older records simply lack them.
+    if (Number.isInteger(r.roundsPlanned) && r.roundsPlanned >= 1) rec.roundsPlanned = r.roundsPlanned;
+    if (typeof r.focus === 'string' && r.focus) rec.focus = r.focus;
+    if (typeof r.focusWeak === 'boolean') rec.focusWeak = r.focusWeak;
     out.push(rec);
   }
   return out;

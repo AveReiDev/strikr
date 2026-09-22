@@ -24,7 +24,7 @@
  *                       signal; updates land on the following launch.
  */
 
-const CACHE_VERSION = 'strikr-v1.3.1';
+const CACHE_VERSION = 'strikr-v1.3.2';
 
 /** Everything needed to run with no network. */
 const SHELL = [

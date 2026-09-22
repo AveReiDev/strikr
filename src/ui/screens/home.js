@@ -9,15 +9,10 @@ import { gapMsFor } from '../../engine/timing.js';
 import { buildPool } from '../../engine/selector.js';
 import { dailyVolume } from '../../store/history.js';
 import { computeSuggestion } from '../../engine/suggest.js';
+import { TAG_LABEL } from '../../store/library.js';
 
 const SPORT_LABEL = { boxing: 'Boxing', muaythai: 'Muay Thai', kickboxing: 'Kickboxing' };
 
-const TAG_LABEL = {
-  hands: 'Hands', kicks: 'Kicks', elbows: 'Elbows',
-  body: 'Body', defensive: 'Defense',
-  jab: 'Jab', cross: 'Cross', hook: 'Hook', uppercut: 'Uppercut',
-  kick: 'Kick', teep: 'Teep', knee: 'Knee',
-};
 const TIER_SUB = {
   beginner: 'Basic combos',
   intermediate: 'Technical striking',

@@ -236,6 +236,7 @@ test('abort reports an incomplete session with the rounds finished so far', () =
   assert.ok(fin);
   assert.equal(fin.summary.completed, false);
   assert.equal(fin.summary.rounds, 0, 'no round had finished yet');
+  assert.equal(fin.summary.roundsPlanned, BASE.roundsPerWorkout, 'planned rounds survive an abort');
   assert.equal(session.snapshot(30000).state, STATES.IDLE);
 });
 

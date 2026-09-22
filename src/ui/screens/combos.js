@@ -5,15 +5,11 @@
  * user's own combos can be edited and deleted.
  */
 
-import { FREQUENCIES, SPORTS, TIERS, SPORT_LABEL, TAGS, deriveFromDisplay } from '../../store/library.js';
+import { FREQUENCIES, SPORTS, TIERS, SPORT_LABEL, TAGS, TAG_LABEL, deriveFromDisplay } from '../../store/library.js';
 import { openPicker, closePicker } from '../components/picker.js';
 import { comboFrequency, comboCoverage } from '../../store/history.js';
 
 const FREQ_LABEL = { occasional: 'Occasional', common: 'Common', constant: 'Constant' };
-const TAG_LABEL = {
-  hands: 'Hands', kicks: 'Kicks', elbows: 'Elbows',
-  body: 'Body', defensive: 'Defense',
-};
 
 export function createCombosScreen({ root, library, settings, history, onChange }) {
   let query = '';

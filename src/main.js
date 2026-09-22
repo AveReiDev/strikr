@@ -11,6 +11,7 @@ import { createStorage } from './store/storage.js';
 import { createSettingsStore } from './store/settings.js';
 import { createLibrary } from './store/library.js';
 import { createHistory, newSessionId, comboFrequency } from './store/history.js';
+import { TAG_LABEL } from './store/library.js';
 import { createRouter } from './ui/router.js';
 import { createHomeScreen } from './ui/screens/home.js';
 import { createWorkoutScreen } from './ui/screens/workout.js';
@@ -172,6 +173,8 @@ async function startWorkout() {
   // Capture the wall clock separately for the history record.
   app.startedAtISO = new Date().toISOString();
   app.combosCalledIds = [];
+  app.workoutFocus = focus;
+  app.workoutFocusWeak = focusWeak;
 
   app.screens.workout.clearCombo();
   app.screens.workout.setStatus('');
@@ -252,6 +255,9 @@ function finished(summary) {
     combosCalled: summary.combosCalled,
     combosCalledIds: app.combosCalledIds ?? [],
     completed: summary.completed,
+    roundsPlanned: summary.roundsPlanned,
+    focus: app.workoutFocus ?? undefined,
+    focusWeak: app.workoutFocusWeak,
   });
   app.screens.history.refresh();
 
@@ -264,21 +270,32 @@ function finished(summary) {
   );
 }
 
-/** Load a past session's settings onto Home (spec 8). */
+/**
+ * Load a past session's settings onto Home (spec 8).
+ *
+ * Uses the rounds that were PLANNED — a workout stopped after 3 of 8 should
+ * repeat as 8. Records from before roundsPlanned existed fall back to the
+ * rounds finished. Focus is always written, even as null: leaving the old one
+ * in place after switching sport can produce an empty pool.
+ */
 function repeatSession(record) {
+  const rounds = record.roundsPlanned ?? record.rounds;
   app.settings.set('sport', record.sport);
   app.settings.set('tier', record.tier);
   app.settings.set('intensity', record.intensity);
   app.settings.set('roundLengthMin', Math.round(record.roundLengthSec / 60));
-  app.settings.set('roundsPerWorkout', record.rounds);
+  app.settings.set('roundsPerWorkout', rounds);
   app.settings.set('restBetweenRoundsSec', record.restSec);
+  app.settings.set('focus', record.focus ?? null);
+  if (typeof record.focusWeak === 'boolean') app.settings.set('focusWeak', record.focusWeak);
 
   app.screens.home.refresh();
   app.screens.settings.refresh();
   app.router.show('home');
   app.screens.home.notice(
     `Loaded that session: ${record.sport}, ${record.tier}, ${record.intensity}, ` +
-    `${record.rounds} &times; ${Math.round(record.roundLengthSec / 60)} min.`
+    `${rounds} &times; ${Math.round(record.roundLengthSec / 60)} min` +
+    (record.focus ? `, ${TAG_LABEL[record.focus] ?? record.focus} focus.` : '.')
   );
 }
 

@@ -112,6 +112,7 @@ export function createSession({ config, settings, combos, rng, intensity: overri
       tier: settings.tier,
       intensity: settings.intensity,
       rounds: roundsCompleted,
+      roundsPlanned: settings.roundsPerWorkout,
       roundLengthSec: settings.roundLengthMin * 60,
       restSec: settings.restBetweenRoundsSec,
       durationSec: Math.round((now - (startedAt ?? now)) / 1000),

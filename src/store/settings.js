@@ -13,9 +13,16 @@ export const TIERS = ['beginner', 'intermediate', 'advanced'];
 export const INTENSITIES = ['light', 'medium', 'hard', 'custom'];
 export const ROUND_LENGTHS = [1, 2, 3, 4, 5, 10];
 
-/** Allowed values for the stepper rows on the settings screen. */
+/**
+ * Allowed values for the picker rows on the settings screen.
+ *
+ * roundsPerWorkout is every whole number up to the largest goal, because the
+ * progressive-training suggestion steps one round at a time and resets to 70%
+ * of the goal — any gap in this list is a suggestion that silently cannot be
+ * loaded, since set() ignores values outside it.
+ */
 export const CHOICES = {
-  roundsPerWorkout: [1, 2, 3, 4, 5, 6, 8, 10, 12],
+  roundsPerWorkout: Array.from({ length: 15 }, (_, i) => i + 1),
   restBetweenRoundsSec: [10, 15, 20, 30, 45, 60, 90],
   countdownSec: [0, 3, 5, 10],
 };

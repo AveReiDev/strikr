@@ -6,26 +6,43 @@
  */
 
 const INTENSITY_ORDER = ['light', 'medium', 'hard'];
-const INTENSITY_MULT = { light: 1, medium: 1.5, hard: 2 };
 
-function score(day) {
-  return day.rounds * (INTENSITY_MULT[day.intensity] ?? 1) * (day.roundLengthMin || 1);
+/**
+ * How far along the progression a day is, as a sortable tuple.
+ *
+ * The progression runs rounds first, then intensity, then round length — so a
+ * day at a higher intensity is further along than any number of rounds at a
+ * lower one, even though the rounds were reset when intensity stepped up.
+ * Ranking by a blended volume score instead made the reset step look like a
+ * regression, and the suggestion stalled until the older, easier day aged out
+ * of the window. Each dimension is capped at the goal, since overshooting one
+ * does not make up for falling short on another.
+ */
+function progressKey(day, goal) {
+  const gIdx = INTENSITY_ORDER.indexOf(goal.intensity);
+  return [
+    Math.min(INTENSITY_ORDER.indexOf(day.intensity), gIdx),
+    Math.min(day.roundLengthMin || 0, goal.roundLengthMin),
+    Math.min(day.rounds, goal.rounds),
+  ];
 }
 
-function goalScore(goal) {
-  return goal.rounds * (INTENSITY_MULT[goal.intensity] ?? 1) * (goal.roundLengthMin || 1);
+function compareKeys(a, b) {
+  for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return a[i] - b[i];
+  return 0;
 }
 
 /**
- * Find the best recent day — the one closest to (or exceeding) the goal.
+ * The recent day furthest along toward the goal. Days whose intensity is not
+ * one of the three levels (all-Custom days) cannot be placed, so are skipped.
+ * Ties go to the most recent day.
  */
 function bestDay(volumes, goal) {
-  if (!volumes.length) return null;
-  const target = goalScore(goal);
-  let best = null, bestScore = -1;
+  let best = null, bestKey = null;
   for (const v of volumes) {
-    const s = score(v);
-    if (s > bestScore) { best = v; bestScore = s; }
+    if (!INTENSITY_ORDER.includes(v.intensity)) continue;
+    const k = progressKey(v, goal);
+    if (!best || compareKeys(k, bestKey) >= 0) { best = v; bestKey = k; }
   }
   return best;
 }
@@ -73,8 +90,8 @@ export function computeSuggestion(goal, volumes, current) {
   if (best.rounds < goal.rounds) {
     return {
       rounds: best.rounds + 1,
-      intensity: best.intensity || current.intensity,
-      roundLengthMin: best.roundLengthMin || current.roundLengthMin,
+      intensity: best.intensity,
+      roundLengthMin: Math.min(best.roundLengthMin || current.roundLengthMin, goal.roundLengthMin),
       reason: `You did ${best.rounds} rounds ${best.intensity} on ${formatDay(best.day)}`,
       goalReached: false,
       bestDay: best,
@@ -87,7 +104,7 @@ export function computeSuggestion(goal, volumes, current) {
     return {
       rounds: resetRounds,
       intensity: nextIntensity,
-      roundLengthMin: best.roundLengthMin || current.roundLengthMin,
+      roundLengthMin: Math.min(best.roundLengthMin || current.roundLengthMin, goal.roundLengthMin),
       reason: `You did ${best.rounds} rounds ${best.intensity} — stepping up intensity`,
       goalReached: false,
       bestDay: best,

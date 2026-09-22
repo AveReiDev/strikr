@@ -413,3 +413,22 @@ test('old records without combosCalledIds do not break aggregation', () => {
   assert.equal(comboFrequency(h.all()).size, 0);
   assert.doesNotThrow(() => comboCoverage(h.all(), [{ id: 'x' }]));
 });
+
+test('planned rounds and focus round-trip; malformed ones are dropped', () => {
+  const backend = fakeBackend();
+  const h = makeHistory(backend);
+  h.add(record({ id: 'keep', completed: false, rounds: 3, roundsPlanned: 8, focus: 'kicks', focusWeak: true }));
+  h.add(record({ id: 'junk', roundsPlanned: 2.5, focus: 42, focusWeak: 'yes' }));
+
+  const reloaded = makeHistory(backend).all();
+  const keep = reloaded.find((r) => r.id === 'keep');
+  assert.equal(keep.roundsPlanned, 8);
+  assert.equal(keep.focus, 'kicks');
+  assert.equal(keep.focusWeak, true);
+
+  const junk = reloaded.find((r) => r.id === 'junk');
+  assert.ok(junk, 'a bad optional field must not discard the record');
+  assert.equal('roundsPlanned' in junk, false);
+  assert.equal('focus' in junk, false);
+  assert.equal('focusWeak' in junk, false);
+});

@@ -50,6 +50,13 @@ export function deriveFromDisplay(input) {
 export const TAGS = ['hands', 'kicks', 'elbows', 'body', 'defensive'];
 export const DRILL_TAGS = ['jab', 'cross', 'hook', 'uppercut', 'kick', 'teep', 'knee'];
 
+export const TAG_LABEL = {
+  hands: 'Hands', kicks: 'Kicks', elbows: 'Elbows',
+  body: 'Body', defensive: 'Defense',
+  jab: 'Jab', cross: 'Cross', hook: 'Hook', uppercut: 'Uppercut',
+  kick: 'Kick', teep: 'Teep', knee: 'Knee',
+};
+
 export function validateCustom({ display, sport, tier, frequency, tags }) {
   const errors = [];
   const derived = deriveFromDisplay(display);

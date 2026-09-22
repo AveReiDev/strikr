@@ -211,3 +211,81 @@ test('missing goal defaults to null', () => {
   const store = createSettingsStore({ config: CONFIG, storage });
   assert.equal(store.get('goal'), null);
 });
+
+/* ------------------------------------------------------------------ *
+ * Following the suggestions
+ * ------------------------------------------------------------------ */
+
+import { CHOICES, GOAL_ROUNDS, GOAL_INTENSITIES, GOAL_ROUND_LENGTHS, INTENSITIES, ROUND_LENGTHS } from '../src/store/settings.js';
+
+/** Do exactly what is suggested, one day at a time, keeping a 14-day window. */
+function follow(goal, start, maxDays = 60) {
+  let volumes = [start];
+  const seen = [];
+  for (let i = 1; i <= maxDays; i++) {
+    const s = computeSuggestion(goal, volumes, { roundsPerWorkout: 3, intensity: 'light', roundLengthMin: 1 });
+    if (s.goalReached) return { days: i, seen };
+    seen.push(s);
+    volumes = [...volumes, {
+      day: `d${String(i).padStart(3, '0')}`, rounds: s.rounds, intensity: s.intensity,
+      roundLengthMin: s.roundLengthMin, sessions: 1,
+    }].slice(-14);
+  }
+  return { days: Infinity, seen };
+}
+
+test('following the suggestions never repeats one — each day is a step forward', () => {
+  // Used to suggest "7 hard" for 14 days straight: the reset after stepping up
+  // intensity scored lower than the old medium day, so that day stayed "best".
+  const { days, seen } = follow(
+    { rounds: 10, intensity: 'hard', roundLengthMin: 3 },
+    { day: 'd000', rounds: 3, intensity: 'light', roundLengthMin: 2, sessions: 1 },
+  );
+  assert.ok(Number.isFinite(days), 'goal never reached');
+  for (let i = 1; i < seen.length; i++) {
+    assert.notDeepEqual(
+      [seen[i].rounds, seen[i].intensity, seen[i].roundLengthMin],
+      [seen[i - 1].rounds, seen[i - 1].intensity, seen[i - 1].roundLengthMin],
+      `day ${i + 1} repeated day ${i}`,
+    );
+  }
+});
+
+test('every suggestion, for every goal, is a value the settings will accept', () => {
+  // settings.set silently ignores values outside the allowed lists, so an
+  // unloadable suggestion makes the Load button quietly do nothing.
+  for (const rounds of GOAL_ROUNDS) {
+    for (const intensity of GOAL_INTENSITIES) {
+      for (const roundLengthMin of GOAL_ROUND_LENGTHS) {
+        const { seen } = follow(
+          { rounds, intensity, roundLengthMin },
+          { day: 'd000', rounds: 1, intensity: 'light', roundLengthMin: 1, sessions: 1 },
+        );
+        for (const s of seen) {
+          assert.ok(CHOICES.roundsPerWorkout.includes(s.rounds), `rounds ${s.rounds} not selectable`);
+          assert.ok(INTENSITIES.includes(s.intensity), `intensity ${s.intensity} not selectable`);
+          assert.ok(ROUND_LENGTHS.includes(s.roundLengthMin), `length ${s.roundLengthMin} not selectable`);
+        }
+      }
+    }
+  }
+});
+
+test('an easier but longer day does not outrank a harder one', () => {
+  const goal = { rounds: 10, intensity: 'hard', roundLengthMin: 2 };
+  const volumes = [
+    { day: '2026-09-10', rounds: 10, intensity: 'medium', roundLengthMin: 2, sessions: 1 },
+    { day: '2026-09-11', rounds: 7, intensity: 'hard', roundLengthMin: 2, sessions: 1 },
+  ];
+  const s = computeSuggestion(goal, volumes, { roundsPerWorkout: 7, intensity: 'hard', roundLengthMin: 2 });
+  assert.equal(s.intensity, 'hard');
+  assert.equal(s.rounds, 8);
+});
+
+test('all-Custom days are ignored rather than read as "undefined" intensity', () => {
+  const goal = { rounds: 10, intensity: 'hard', roundLengthMin: 2 };
+  const volumes = [{ day: '2026-09-10', rounds: 6, intensity: undefined, roundLengthMin: 2, sessions: 1 }];
+  const s = computeSuggestion(goal, volumes, { roundsPerWorkout: 3, intensity: 'medium', roundLengthMin: 2 });
+  assert.equal(s.bestDay, null);
+  assert.equal(s.rounds, 3);
+});

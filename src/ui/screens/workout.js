@@ -26,6 +26,7 @@ export function createWorkoutScreen({ root, onPause, onAbort }) {
     <div class="wk-clock" id="wk-clock">0:00</div>
     <div class="wk-track"><div class="wk-bar" id="wk-bar"></div></div>
     <div class="wk-combo" id="wk-combo"></div>
+    <div class="wk-rung" id="wk-rung"></div>
     <div class="wk-actions">
       <button id="wk-pause">Pause</button>
       <button id="wk-abort" class="abort">Abort</button>
@@ -39,6 +40,7 @@ export function createWorkoutScreen({ root, onPause, onAbort }) {
     clock: root.querySelector('#wk-clock'),
     bar: root.querySelector('#wk-bar'),
     combo: root.querySelector('#wk-combo'),
+    rung: root.querySelector('#wk-rung'),
     pause: root.querySelector('#wk-pause'),
     status: root.querySelector('#wk-status'),
   };
@@ -47,8 +49,14 @@ export function createWorkoutScreen({ root, onPause, onAbort }) {
   root.querySelector('#wk-abort').addEventListener('click', onAbort);
 
   return {
-    setCombo(text) { el.combo.textContent = text; },
-    clearCombo() { el.combo.textContent = ''; },
+    setCombo(text, sub = '') {
+      el.combo.textContent = text;
+      el.rung.textContent = sub;
+    },
+    clearCombo() {
+      el.combo.textContent = '';
+      el.rung.textContent = '';
+    },
     setStatus(text) { el.status.textContent = text ?? ''; },
 
     render(snap) {

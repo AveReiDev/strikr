@@ -53,6 +53,14 @@ export function createSettingsScreen({ root, settings, speech, onReset, onThemeC
         <span class="row-value"><span data-val="countdownSec"></span><span class="chev">&rsaquo;</span></span>
       </button>
 
+      <button class="row" data-pick="ladderReps">
+        <span>
+          <span class="row-title">Ladder reps per rung</span>
+          <span class="row-sub">Times each step is called in Ladder and Pyramid</span>
+        </span>
+        <span class="row-value"><span data-val="ladderReps"></span><span class="chev">&rsaquo;</span></span>
+      </button>
+
       <div class="row">
         <span>
           <span class="row-title">Voice</span>
@@ -158,12 +166,14 @@ export function createSettingsScreen({ root, settings, speech, onReset, onThemeC
     roundsPerWorkout: (v) => String(v),
     restBetweenRoundsSec: (v) => `${v}s`,
     countdownSec: (v) => (v === 0 ? 'Off' : `${v}s`),
+    ladderReps: (v) => `${v}×`,
   };
 
   const PICKER_TITLE = {
     roundsPerWorkout: 'Rounds per workout',
     restBetweenRoundsSec: 'Rest between rounds',
     countdownSec: 'Countdown timer',
+    ladderReps: 'Ladder reps per rung',
   };
 
   const goalFmt = {

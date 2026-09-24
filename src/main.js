@@ -4,6 +4,7 @@
 
 import { createSession, STATES } from './engine/session.js';
 import { createRng, buildPool } from './engine/selector.js';
+import { buildLadderPool, LADDER_MODES, MIN_RUNGS } from './engine/ladder.js';
 import { createSpeech } from './audio/speech.js';
 import { createAudio } from './audio/context.js';
 import { createWakeLock } from './audio/wakelock.js';
@@ -134,11 +135,19 @@ async function startWorkout() {
   // The engine draws from the merged library, not the shipped file, so
   // disabling a combo actually removes it from the workout.
   const focus = app.settings.get('focus') || null;
-  const pool = buildPool(app.library.activePool(), {
+  const ladder = LADDER_MODES.includes(settings.workoutMode);
+  const pool = (ladder ? buildLadderPool : buildPool)(app.library.activePool(), {
     sport: settings.sport,
     tier: settings.tier,
     focus,
   });
+  if (!pool.length && ladder) {
+    app.screens.home.notice(
+      `Ladders need combos of ${MIN_RUNGS}+ strikes, and none match these choices. ` +
+      'Pick a harder difficulty, a different focus, or switch back to Random.'
+    );
+    return;
+  }
   if (!pool.length) {
     const reason = focus
       ? `No combos match the "${focus}" filter for ${settings.sport}. Change the focus or add more combos.`
@@ -179,6 +188,7 @@ async function startWorkout() {
   app.combosCalledIds = [];
   app.workoutFocus = focus;
   app.workoutFocusWeak = focusWeak;
+  app.workoutMode = settings.workoutMode;
 
   app.screens.workout.clearCombo();
   app.screens.workout.setStatus('');
@@ -216,8 +226,15 @@ function handle(events) {
         app.audio.bell();
         break;
       case 'combo':
-        app.screens.workout.setCombo(e.combo.display);
-        app.combosCalledIds.push(e.combo.id);
+        app.screens.workout.setCombo(
+          e.combo.display,
+          e.combo.ladder ? `Rung ${e.combo.ladder.rung} of ${e.combo.ladder.of}` : '',
+        );
+        // Only a full combo counts toward per-combo history. A ladder's partial
+        // rungs would otherwise log "jab" hundreds of times as practice.
+        if (!e.combo.ladder || e.combo.ladder.rung === e.combo.ladder.of) {
+          app.combosCalledIds.push(e.combo.ladder?.baseId ?? e.combo.id);
+        }
         break;
       case 'cancelSpeech':
         app.speech.cancel();
@@ -262,6 +279,7 @@ function finished(summary) {
     roundsPlanned: summary.roundsPlanned,
     focus: app.workoutFocus ?? undefined,
     focusWeak: app.workoutFocusWeak,
+    mode: LADDER_MODES.includes(app.workoutMode) ? app.workoutMode : undefined,
   });
   app.screens.history.refresh();
 
@@ -292,6 +310,7 @@ function repeatSession(record) {
   app.settings.set('restBetweenRoundsSec', record.restSec);
   app.settings.set('focus', record.focus ?? null);
   if (typeof record.focusWeak === 'boolean') app.settings.set('focusWeak', record.focusWeak);
+  app.settings.set('workoutMode', record.mode ?? 'random');
 
   app.screens.home.refresh();
   app.screens.settings.refresh();
@@ -299,6 +318,7 @@ function repeatSession(record) {
   app.screens.home.notice(
     `Loaded that session: ${record.sport}, ${record.tier}, ${record.intensity}, ` +
     `${rounds} &times; ${Math.round(record.roundLengthSec / 60)} min` +
+    (record.mode ? `, ${record.mode}` : '') +
     (record.focus ? `, ${TAG_LABEL[record.focus] ?? record.focus} focus.` : '.')
   );
 }

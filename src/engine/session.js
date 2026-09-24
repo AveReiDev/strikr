@@ -11,6 +11,7 @@
  */
 
 import { createSelector } from './selector.js';
+import { createLadderSelector, LADDER_MODES } from './ladder.js';
 import {
   gapMsFor,
   voiceRate,
@@ -40,7 +41,7 @@ export function createSession({ config, settings, combos, rng, intensity: overri
   const restMs = settings.restBetweenRoundsSec * 1000;
   const countdownMs = settings.countdownSec * 1000;
 
-  const selector = createSelector({
+  const selectorArgs = {
     combos,
     sport: settings.sport,
     tier: settings.tier,
@@ -49,7 +50,10 @@ export function createSession({ config, settings, combos, rng, intensity: overri
     focusWeak,
     comboFrequencyMap,
     focus,
-  });
+  };
+  const selector = LADDER_MODES.includes(settings.workoutMode)
+    ? createLadderSelector({ ...selectorArgs, mode: settings.workoutMode, reps: settings.ladderReps ?? 1 })
+    : createSelector(selectorArgs);
 
   let state = STATES.IDLE;
   let phaseStart = 0;
@@ -101,6 +105,7 @@ export function createSession({ config, settings, combos, rng, intensity: overri
     awaitingSpeech = false;
     pendingCombo = null;
     currentCombo = null;
+    selector.startRound?.();   // a ladder opens every round on rung one
     gapStart = now;
     currentGapMs = intensity.baseGapMs;
   }
@@ -113,6 +118,7 @@ export function createSession({ config, settings, combos, rng, intensity: overri
       intensity: settings.intensity,
       rounds: roundsCompleted,
       roundsPlanned: settings.roundsPerWorkout,
+      mode: settings.workoutMode ?? 'random',
       roundLengthSec: settings.roundLengthMin * 60,
       restSec: settings.restBetweenRoundsSec,
       durationSec: Math.round((now - (startedAt ?? now)) / 1000),

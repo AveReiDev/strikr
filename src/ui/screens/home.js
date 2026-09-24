@@ -4,14 +4,22 @@
  * Every choice writes straight through to settings, so it survives a reload.
  */
 
-import { SPORTS, TIERS, INTENSITIES, ROUND_LENGTHS } from '../../store/settings.js';
+import { SPORTS, TIERS, INTENSITIES, ROUND_LENGTHS, WORKOUT_MODES } from '../../store/settings.js';
 import { gapMsFor } from '../../engine/timing.js';
 import { buildPool } from '../../engine/selector.js';
+import { buildLadderPool, LADDER_MODES } from '../../engine/ladder.js';
 import { dailyVolume } from '../../store/history.js';
 import { computeSuggestion } from '../../engine/suggest.js';
 import { TAG_LABEL } from '../../store/library.js';
 
 const SPORT_LABEL = { boxing: 'Boxing', muaythai: 'Muay Thai', kickboxing: 'Kickboxing' };
+
+const MODE_LABEL = { random: 'Random', ladder: 'Ladder', pyramid: 'Pyramid' };
+const MODE_SUB = {
+  random: 'Mixed combos',
+  ladder: 'Add a strike',
+  pyramid: 'Up, then down',
+};
 
 const TIER_SUB = {
   beginner: 'Basic combos',
@@ -37,6 +45,9 @@ export function createHomeScreen({ root, settings, config, library, history, onS
     <div class="grid" data-group="intensity"></div>
     <div class="bars" data-group="intensityCustom" style="margin-top:var(--sp-2)"></div>
     <div id="custom-controls" hidden></div>
+
+    <div class="section-label">Mode</div>
+    <div class="grid" data-group="workoutMode"></div>
 
     <div class="section-label">Focus</div>
     <div class="grid wrap" data-group="focus"></div>
@@ -64,6 +75,7 @@ export function createHomeScreen({ root, settings, config, library, history, onS
     tier: root.querySelector('[data-group="tier"]'),
     focus: root.querySelector('[data-group="focus"]'),
     weakSpots: root.querySelector('[data-group="weakSpots"]'),
+    workoutMode: root.querySelector('[data-group="workoutMode"]'),
     roundLengthMin: root.querySelector('[data-group="roundLengthMin"]'),
   };
 
@@ -131,14 +143,18 @@ export function createHomeScreen({ root, settings, config, library, history, onS
    */
   const poolSizeEl = root.querySelector('#pool-size');
   function renderPoolSize() {
-    const n = buildPool(library.activePool(), {
+    const ladder = LADDER_MODES.includes(settings.get('workoutMode'));
+    const n = (ladder ? buildLadderPool : buildPool)(library.activePool(), {
       sport: settings.get('sport'),
       tier: settings.get('tier'),
       focus: settings.get('focus') || null,
     }).length;
+    const noun = ladder ? 'ladder' : 'combo';
     poolSizeEl.textContent = n
-      ? `${n} combo${n === 1 ? '' : 's'} in rotation`
-      : 'No combos match these choices';
+      ? `${n} ${noun}${n === 1 ? '' : 's'} in rotation`
+      : ladder
+        ? 'No combos here are long enough to ladder'
+        : 'No combos match these choices';
   }
 
   /** A left-aligned chip carrying a title and a sub-line, as in the reference. */
@@ -300,6 +316,10 @@ export function createHomeScreen({ root, settings, config, library, history, onS
     groups.weakSpots.appendChild(b);
   }
 
+  for (const m of WORKOUT_MODES) {
+    groups.workoutMode.appendChild(stackChip('workoutMode', m, MODE_LABEL[m], MODE_SUB[m]));
+  }
+
   for (const r of ROUND_LENGTHS) groups.roundLengthMin.appendChild(chip('roundLengthMin', r));
 
   root.querySelector('#start-round').addEventListener('click', onStart);
@@ -390,7 +410,7 @@ export function createHomeScreen({ root, settings, config, library, history, onS
   });
 
   function refreshAll() {
-    for (const group of ['sport', 'tier', 'intensity', 'roundLengthMin']) {
+    for (const group of ['sport', 'tier', 'intensity', 'workoutMode', 'roundLengthMin']) {
       for (const el of buttonsFor(group)) {
         el.setAttribute('aria-pressed', String(el.dataset.value === String(settings.get(group))));
       }

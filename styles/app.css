@@ -164,6 +164,8 @@ body[data-mode="workout"] #tabbar { display: none; }
   line-height: var(--leading-tight);
 }
 .chip.stack .chip-sub { letter-spacing: 0.02em; }
+/* "Pyramid" at full tracking is wider than a third of a phone screen. */
+[data-group="workoutMode"] .chip.stack .chip-title { letter-spacing: 0.02em; }
 
 /* ---- primary action -------------------------------------------------- */
 
@@ -364,6 +366,15 @@ input[type="range"] { flex: 1; accent-color: var(--accent); min-height: var(--ta
   min-height: 3.2em;
   display: flex;
   align-items: center;
+}
+.wk-rung {
+  color: var(--fg-dim);
+  font-size: var(--size-sm);
+  font-weight: var(--weight-black);
+  letter-spacing: var(--track-mid);
+  text-transform: uppercase;
+  margin: calc(-1 * var(--sp-4)) 0 var(--sp-4);
+  min-height: 1.4em;   /* reserved, so the buttons do not jump when it appears */
 }
 .wk-actions { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-2); }
 .wk-actions button {

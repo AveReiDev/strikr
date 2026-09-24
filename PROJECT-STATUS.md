@@ -1,6 +1,6 @@
 # STRIKR — project summary
 
-Last updated 22 September 2026.
+Last updated 24 September 2026.
 
 ---
 
@@ -18,6 +18,7 @@ Last updated 22 September 2026.
 | 6B — Progressive training | **Done**, tested on device |
 | 6C — Constraint rounds | **Done**, awaiting device test |
 | Audit fixes (v1.4.0) | **Done**, awaiting device test |
+| 7A — Ladder / pyramid drills (v1.5.0) | **Done**, awaiting device test |
 
 ### Installing it on your phone
 
@@ -42,7 +43,7 @@ tell that `app.css` is new. **After editing any file in the app, bump
 `CACHE_VERSION` at the top of `sw.js`.** Forget, and an installed phone may keep
 serving the old version. This is written at the top of `sw.js` too.
 
-**171 tests pass.** Run them with `npm test`, or:
+**183 tests pass.** Run them with `npm test`, or:
 
 ```bash
 node --test 'test/*.test.js'
@@ -299,6 +300,27 @@ the phone).
 - About shows the SW cache version instead of a hard-coded 1.0.0; the SW no
   longer caches an error response over the good `index.html`.
 
+## Suggested workout fix and ladder drills, 24 September 2026 (v1.5.0)
+
+- **Suggested workout "missing".** Nothing was broken: with no goal stored,
+  Settings displayed the picker's starting values (10 / Hard / 2 min), so an
+  unset goal looked set. That happened after the move to GitHub Pages, since
+  the new origin started with empty storage. Settings now says **Not set**,
+  and Home shows a "Set goal" card that opens the goal section.
+- **Ladder and Pyramid modes** (Home › Mode). `src/engine/ladder.js` cuts
+  rungs from any combo with 3+ spoken strikes: Jab / Jab, Cross / … A
+  parenthetical such as "(land switched)" never ends a rung; it goes with the
+  next spoken strike. Pyramid climbs and then strips back down. Every round
+  starts a fresh ladder on rung one (`selector.startRound()`, called by the
+  session). Settings › Ladder reps per rung repeats each step 1–3×. The
+  workout screen shows "Rung n of N".
+- Only the top rung (the whole combo) counts toward per-combo history, so
+  partial rungs do not inflate the Combos screen or weak-spots. History
+  records carry `mode` for ladder and pyramid workouts, and Repeat restores it.
+- Next, in the agreed order: post-workout "how did that feel?" rating, then
+  rounds that ramp up and finishers, then weekly load tracking with planned
+  easy weeks.
+
 ## Still open
 
 - **Stable address.** The dev cert expired 4 Sep and is tied to an old IP;
@@ -327,6 +349,7 @@ src/
     timing.js           gap maths, speech estimate, round-end lookahead
     session.js          the round/rest state machine — owns no timers
     suggest.js          progressive training suggestion algorithm
+    ladder.js           ladder / pyramid drills cut from existing combos
   audio/
     speech.js           the ONLY file touching SpeechSynthesis
     context.js          shared AudioContext: keep-alive tone and bell
@@ -339,7 +362,7 @@ src/
 styles/
   tokens.css          every colour and size; light mode is a token override
   app.css             components only, no raw colours
-test/                 node --test, 171 tests
+test/                 node --test, 183 tests
 ```
 
 Three storage keys, independently readable so one corrupt value cannot brick the

@@ -14,6 +14,8 @@ export const PERIOD_LABEL = { week: 'This Week', month: 'This Month', all: 'All 
 const SPORTS = ['boxing', 'muaythai', 'kickboxing'];
 const TIERS = ['beginner', 'intermediate', 'advanced'];
 const INTENSITIES = ['light', 'medium', 'hard', 'custom'];
+// Random workouts store no mode, so only the drill modes are listed.
+const MODES = ['ladder', 'pyramid'];
 
 export function newSessionId() {
   if (globalThis.crypto?.randomUUID) return globalThis.crypto.randomUUID();
@@ -123,6 +125,7 @@ function sanitiseHistory(raw) {
     if (Number.isInteger(r.roundsPlanned) && r.roundsPlanned >= 1) rec.roundsPlanned = r.roundsPlanned;
     if (typeof r.focus === 'string' && r.focus) rec.focus = r.focus;
     if (typeof r.focusWeak === 'boolean') rec.focusWeak = r.focusWeak;
+    if (MODES.includes(r.mode)) rec.mode = r.mode;
     out.push(rec);
   }
   return out;

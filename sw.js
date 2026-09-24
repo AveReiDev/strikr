@@ -24,7 +24,7 @@
  *                       signal; updates land on the following launch.
  */
 
-const CACHE_VERSION = 'strikr-v1.4.1';
+const CACHE_VERSION = 'strikr-v1.5.0';
 
 /** Everything needed to run with no network. */
 const SHELL = [
@@ -40,6 +40,7 @@ const SHELL = [
   './src/engine/timing.js',
   './src/engine/session.js',
   './src/engine/suggest.js',
+  './src/engine/ladder.js',
   './src/audio/speech.js',
   './src/audio/context.js',
   './src/audio/wakelock.js',

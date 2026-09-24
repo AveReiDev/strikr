@@ -12,6 +12,7 @@ export const SPORTS = ['boxing', 'muaythai', 'kickboxing'];
 export const TIERS = ['beginner', 'intermediate', 'advanced'];
 export const INTENSITIES = ['light', 'medium', 'hard', 'custom'];
 export const ROUND_LENGTHS = [1, 2, 3, 4, 5, 10];
+export const WORKOUT_MODES = ['random', 'ladder', 'pyramid'];
 
 /**
  * Allowed values for the picker rows on the settings screen.
@@ -25,6 +26,7 @@ export const CHOICES = {
   roundsPerWorkout: Array.from({ length: 15 }, (_, i) => i + 1),
   restBetweenRoundsSec: [10, 15, 20, 30, 45, 60, 90],
   countdownSec: [0, 3, 5, 10],
+  ladderReps: [1, 2, 3],
 };
 
 export const GOAL_INTENSITIES = ['light', 'medium', 'hard'];
@@ -45,6 +47,8 @@ export function settingsSchema(config) {
     voiceSpeedPct: { type: 'number', integer: true, min: 0, max: 100 },
     darkMode: { type: 'boolean' },
     focusWeak: { type: 'boolean' },
+    workoutMode: { oneOf: WORKOUT_MODES },
+    ladderReps: { oneOf: CHOICES.ladderReps },
     customIntensity: {
       type: 'object',
       defaults: { baseGapMs: custom.baseGapMs, perActionMs: custom.perActionMs },
@@ -70,6 +74,8 @@ export function defaultSettings(config) {
     voiceSpeedPct: d.voiceSpeedPct,
     darkMode: d.darkMode,
     focusWeak: false,
+    workoutMode: 'random',
+    ladderReps: 1,
     focus: null,
     customIntensity: {
       baseGapMs: config.intensity.custom.baseGapMs,

@@ -17,6 +17,13 @@ const INTENSITIES = ['light', 'medium', 'hard', 'custom'];
 // Random workouts store no mode, so only the drill modes are listed.
 const MODES = ['ladder', 'pyramid'];
 
+/**
+ * How a session felt, rated once it ends: 1 Easy … 5 Brutal. Unrated
+ * sessions simply lack the field — skipping the question is always allowed.
+ */
+export const FEELS = [1, 2, 3, 4, 5];
+export const FEEL_LABEL = { 1: 'Easy', 2: 'Steady', 3: 'Solid', 4: 'Tough', 5: 'Brutal' };
+
 export function newSessionId() {
   if (globalThis.crypto?.randomUUID) return globalThis.crypto.randomUUID();
   // Older iOS Safari has no randomUUID. Uniqueness only has to hold within
@@ -126,6 +133,7 @@ function sanitiseHistory(raw) {
     if (typeof r.focus === 'string' && r.focus) rec.focus = r.focus;
     if (typeof r.focusWeak === 'boolean') rec.focusWeak = r.focusWeak;
     if (MODES.includes(r.mode)) rec.mode = r.mode;
+    if (FEELS.includes(r.feel)) rec.feel = r.feel;
     out.push(rec);
   }
   return out;
@@ -152,6 +160,15 @@ export function createHistory({ storage }) {
       records.push(record);
       persist();
       return record;
+    },
+
+    /** Rate a saved session. Returns false for an unknown id or rating. */
+    setFeel(id, feel) {
+      const r = records.find((x) => x.id === id);
+      if (!r || !FEELS.includes(feel)) return false;
+      r.feel = feel;
+      persist();
+      return true;
     },
 
     inPeriod(period, now = Date.now()) {
@@ -271,6 +288,11 @@ export function leastPracticed(records, pool, { since, limit } = {}) {
 
 const INTENSITY_ORDER = ['light', 'medium', 'hard'];
 
+function maxFeel(recs) {
+  const rated = recs.map((r) => r.feel).filter((f) => FEELS.includes(f));
+  return rated.length ? Math.max(...rated) : undefined;
+}
+
 function mode(arr) {
   if (!arr.length) return arr[0];
   const counts = new Map();
@@ -305,6 +327,9 @@ export function dailyVolume(records, { sport, since } = {}) {
       intensity: mode(recs.map((r) => r.intensity).filter((i) => INTENSITY_ORDER.includes(i))),
       roundLengthMin: mode(recs.map((r) => Math.round(r.roundLengthSec / 60))),
       sessions: recs.length,
+      // The hardest-feeling session speaks for the day: one brutal workout is
+      // not cancelled out by an easy one before it.
+      feel: maxFeel(recs),
     });
   }
   return out.sort((a, b) => (a.day < b.day ? -1 : a.day > b.day ? 1 : 0));

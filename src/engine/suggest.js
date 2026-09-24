@@ -47,11 +47,54 @@ function bestDay(volumes, goal) {
   return best;
 }
 
+/** The most recent day that can be placed on the progression, and the one before it. */
+function lastTwoDays(volumes) {
+  const placed = volumes.filter((v) => INTENSITY_ORDER.includes(v.intensity));
+  return [placed.at(-1) ?? null, placed.at(-2) ?? null];
+}
+
+/**
+ * Autoregulation from the post-workout rating.
+ *
+ * Tough (4) or one Brutal (5): hold — repeat the latest day rather than step
+ * past it. Two Brutal days running: back off by about a fifth of the rounds.
+ * Anything easier, or unrated, leaves the normal progression alone. The held
+ * workout is capped at the goal, so training past it is never suggested.
+ */
+function feelAdjustment(volumes, goal) {
+  const [last, prev] = lastTwoDays(volumes);
+  if (!last || !(last.feel >= 4)) return null;
+
+  const gIdx = INTENSITY_ORDER.indexOf(goal.intensity);
+  const intensity = INTENSITY_ORDER[Math.min(INTENSITY_ORDER.indexOf(last.intensity), gIdx)];
+  const roundLengthMin = Math.min(last.roundLengthMin || goal.roundLengthMin, goal.roundLengthMin);
+  const rounds = Math.min(last.rounds, goal.rounds);
+
+  if (last.feel === 5 && prev?.feel === 5) {
+    return {
+      rounds: Math.max(1, rounds - Math.max(1, Math.round(rounds * 0.2))),
+      intensity,
+      roundLengthMin,
+      reason: `Two brutal sessions running — backing off to recover`,
+      goalReached: false,
+      bestDay: last,
+    };
+  }
+  return {
+    rounds,
+    intensity,
+    roundLengthMin,
+    reason: `Last session felt ${last.feel === 5 ? 'brutal' : 'tough'} — repeat it before stepping up`,
+    goalReached: false,
+    bestDay: last,
+  };
+}
+
 /**
  * Compute the next suggested workout.
  *
  * @param {Object} goal - { rounds, intensity, roundLengthMin }
- * @param {Array} volumes - recent dailyVolume output (last 14 days)
+ * @param {Array} volumes - recent dailyVolume output (last 14 days), oldest first
  * @param {Object} current - current settings snapshot
  * @returns {{ rounds, intensity, roundLengthMin, reason, goalReached, bestDay }|null}
  */
@@ -73,6 +116,15 @@ export function computeSuggestion(goal, volumes, current) {
 
   const gIdx = INTENSITY_ORDER.indexOf(goal.intensity);
   const bIdx = INTENSITY_ORDER.indexOf(best.intensity);
+  const reached = best.rounds >= goal.rounds
+    && bIdx >= gIdx
+    && best.roundLengthMin >= goal.roundLengthMin;
+
+  // A reached goal is reported regardless of how the last day felt.
+  if (!reached) {
+    const adjusted = feelAdjustment(volumes, goal);
+    if (adjusted) return adjusted;
+  }
 
   if (best.rounds >= goal.rounds
     && bIdx >= gIdx

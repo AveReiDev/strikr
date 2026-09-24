@@ -8,7 +8,7 @@ import { SPORTS, TIERS, INTENSITIES, ROUND_LENGTHS, WORKOUT_MODES } from '../../
 import { gapMsFor } from '../../engine/timing.js';
 import { buildPool } from '../../engine/selector.js';
 import { buildLadderPool, LADDER_MODES } from '../../engine/ladder.js';
-import { dailyVolume } from '../../store/history.js';
+import { dailyVolume, FEELS, FEEL_LABEL } from '../../store/history.js';
 import { computeSuggestion } from '../../engine/suggest.js';
 import { TAG_LABEL } from '../../store/library.js';
 
@@ -27,12 +27,14 @@ const TIER_SUB = {
   advanced: 'High-level combos',
 };
 
-export function createHomeScreen({ root, settings, config, library, history, onStart, onSetGoal }) {
+export function createHomeScreen({ root, settings, config, library, history, onStart, onSetGoal, onFeel }) {
   let suggestionDismissed = false;
+  let feelFor = null;         // id of the just-saved session awaiting a rating
 
   root.innerHTML = `
     <h1 class="page-title">STRIKR<span class="dot">.</span></h1>
 
+    <div id="feel-prompt"></div>
     <div id="suggestion-card"></div>
 
     <div class="section-label">Select sport</div>
@@ -371,7 +373,7 @@ export function createHomeScreen({ root, settings, config, library, history, onS
       suggestionBox.innerHTML = `
         <div class="card suggestion-card">
           <div class="suggestion-header">SUGGESTED WORKOUT</div>
-          <div class="suggestion-detail highlight">${suggestion.rounds} rounds · ${capitalise(suggestion.intensity)} · ${suggestion.roundLengthMin} min</div>
+          <div class="suggestion-detail highlight">${suggestion.rounds} round${suggestion.rounds === 1 ? '' : 's'} · ${capitalise(suggestion.intensity)} · ${suggestion.roundLengthMin} min</div>
           ${suggestion.reason ? `<div class="suggestion-reason">${suggestion.reason}</div>` : ''}
           <div class="suggestion-actions">
             <button class="suggestion-btn primary-btn" data-action="load">Load</button>
@@ -425,10 +427,42 @@ export function createHomeScreen({ root, settings, config, library, history, onS
     renderPoolSize();
   }
 
+  /* ---- post-workout rating --------------------------------------------- */
+
+  const feelBox = root.querySelector('#feel-prompt');
+
+  function renderFeel() {
+    if (!feelFor) { feelBox.innerHTML = ''; return; }
+    feelBox.innerHTML = `
+      <div class="card feel-card">
+        <div class="suggestion-header">HOW DID THAT FEEL?</div>
+        <div class="feel-scale">
+          ${FEELS.map((f) => `
+            <button class="chip stack feel-btn" data-feel="${f}">
+              <span class="chip-title">${f}</span><span class="chip-sub">${FEEL_LABEL[f]}</span>
+            </button>`).join('')}
+        </div>
+        <button class="feel-skip" data-feel="">Skip</button>
+      </div>`;
+  }
+
+  feelBox.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-feel]');
+    if (!btn) return;
+    const id = feelFor;
+    feelFor = null;
+    renderFeel();
+    onFeel?.(id, Number(btn.dataset.feel) || null);
+  });
+
   renderSuggestion();
   renderPoolSize();
 
   return {
+    askFeel(id) {
+      feelFor = id;
+      renderFeel();
+    },
     refresh() {
       suggestionDismissed = false;
       refreshAll();

@@ -739,6 +739,28 @@ input[type="range"] { flex: 1; accent-color: var(--accent); min-height: var(--ta
   text-transform: uppercase;
   color: var(--fg-dim);
 }
+/* Post-workout rating: five equal columns must fit a phone, so no tracking
+   on the labels and minmax(0, 1fr) so a long word cannot widen its column. */
+.feel-card { padding: var(--sp-4); margin-bottom: var(--sp-2); }
+.feel-scale {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--sp-1);
+  margin-top: var(--sp-3);
+}
+.chip.stack.feel-btn { text-align: center; padding: var(--sp-2) 0; }
+.chip.stack.feel-btn .chip-title { font-size: var(--size-lg); }
+.chip.stack.feel-btn .chip-sub { letter-spacing: 0; text-transform: none; }
+.feel-skip {
+  display: block;
+  margin: var(--sp-2) auto 0;
+  min-height: var(--tap-min);
+  padding: 0 var(--sp-4);
+  background: none;
+  border: 0;
+  color: var(--fg-dim);
+  font-size: var(--size-sm);
+}
 .suggestion-detail {
   font-size: var(--size-lg);
   font-weight: var(--weight-black);

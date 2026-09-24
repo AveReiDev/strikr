@@ -432,3 +432,27 @@ test('planned rounds and focus round-trip; malformed ones are dropped', () => {
   assert.equal('focus' in junk, false);
   assert.equal('focusWeak' in junk, false);
 });
+
+test('a session can be rated once saved, and the rating survives a reload', () => {
+  const backend = fakeBackend();
+  const h = makeHistory(backend);
+  const r = h.add(record());
+  assert.equal(h.setFeel(r.id, 4), true);
+  assert.equal(makeHistory(backend).all()[0].feel, 4);
+});
+
+test('an unknown session or out-of-range rating is refused', () => {
+  const h = makeHistory();
+  const r = h.add(record());
+  assert.equal(h.setFeel('nope', 3), false);
+  assert.equal(h.setFeel(r.id, 6), false);
+  assert.equal(h.setFeel(r.id, 0), false);
+  assert.equal(h.all()[0].feel, undefined);
+});
+
+test('a corrupt stored rating is dropped, keeping the record', () => {
+  const backend = fakeBackend({ 'strikr.v1.history': stored([record({ id: 'a', feel: 9 })]) });
+  const [r] = makeHistory(backend).all();
+  assert.equal(r.id, 'a');
+  assert.equal(r.feel, undefined);
+});

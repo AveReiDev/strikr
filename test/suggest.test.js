@@ -289,3 +289,77 @@ test('all-Custom days are ignored rather than read as "undefined" intensity', ()
   assert.equal(s.bestDay, null);
   assert.equal(s.rounds, 3);
 });
+
+/* ------------------------------------------------------------------ *
+ * Post-workout rating (feel)
+ * ------------------------------------------------------------------ */
+
+const FEEL_GOAL = { rounds: 10, intensity: 'hard', roundLengthMin: 2 };
+const FEEL_CURRENT = { roundsPerWorkout: 3, intensity: 'medium', roundLengthMin: 2 };
+const day = (d, rounds, feel, intensity = 'hard') =>
+  ({ day: d, rounds, intensity, roundLengthMin: 2, sessions: 1, feel });
+
+test('dailyVolume takes the hardest rating of the day, and leaves unrated days unrated', () => {
+  const records = [
+    rec({ startedAt: daysAgo(2).toISOString(), feel: 2 }),
+    rec({ startedAt: daysAgo(2).toISOString(), feel: 5 }),
+    rec({ startedAt: daysAgo(2).toISOString() }),
+    rec({ startedAt: daysAgo(1).toISOString() }),
+  ];
+  const vol = dailyVolume(records, { sport: 'muaythai' });
+  assert.equal(vol[0].feel, 5);
+  assert.equal(vol[1].feel, undefined);
+});
+
+test('an easy or solid last day steps up as before', () => {
+  for (const feel of [undefined, 1, 2, 3]) {
+    const s = computeSuggestion(FEEL_GOAL, [day('2026-09-17', 5, feel)], FEEL_CURRENT);
+    assert.equal(s.rounds, 6, `feel ${feel}`);
+  }
+});
+
+test('a tough last day holds at that workout', () => {
+  const s = computeSuggestion(FEEL_GOAL, [day('2026-09-17', 5, 4)], FEEL_CURRENT);
+  assert.equal(s.rounds, 5);
+  assert.equal(s.intensity, 'hard');
+  assert.match(s.reason, /tough/);
+});
+
+test('a single brutal day holds rather than backing off', () => {
+  const s = computeSuggestion(FEEL_GOAL, [day('2026-09-16', 5, 3), day('2026-09-17', 5, 5)], FEEL_CURRENT);
+  assert.equal(s.rounds, 5);
+  assert.match(s.reason, /brutal/);
+});
+
+test('two brutal days running back off by about a fifth', () => {
+  const s = computeSuggestion(FEEL_GOAL, [day('2026-09-16', 5, 5), day('2026-09-17', 5, 5)], FEEL_CURRENT);
+  assert.equal(s.rounds, 4);
+  const big = computeSuggestion(FEEL_GOAL, [day('2026-09-16', 10, 5, 'medium'), day('2026-09-17', 10, 5, 'medium')], FEEL_CURRENT);
+  assert.equal(big.rounds, 8);
+  assert.equal(big.intensity, 'medium');
+  const one = computeSuggestion(FEEL_GOAL, [day('2026-09-16', 1, 5), day('2026-09-17', 1, 5)], FEEL_CURRENT);
+  assert.equal(one.rounds, 1, 'never below one round');
+});
+
+test('the hold follows the LATEST day, even when an earlier day went further', () => {
+  const s = computeSuggestion(
+    FEEL_GOAL,
+    [day('2026-09-15', 8, 3), day('2026-09-17', 4, 4, 'medium')],
+    FEEL_CURRENT,
+  );
+  assert.equal(s.rounds, 4);
+  assert.equal(s.intensity, 'medium');
+});
+
+test('a held workout never exceeds the goal', () => {
+  const goal = { rounds: 6, intensity: 'medium', roundLengthMin: 3 };
+  const s = computeSuggestion(goal, [day('2026-09-17', 5, 4, 'hard')], FEEL_CURRENT);
+  assert.equal(s.intensity, 'medium');
+  assert.equal(s.roundLengthMin, 2);
+  assert.ok(s.rounds <= goal.rounds);
+});
+
+test('a reached goal is reported even if it felt brutal', () => {
+  const s = computeSuggestion(FEEL_GOAL, [day('2026-09-16', 10, 5), day('2026-09-17', 10, 5)], FEEL_CURRENT);
+  assert.equal(s.goalReached, true);
+});

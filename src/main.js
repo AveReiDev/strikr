@@ -71,6 +71,11 @@ async function boot() {
     library: app.library,
     history: app.history,
     onStart: startWorkout,
+    onFeel: (id, feel) => {
+      if (feel) app.history.setFeel(id, feel);
+      app.screens.history.refresh();
+      app.screens.home.refresh();
+    },
     onSetGoal: () => {
       app.router.show('settings');
       document.getElementById('goal-status')?.scrollIntoView({ block: 'center' });
@@ -190,6 +195,7 @@ async function startWorkout() {
   app.workoutFocusWeak = focusWeak;
   app.workoutMode = settings.workoutMode;
 
+  app.screens.home.askFeel(null);   // an unanswered rating does not outlive the next workout
   app.screens.workout.clearCombo();
   app.screens.workout.setStatus('');
   app.router.show('workout');
@@ -282,12 +288,13 @@ function finished(summary) {
     mode: LADDER_MODES.includes(app.workoutMode) ? app.workoutMode : undefined,
   });
   app.screens.history.refresh();
+  if (saved) app.screens.home.askFeel(saved.id);
 
   app.router.show(app.lastTab === 'workout' ? 'home' : app.lastTab);
   app.screens.home.notice(
     `${summary.completed ? 'Workout complete' : 'Workout stopped'} — ` +
     `${summary.rounds} round${summary.rounds === 1 ? '' : 's'}, ` +
-    `${summary.combosCalled} combos, ${Math.round(summary.durationSec)}s.` +
+    `${summary.combosCalled} calls, ${Math.round(summary.durationSec)}s.` +
     (saved ? '' : ' Not saved to history — no round was finished.')
   );
 }

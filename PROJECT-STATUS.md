@@ -18,7 +18,8 @@ Last updated 24 September 2026.
 | 6B — Progressive training | **Done**, tested on device |
 | 6C — Constraint rounds | **Done**, awaiting device test |
 | Audit fixes (v1.4.0) | **Done**, awaiting device test |
-| 7A — Ladder / pyramid drills (v1.5.0) | **Done**, awaiting device test |
+| 7A — Ladder / pyramid drills (v1.5.0) | **Done**, tested on the bag |
+| 7B — Post-workout feel rating (v1.6.0) | **Done**, awaiting device test |
 
 ### Installing it on your phone
 
@@ -43,7 +44,7 @@ tell that `app.css` is new. **After editing any file in the app, bump
 `CACHE_VERSION` at the top of `sw.js`.** Forget, and an installed phone may keep
 serving the old version. This is written at the top of `sw.js` too.
 
-**183 tests pass.** Run them with `npm test`, or:
+**194 tests pass.** Run them with `npm test`, or:
 
 ```bash
 node --test 'test/*.test.js'
@@ -317,9 +318,23 @@ the phone).
 - Only the top rung (the whole combo) counts toward per-combo history, so
   partial rungs do not inflate the Combos screen or weak-spots. History
   records carry `mode` for ladder and pyramid workouts, and Repeat restores it.
-- Next, in the agreed order: post-workout "how did that feel?" rating, then
-  rounds that ramp up and finishers, then weekly load tracking with planned
-  easy weeks.
+
+## Feel rating, 24 September 2026 (v1.6.0)
+
+- After a saved workout, Home asks **How did that feel?** 1 Easy · 2 Steady ·
+  3 Solid · 4 Tough · 5 Brutal, or Skip. It is stored as `feel` on the history
+  record (`history.setFeel`) and shown in History as "felt tough". The prompt
+  is in memory only: a reload or the next workout drops an unanswered one.
+- `dailyVolume` gives each day the hardest rating of its sessions.
+- `computeSuggestion` autoregulates from the most recent day. 1–3 or unrated:
+  the normal progression. Tough, or one Brutal: hold at that day's workout,
+  capped at the goal. Two Brutal days running: back off about 20% of the
+  rounds. A reached goal is still reported first.
+- The hold follows the latest day, not the best one, so a short but brutal
+  session holds at that short session. This is deliberate: it respects
+  fatigue.
+- Next, in the agreed order: rounds that ramp up and finishers, then weekly
+  load tracking with planned easy weeks.
 
 ## Still open
 
@@ -362,7 +377,7 @@ src/
 styles/
   tokens.css          every colour and size; light mode is a token override
   app.css             components only, no raw colours
-test/                 node --test, 183 tests
+test/                 node --test, 194 tests
 ```
 
 Three storage keys, independently readable so one corrupt value cannot brick the

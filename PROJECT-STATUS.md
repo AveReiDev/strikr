@@ -19,7 +19,8 @@ Last updated 24 September 2026.
 | 6C — Constraint rounds | **Done**, awaiting device test |
 | Audit fixes (v1.4.0) | **Done**, awaiting device test |
 | 7A — Ladder / pyramid drills (v1.5.0) | **Done**, tested on the bag |
-| 7B — Post-workout feel rating (v1.6.0) | **Done**, awaiting device test |
+| 7B — Post-workout feel rating (v1.6.0) | **Done**, live |
+| 7C — Ramp up and finishers (v1.7.0) | **Done**, awaiting device test |
 
 ### Installing it on your phone
 
@@ -44,7 +45,7 @@ tell that `app.css` is new. **After editing any file in the app, bump
 `CACHE_VERSION` at the top of `sw.js`.** Forget, and an installed phone may keep
 serving the old version. This is written at the top of `sw.js` too.
 
-**194 tests pass.** Run them with `npm test`, or:
+**205 tests pass.** Run them with `npm test`, or:
 
 ```bash
 node --test 'test/*.test.js'
@@ -333,8 +334,25 @@ the phone).
 - The hold follows the latest day, not the best one, so a short but brutal
   session holds at that short session. This is deliberate: it respects
   fatigue.
-- Next, in the agreed order: rounds that ramp up and finishers, then weekly
-  load tracking with planned easy weeks.
+
+## Ramp up and finishers, 24 September 2026 (v1.7.0)
+
+Both are in Settings › Workout. Home's "in rotation" line shows when they
+are on. History records carry `rampUp` and `finisherSec`, and Repeat
+restores them.
+
+- **Ramp up.** Round 1 gets `ramp.startExtraGapMs` (1200, the step between
+  presets) more `baseGapMs`, shrinking evenly to nothing by the last round.
+  The chosen intensity is the peak. `perActionMs` is untouched, in keeping
+  with the Phase 1 finding.
+- **Finisher** (Off / 15 / 20 / 30 s, never more than half the round). When
+  the window opens, the session speaks "Finisher!" as soon as the current
+  callout ends, without waiting out the gap. It then calls from a second
+  selector holding only combos of ≤2 actions, at `finisher.baseGapMs` (300).
+  The phase label turns red and reads FINISHER. With no short combos in the
+  pool, the finisher is skipped and the record says 0. In ladder mode the
+  finisher calls whole combos, and the next round restarts the ladder.
+- Next: weekly load tracking with planned easy weeks (rewrites suggest.js).
 
 ## Still open
 
@@ -377,7 +395,7 @@ src/
 styles/
   tokens.css          every colour and size; light mode is a token override
   app.css             components only, no raw colours
-test/                 node --test, 194 tests
+test/                 node --test, 205 tests
 ```
 
 Three storage keys, independently readable so one corrupt value cannot brick the

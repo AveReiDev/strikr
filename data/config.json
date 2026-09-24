@@ -20,6 +20,12 @@
   "_comment_tierWeights": "Probability of drawing from each tier, relative to the tier the user selected. Renormalised over whichever tiers actually exist for the selection.",
   "tierWeights": { "selected": 50, "oneBelow": 30, "twoBelow": 20 },
 
+  "_comment_ramp": "Ramp up: round 1 gets this much extra baseGapMs, shrinking evenly to none by the last round, so a workout builds to the chosen intensity rather than starting there. 1200 is the step between the presets, so Hard opens like Medium.",
+  "ramp": { "startExtraGapMs": 1200 },
+
+  "_comment_finisher": "Finisher: the last finisherSec of every round switches to 1-2 action combos with this baseGapMs (perActionMs is unchanged, see above). Never more than half the round. callout is spoken once as it begins.",
+  "finisher": { "baseGapMs": 300, "maxActions": 2, "callout": "Finisher!" },
+
   "_comment_noRepeat": "A combo called within the last N calls is not eligible for the next draw. Shrinks automatically to one less than the pool size, so tiny pools still work.",
   "noRepeatWindow": 8,
 

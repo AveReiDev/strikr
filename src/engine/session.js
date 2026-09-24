@@ -10,7 +10,7 @@
  *   IDLE -> PREPARING -> COUNTDOWN -> ROUND -> REST -> ROUND ... -> COMPLETE
  */
 
-import { createSelector } from './selector.js';
+import { createSelector, buildPool } from './selector.js';
 import { createLadderSelector, LADDER_MODES } from './ladder.js';
 import {
   gapMsFor,
@@ -35,7 +35,8 @@ const REST_ANNOUNCE_AT = [10, 3, 2, 1];
 export function createSession({ config, settings, combos, rng, intensity: override, focusWeak, comboFrequencyMap, focus }) {
   // `override` lets Custom intensity supply the user's own numbers while
   // keeping the same shape as a built-in one.
-  const intensity = override ?? config.intensity[settings.intensity];
+  const peak = override ?? config.intensity[settings.intensity];
+  let intensity = peak;   // this round's timing; differs from peak only when ramping
   const rate = voiceRate(settings.voiceSpeedPct, config.voiceRateRange);
   const roundMs = settings.roundLengthMin * 60 * 1000;
   const restMs = settings.restBetweenRoundsSec * 1000;
@@ -54,6 +55,36 @@ export function createSession({ config, settings, combos, rng, intensity: overri
   const selector = LADDER_MODES.includes(settings.workoutMode)
     ? createLadderSelector({ ...selectorArgs, mode: settings.workoutMode, reps: settings.ladderReps ?? 1 })
     : createSelector(selectorArgs);
+
+  // Finisher: the last stretch of each round calls short combos, fast. It has
+  // its own selector over just the short combos, so the main one (and a
+  // ladder's place in its climb) is untouched. Capped at half the round.
+  const fin = config.finisher;
+  const finisherMs = Math.min((settings.finisherSec ?? 0) * 1000, roundMs / 2);
+  const finisherPool = finisherMs > 0
+    ? buildPool(combos, { sport: settings.sport, tier: settings.tier, focus })
+      .filter((c) => c.actions <= fin.maxActions)
+    : [];
+  const finisherSelector = finisherPool.length
+    ? createSelector({ ...selectorArgs, combos: finisherPool })
+    : null;
+  let finisherAnnounced = false;
+
+  /**
+   * Ramp up: round 1 carries the configured extra gap, shrinking evenly to
+   * none by the last round. A one-round workout is simply the peak.
+   */
+  function intensityForRound(index) {
+    const n = settings.roundsPerWorkout;
+    if (!settings.rampUp || n <= 1) return peak;
+    const extra = Math.round(config.ramp.startExtraGapMs * (n - index) / (n - 1));
+    return { ...peak, baseGapMs: peak.baseGapMs + extra };
+  }
+
+  function inFinisher(now) {
+    return finisherSelector !== null && state === STATES.ROUND
+      && roundMs - elapsed(now) <= finisherMs;
+  }
 
   let state = STATES.IDLE;
   let phaseStart = 0;
@@ -99,6 +130,8 @@ export function createSession({ config, settings, combos, rng, intensity: overri
 
   function enterRound(now) {
     roundIndex += 1;
+    intensity = intensityForRound(roundIndex);
+    finisherAnnounced = false;
     transition(STATES.ROUND, now);
     emit({ type: 'bell' });
     // Give the base gap before the first callout so the bell is not talked over.
@@ -119,6 +152,8 @@ export function createSession({ config, settings, combos, rng, intensity: overri
       rounds: roundsCompleted,
       roundsPlanned: settings.roundsPerWorkout,
       mode: settings.workoutMode ?? 'random',
+      rampUp: Boolean(settings.rampUp),
+      finisherSec: finisherSelector ? settings.finisherSec : 0,
       roundLengthSec: settings.roundLengthMin * 60,
       restSec: settings.restBetweenRoundsSec,
       durationSec: Math.round((now - (startedAt ?? now)) / 1000),
@@ -151,16 +186,31 @@ export function createSession({ config, settings, combos, rng, intensity: overri
     }
 
     if (awaitingSpeech) return;                       // voice still talking
+
+    const finishing = inFinisher(now);
+    if (finishing && !finisherAnnounced) {
+      // Announce straight away rather than sitting out the rest of the gap,
+      // and drop anything the main selector was holding for the lookahead.
+      finisherAnnounced = true;
+      pendingCombo = null;
+      awaitingSpeech = true;
+      currentGapMs = 0;
+      gapStart = null;
+      emit({ type: 'finisher' });
+      emit({ type: 'say', text: fin.callout, tag: 'combo' });
+      return;
+    }
+
     if (gapStart !== null && now - gapStart < currentGapMs) return;   // mid-gap
 
     // Hold a rejected combo rather than redrawing it, so the lookahead does not
     // silently burn through the pool at the end of every round.
-    const combo = pendingCombo ?? selector.next();
+    const combo = pendingCombo ?? (finishing ? finisherSelector : selector).next();
     if (!combo) return;
     pendingCombo = combo;
 
     const text = applyPronunciation(combo.speech, config.pronunciation);
-    const gapMs = gapMsFor(combo, intensity);
+    const gapMs = gapMsFor(combo, finishing ? { ...intensity, baseGapMs: fin.baseGapMs } : intensity);
     const estSpeechMs = estimateSpeechMs(text, rate, config.speechEstimate);
 
     if (!canStartCallout({
@@ -272,6 +322,8 @@ export function createSession({ config, settings, combos, rng, intensity: overri
           : state === STATES.COUNTDOWN ? countdownMs
           : 0,
         combo: currentCombo,
+        finisher: finisherAnnounced && state === STATES.ROUND,
+        intensity: state === STATES.ROUND ? intensity : null,
         combosCalled,
         poolSize: selector.pool.length,
       };

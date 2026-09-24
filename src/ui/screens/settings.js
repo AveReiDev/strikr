@@ -53,6 +53,24 @@ export function createSettingsScreen({ root, settings, speech, onReset, onThemeC
         <span class="row-value"><span data-val="countdownSec"></span><span class="chev">&rsaquo;</span></span>
       </button>
 
+      <div class="row">
+        <span>
+          <span class="row-title">Ramp up</span>
+          <span class="row-sub">Builds to your intensity by the last round</span>
+        </span>
+        <span class="row-value">
+          <button class="toggle" id="ramp-up" aria-label="Ramp up"></button>
+        </span>
+      </div>
+
+      <button class="row" data-pick="finisherSec">
+        <span>
+          <span class="row-title">Finisher</span>
+          <span class="row-sub">Fast short combos to close every round</span>
+        </span>
+        <span class="row-value"><span data-val="finisherSec"></span><span class="chev">&rsaquo;</span></span>
+      </button>
+
       <button class="row" data-pick="ladderReps">
         <span>
           <span class="row-title">Ladder reps per rung</span>
@@ -167,6 +185,7 @@ export function createSettingsScreen({ root, settings, speech, onReset, onThemeC
     restBetweenRoundsSec: (v) => `${v}s`,
     countdownSec: (v) => (v === 0 ? 'Off' : `${v}s`),
     ladderReps: (v) => `${v}×`,
+    finisherSec: (v) => (v === 0 ? 'Off' : `Last ${v}s`),
   };
 
   const PICKER_TITLE = {
@@ -174,6 +193,7 @@ export function createSettingsScreen({ root, settings, speech, onReset, onThemeC
     restBetweenRoundsSec: 'Rest between rounds',
     countdownSec: 'Countdown timer',
     ladderReps: 'Ladder reps per rung',
+    finisherSec: 'Finisher',
   };
 
   const goalFmt = {
@@ -205,6 +225,7 @@ export function createSettingsScreen({ root, settings, speech, onReset, onThemeC
     root.querySelector('#voice-speed').value = String(speed);
     root.querySelector('#voice-speed-val').textContent = `${speed}%`;
     root.querySelector('#dark-mode').setAttribute('aria-pressed', String(settings.get('darkMode')));
+    root.querySelector('#ramp-up').setAttribute('aria-pressed', String(settings.get('rampUp')));
     root.querySelector('#voice-name').textContent = speech?.voiceName ?? '—';
     renderGoal();
 
@@ -300,6 +321,11 @@ export function createSettingsScreen({ root, settings, speech, onReset, onThemeC
 
   root.querySelector('#voice-test').addEventListener('click', () => {
     speech?.speak('Jab, Cross, Lead hook, Rear body kick');
+  });
+
+  root.querySelector('#ramp-up').addEventListener('click', () => {
+    settings.set('rampUp', !settings.get('rampUp'));
+    render();
   });
 
   root.querySelector('#dark-mode').addEventListener('click', () => {

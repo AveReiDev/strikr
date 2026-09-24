@@ -134,6 +134,8 @@ function sanitiseHistory(raw) {
     if (typeof r.focusWeak === 'boolean') rec.focusWeak = r.focusWeak;
     if (MODES.includes(r.mode)) rec.mode = r.mode;
     if (FEELS.includes(r.feel)) rec.feel = r.feel;
+    if (r.rampUp === true) rec.rampUp = true;
+    if ([15, 20, 30].includes(r.finisherSec)) rec.finisherSec = r.finisherSec;
     out.push(rec);
   }
   return out;

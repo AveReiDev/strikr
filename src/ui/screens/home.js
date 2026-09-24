@@ -152,8 +152,13 @@ export function createHomeScreen({ root, settings, config, library, history, onS
       focus: settings.get('focus') || null,
     }).length;
     const noun = ladder ? 'ladder' : 'combo';
+    // Ramp and finisher live in Settings, so say here that they are on.
+    const extras = [
+      settings.get('rampUp') ? 'ramp up' : '',
+      settings.get('finisherSec') ? `${settings.get('finisherSec')}s finisher` : '',
+    ].filter(Boolean).map((x) => ` · ${x}`).join('');
     poolSizeEl.textContent = n
-      ? `${n} ${noun}${n === 1 ? '' : 's'} in rotation`
+      ? `${n} ${noun}${n === 1 ? '' : 's'} in rotation${extras}`
       : ladder
         ? 'No combos here are long enough to ladder'
         : 'No combos match these choices';

@@ -86,7 +86,7 @@ export function createHistoryScreen({ root, history, onRepeat }) {
 
     el.innerHTML = `
       <div class="session-top">
-        <span class="session-meta">${SPORT_LABEL[r.sport]} &middot; ${r.tier} &middot; ${r.intensity}${r.focus ? ` &middot; ${TAG_LABEL[r.focus] ?? r.focus}` : ''}${r.focusWeak ? ' &middot; weak spots' : ''}${r.mode ? ` &middot; ${r.mode}` : ''}${r.feel ? ` &middot; felt ${FEEL_LABEL[r.feel].toLowerCase()}` : ''}</span>
+        <span class="session-meta">${SPORT_LABEL[r.sport]} &middot; ${r.tier} &middot; ${r.intensity}${r.focus ? ` &middot; ${TAG_LABEL[r.focus] ?? r.focus}` : ''}${r.focusWeak ? ' &middot; weak spots' : ''}${r.mode ? ` &middot; ${r.mode}` : ''}${r.rampUp ? ' &middot; ramp' : ''}${r.finisherSec ? ` &middot; ${r.finisherSec}s finisher` : ''}${r.feel ? ` &middot; felt ${FEEL_LABEL[r.feel].toLowerCase()}` : ''}</span>
         <span class="session-time">${formatTime(r.startedAt)}</span>
       </div>
       <div class="session-title">

@@ -242,6 +242,9 @@ function handle(events) {
           app.combosCalledIds.push(e.combo.ladder?.baseId ?? e.combo.id);
         }
         break;
+      case 'finisher':
+        app.screens.workout.setCombo('', '');
+        break;
       case 'cancelSpeech':
         app.speech.cancel();
         break;
@@ -286,6 +289,8 @@ function finished(summary) {
     focus: app.workoutFocus ?? undefined,
     focusWeak: app.workoutFocusWeak,
     mode: LADDER_MODES.includes(app.workoutMode) ? app.workoutMode : undefined,
+    rampUp: summary.rampUp || undefined,
+    finisherSec: summary.finisherSec || undefined,
   });
   app.screens.history.refresh();
   if (saved) app.screens.home.askFeel(saved.id);
@@ -318,6 +323,8 @@ function repeatSession(record) {
   app.settings.set('focus', record.focus ?? null);
   if (typeof record.focusWeak === 'boolean') app.settings.set('focusWeak', record.focusWeak);
   app.settings.set('workoutMode', record.mode ?? 'random');
+  app.settings.set('rampUp', record.rampUp === true);
+  app.settings.set('finisherSec', record.finisherSec ?? 0);
 
   app.screens.home.refresh();
   app.screens.settings.refresh();
@@ -326,6 +333,8 @@ function repeatSession(record) {
     `Loaded that session: ${record.sport}, ${record.tier}, ${record.intensity}, ` +
     `${rounds} &times; ${Math.round(record.roundLengthSec / 60)} min` +
     (record.mode ? `, ${record.mode}` : '') +
+    (record.rampUp ? ', ramp up' : '') +
+    (record.finisherSec ? `, ${record.finisherSec}s finisher` : '') +
     (record.focus ? `, ${TAG_LABEL[record.focus] ?? record.focus} focus.` : '.')
   );
 }

@@ -62,7 +62,8 @@ export function createWorkoutScreen({ root, onPause, onAbort }) {
     render(snap) {
       el.phase.textContent = snap.paused
         ? 'Paused'
-        : (PHASE_LABEL[snap.state] ?? snap.state);
+        : snap.finisher ? 'Finisher' : (PHASE_LABEL[snap.state] ?? snap.state);
+      root.classList.toggle('finisher', Boolean(snap.finisher && !snap.paused));
       el.round.textContent =
         snap.state === STATES.ROUND || snap.state === STATES.REST
           ? `${snap.roundIndex} / ${snap.roundsPerWorkout}`

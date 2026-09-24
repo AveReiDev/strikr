@@ -367,6 +367,8 @@ input[type="range"] { flex: 1; accent-color: var(--accent); min-height: var(--ta
   display: flex;
   align-items: center;
 }
+/* The finisher is the one moment the screen should shout. */
+.finisher #wk-phase { color: var(--accent); }
 .wk-rung {
   color: var(--fg-dim);
   font-size: var(--size-sm);

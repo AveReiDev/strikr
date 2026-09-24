@@ -79,6 +79,7 @@ export function createSettingsScreen({ root, settings, speech, onReset, onThemeC
     </div>
 
     <div class="section-label">Training goal</div>
+    <div class="muted goal-status" id="goal-status">No goal set. Pick a target and Home will suggest each session&rsquo;s workout.</div>
     <div class="card" id="goal-card">
       <button class="row" data-pick-goal="rounds">
         <span>
@@ -171,12 +172,15 @@ export function createSettingsScreen({ root, settings, speech, onReset, onThemeC
     roundLengthMin: (v) => `${v} min`,
   };
 
+  // With no goal stored, say so. Showing the pickers' starting values here made
+  // an unset goal look set, and Home then showed no suggestion with no hint why.
   function renderGoal() {
     const goal = settings.get('goal');
-    const defaults = { rounds: 10, intensity: 'hard', roundLengthMin: 2 };
-    root.querySelector('[data-goal-val="rounds"]').textContent = goal ? goalFmt.rounds(goal.rounds) : goalFmt.rounds(defaults.rounds);
-    root.querySelector('[data-goal-val="intensity"]').textContent = goal ? goalFmt.intensity(goal.intensity) : goalFmt.intensity(defaults.intensity);
-    root.querySelector('[data-goal-val="roundLengthMin"]').textContent = goal ? goalFmt.roundLengthMin(goal.roundLengthMin) : goalFmt.roundLengthMin(defaults.roundLengthMin);
+    for (const field of Object.keys(goalFmt)) {
+      root.querySelector(`[data-goal-val="${field}"]`).textContent =
+        goal ? goalFmt[field](goal[field]) : 'Not set';
+    }
+    root.querySelector('#goal-status').hidden = Boolean(goal);
     root.querySelector('#clear-goal').style.display = goal ? '' : 'none';
   }
 

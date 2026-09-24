@@ -19,7 +19,7 @@ const TIER_SUB = {
   advanced: 'High-level combos',
 };
 
-export function createHomeScreen({ root, settings, config, library, history, onStart }) {
+export function createHomeScreen({ root, settings, config, library, history, onStart, onSetGoal }) {
   let suggestionDismissed = false;
 
   root.innerHTML = `
@@ -311,8 +311,20 @@ export function createHomeScreen({ root, settings, config, library, history, onS
 
   function renderSuggestion() {
     const goal = settings.get('goal');
-    if (!goal || suggestionDismissed) {
+    if (suggestionDismissed) {
       suggestionBox.innerHTML = '';
+      return;
+    }
+    if (!goal) {
+      suggestionBox.innerHTML = `
+        <div class="card suggestion-card">
+          <div class="suggestion-header">SUGGESTED WORKOUT</div>
+          <div class="suggestion-reason">Set a training goal and each session will be suggested here, building toward it.</div>
+          <div class="suggestion-actions">
+            <button class="suggestion-btn primary-btn" data-action="set-goal">Set goal</button>
+            <button class="suggestion-btn" data-action="dismiss">Dismiss</button>
+          </div>
+        </div>`;
       return;
     }
 
@@ -371,7 +383,9 @@ export function createHomeScreen({ root, settings, config, library, history, onS
       suggestionBox.innerHTML = '';
     } else if (action === 'new-goal') {
       settings.set('goal', null);
-      suggestionBox.innerHTML = '';
+      onSetGoal?.();
+    } else if (action === 'set-goal') {
+      onSetGoal?.();
     }
   });
 

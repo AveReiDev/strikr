@@ -70,6 +70,10 @@ async function boot() {
     library: app.library,
     history: app.history,
     onStart: startWorkout,
+    onSetGoal: () => {
+      app.router.show('settings');
+      document.getElementById('goal-status')?.scrollIntoView({ block: 'center' });
+    },
   });
 
   app.screens.workout = createWorkoutScreen({

@@ -8,8 +8,9 @@ import { SPORTS, TIERS, INTENSITIES, ROUND_LENGTHS, WORKOUT_MODES } from '../../
 import { gapMsFor } from '../../engine/timing.js';
 import { buildPool } from '../../engine/selector.js';
 import { buildLadderPool, LADDER_MODES } from '../../engine/ladder.js';
-import { dailyVolume, FEELS, FEEL_LABEL } from '../../store/history.js';
+import { dailyVolume, weeklyLoad, FEELS, FEEL_LABEL } from '../../store/history.js';
 import { computeSuggestion } from '../../engine/suggest.js';
+import { sessionLoad, weekPlan, applyWeekPlan } from '../../engine/load.js';
 import { TAG_LABEL } from '../../store/library.js';
 
 const SPORT_LABEL = { boxing: 'Boxing', muaythai: 'Muay Thai', kickboxing: 'Kickboxing' };
@@ -336,17 +337,52 @@ export function createHomeScreen({ root, settings, config, library, history, onS
 
   const suggestionBox = root.querySelector('#suggestion-card');
 
-  function renderSuggestion() {
+  /**
+   * The day's suggestion, fitted into the week. One function for both the
+   * card and Load, so what Load applies is always what the card showed.
+   */
+  function currentPlan() {
+    const now = Date.now();
+    const all = history.all();
+    const loadCfg = config.load;
+    const weeks = weeklyLoad(all, {
+      now,
+      weeks: loadCfg.lookbackWeeks,
+      loadOf: (r) => sessionLoad(r, loadCfg),
+    });
+    const week = weekPlan(weeks, loadCfg);
+
     const goal = settings.get('goal');
+    if (!goal) return { week, suggestion: null };
+    const since = now - 14 * 24 * 60 * 60 * 1000;
+    const volumes = dailyVolume(all, { sport: settings.get('sport'), since });
+    const suggestion = applyWeekPlan(computeSuggestion(goal, volumes, settings.all), week, loadCfg);
+    return { week, suggestion };
+  }
+
+  /** "This week 38 / 52 · week 2 of 4", or nothing before any training. */
+  function weekLine(week) {
+    const done = Math.round(week.thisWeek);
+    if (week.target === null) {
+      return done ? `<div class="suggestion-week">This week ${done} load · building your baseline</div>` : '';
+    }
+    // The header already says EASY WEEK when it is one, so no need to repeat it.
+    return `<div class="suggestion-week">This week ${done} / ${Math.round(week.target)} load · week ${week.weekOfBlock} of ${week.blockLength}</div>`;
+  }
+
+  function renderSuggestion() {
     if (suggestionDismissed) {
       suggestionBox.innerHTML = '';
       return;
     }
-    if (!goal) {
+    const { week, suggestion } = currentPlan();
+
+    if (!settings.get('goal')) {
       suggestionBox.innerHTML = `
         <div class="card suggestion-card">
           <div class="suggestion-header">SUGGESTED WORKOUT</div>
           <div class="suggestion-reason">Set a training goal and each session will be suggested here, building toward it.</div>
+          ${weekLine(week)}
           <div class="suggestion-actions">
             <button class="suggestion-btn primary-btn" data-action="set-goal">Set goal</button>
             <button class="suggestion-btn" data-action="dismiss">Dismiss</button>
@@ -354,11 +390,6 @@ export function createHomeScreen({ root, settings, config, library, history, onS
         </div>`;
       return;
     }
-
-    const now = Date.now();
-    const since = now - 14 * 24 * 60 * 60 * 1000;
-    const volumes = dailyVolume(history.all(), { sport: settings.get('sport'), since });
-    const suggestion = computeSuggestion(goal, volumes, settings.all);
 
     if (!suggestion) {
       suggestionBox.innerHTML = '';
@@ -370,16 +401,19 @@ export function createHomeScreen({ root, settings, config, library, history, onS
         <div class="card suggestion-card goal-reached">
           <div class="suggestion-header">&#10003; GOAL REACHED</div>
           <div class="suggestion-detail">${suggestion.reason}</div>
+          ${weekLine(week)}
           <div class="suggestion-actions">
             <button class="suggestion-btn" data-action="new-goal">Set new goal</button>
           </div>
         </div>`;
     } else {
+      const header = suggestion.weekDone ? 'WEEK DONE' : week.easy ? 'EASY WEEK' : 'SUGGESTED WORKOUT';
       suggestionBox.innerHTML = `
         <div class="card suggestion-card">
-          <div class="suggestion-header">SUGGESTED WORKOUT</div>
+          <div class="suggestion-header">${header}</div>
           <div class="suggestion-detail highlight">${suggestion.rounds} round${suggestion.rounds === 1 ? '' : 's'} · ${capitalise(suggestion.intensity)} · ${suggestion.roundLengthMin} min</div>
           ${suggestion.reason ? `<div class="suggestion-reason">${suggestion.reason}</div>` : ''}
+          ${weekLine(week)}
           <div class="suggestion-actions">
             <button class="suggestion-btn primary-btn" data-action="load">Load</button>
             <button class="suggestion-btn" data-action="dismiss">Dismiss</button>
@@ -395,12 +429,8 @@ export function createHomeScreen({ root, settings, config, library, history, onS
     if (!btn) return;
     const action = btn.dataset.action;
     if (action === 'load') {
-      const goal = settings.get('goal');
-      const now = Date.now();
-      const since = now - 14 * 24 * 60 * 60 * 1000;
-      const volumes = dailyVolume(history.all(), { sport: settings.get('sport'), since });
-      const s = computeSuggestion(goal, volumes, settings.all);
-      if (!s) return;
+      const s = currentPlan().suggestion;
+      if (!s || s.goalReached) return;
       settings.set('roundsPerWorkout', s.rounds);
       if (INTENSITIES.includes(s.intensity)) settings.set('intensity', s.intensity);
       settings.set('roundLengthMin', s.roundLengthMin);

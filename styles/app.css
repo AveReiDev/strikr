@@ -777,6 +777,14 @@ input[type="range"] { flex: 1; accent-color: var(--accent); min-height: var(--ta
   color: var(--fg-dim);
   margin-top: var(--sp-2);
 }
+.suggestion-week {
+  font-size: var(--size-xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--track-mid);
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  margin-top: var(--sp-2);
+}
 .suggestion-actions {
   display: flex;
   gap: var(--sp-2);

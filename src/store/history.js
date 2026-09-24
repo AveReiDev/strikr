@@ -337,6 +337,31 @@ export function dailyVolume(records, { sport, since } = {}) {
   return out.sort((a, b) => (a.day < b.day ? -1 : a.day > b.day ? 1 : 0));
 }
 
+/**
+ * Total load per week for the last `weeks` weeks, oldest first, ending with
+ * the current (unfinished) week. Weeks start Monday, like the History filter.
+ * Every saved session counts, whatever the sport or whether it was stopped
+ * early: the rounds finished were work done.
+ */
+export function weeklyLoad(records, { now = Date.now(), weeks = 8, loadOf }) {
+  const current = new Date(periodStart('week', now));
+  const starts = [];
+  for (let i = weeks - 1; i >= 0; i--) {
+    const d = new Date(current);
+    d.setDate(d.getDate() - 7 * i);     // setDate keeps local midnight across DST
+    starts.push(d.getTime());
+  }
+  const out = starts.map((weekStart) => ({ weekStart, load: 0 }));
+  for (const r of records) {
+    const t = Date.parse(r.startedAt);
+    if (t < starts[0]) continue;
+    let i = starts.length - 1;
+    while (i > 0 && t < starts[i]) i -= 1;
+    out[i].load += loadOf(r);
+  }
+  return out;
+}
+
 /** "Today", "Yesterday", otherwise a written date. */
 export function formatDayHeading(dayKey, now = Date.now()) {
   const today = localDayKey(now);

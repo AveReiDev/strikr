@@ -20,7 +20,8 @@ Last updated 24 September 2026.
 | Audit fixes (v1.4.0) | **Done**, awaiting device test |
 | 7A — Ladder / pyramid drills (v1.5.0) | **Done**, tested on the bag |
 | 7B — Post-workout feel rating (v1.6.0) | **Done**, live |
-| 7C — Ramp up and finishers (v1.7.0) | **Done**, awaiting device test |
+| 7C — Ramp up and finishers (v1.7.0) | **Done**, live |
+| 7D — Weekly load and easy weeks (v1.8.0) | **Done**, awaiting device test |
 
 ### Installing it on your phone
 
@@ -45,7 +46,7 @@ tell that `app.css` is new. **After editing any file in the app, bump
 `CACHE_VERSION` at the top of `sw.js`.** Forget, and an installed phone may keep
 serving the old version. This is written at the top of `sw.js` too.
 
-**205 tests pass.** Run them with `npm test`, or:
+**221 tests pass.** Run them with `npm test`, or:
 
 ```bash
 node --test 'test/*.test.js'
@@ -352,7 +353,31 @@ restores them.
   The phase label turns red and reads FINISHER. With no short combos in the
   pool, the finisher is skipped and the record says 0. In ladder mode the
   finisher calls whole combos, and the next round restarts the ladder.
-- Next: weekly load tracking with planned easy weeks (rewrites suggest.js).
+
+## Weekly load and easy weeks, 24 September 2026 (v1.8.0)
+
+This completes the progression roadmap. `src/engine/load.js` is pure and its
+constants are under `load` in `data/config.json`.
+
+- **Load** = rounds finished × round minutes × intensity factor (Light 1,
+  Medium 1.25, Hard 1.5; Custom counts as Medium because history does not
+  store its gap). All sports count, and so do stopped sessions.
+- `history.weeklyLoad` buckets the last 8 weeks, Monday start, local time.
+- `weekPlan` re-derives the block from the loads alone. Nothing is stored.
+  The first week with any training is a baseline only, because it is usually
+  partial. Each later week is either normal (it becomes the reference) or
+  recovery (empty, or ≤70% of the reference; this restarts the count).
+  Target = 110% of the reference. After 3 normal weeks running, the next is
+  an easy week at 60%.
+- `applyWeekPlan` runs after the feel adjustment. In an easy week, rounds
+  × 0.6 at the same intensity. Rounds are then trimmed to the load left this
+  week. If not one round fits, the card reads WEEK DONE and offers an
+  optional 3-round Light session. Goal reached is never rewritten. Home's
+  `currentPlan()` feeds both the card and Load, so Load applies exactly what
+  the card shows.
+- The card gains a line such as "This week 38 / 52 load · week 2 of 4", or
+  "building your baseline" before there is a reference. This line also shows
+  on the Set goal card.
 
 ## Still open
 
@@ -383,6 +408,7 @@ src/
     session.js          the round/rest state machine — owns no timers
     suggest.js          progressive training suggestion algorithm
     ladder.js           ladder / pyramid drills cut from existing combos
+    load.js             weekly load, the +10% cap and easy weeks
   audio/
     speech.js           the ONLY file touching SpeechSynthesis
     context.js          shared AudioContext: keep-alive tone and bell
@@ -395,7 +421,7 @@ src/
 styles/
   tokens.css          every colour and size; light mode is a token override
   app.css             components only, no raw colours
-test/                 node --test, 205 tests
+test/                 node --test, 221 tests
 ```
 
 Three storage keys, independently readable so one corrupt value cannot brick the

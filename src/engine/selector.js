@@ -6,6 +6,8 @@
  * workout, every time.
  */
 
+import { createBalance } from './balance.js';
+
 const TIER_RANK = { beginner: 0, intermediate: 1, advanced: 2 };
 
 export function tierRank(tier) {
@@ -90,6 +92,17 @@ export function groupByTier(pool, selectedTier, tierWeights) {
 }
 
 /**
+ * How many recent calls are blocked from the next draw. The configured window,
+ * but never more than a third of the pool: a window of 8 on a pool of 10 left
+ * two eligible combos and made the workout a near-fixed cycle. Always at least
+ * one and always leaving something eligible, so a two-combo pool alternates.
+ */
+export function repeatWindow(poolSize, configured) {
+  if (poolSize <= 1) return 0;
+  return Math.max(1, Math.min(configured, Math.floor(poolSize / 3), poolSize - 1));
+}
+
+/**
  * Stage 2 and 3: pick a tier, then a combo within it.
  *
  * `recent` is the list of ids called most recently, newest last. Anything in
@@ -107,7 +120,7 @@ export function groupByTier(pool, selectedTier, tierWeights) {
 export function selectCombo({ pool, tier, config, rng, recent = [], weakWeight }) {
   if (!pool.length) return null;
 
-  const size = Math.min(config.noRepeatWindow, pool.length - 1);
+  const size = repeatWindow(pool.length, config.noRepeatWindow);
   const blocked = new Set(size > 0 ? recent.slice(-size) : []);
   const eligible = pool.filter((c) => !blocked.has(c.id));
 
@@ -135,12 +148,19 @@ export function selectCombo({ pool, tier, config, rng, recent = [], weakWeight }
  * weight: weight = 1 / (count + 1). This multiplies into the existing
  * frequency weight, so tier and frequency weighting still apply.
  */
-export function createSelector({ combos, sport, tier, config, rng, focusWeak, comboFrequencyMap, focus }) {
+export function createSelector({ combos, sport, tier, config, rng, focusWeak, comboFrequencyMap, focus, balanced = true }) {
   const pool = buildPool(combos, { sport, tier, focus });
   const recent = [];
 
-  const weakWeight = focusWeak && comboFrequencyMap
+  // Strike balancing applies to ordinary draws only: a focus is a deliberate
+  // skew, and the finisher's tiny pool of short combos is its own thing.
+  const balance = balanced && !focus ? createBalance({ sport, balance: config.balance }) : null;
+
+  const weak = focusWeak && comboFrequencyMap
     ? (c) => 1 / ((comboFrequencyMap.get(c.id) || 0) + 1)
+    : null;
+  const weakWeight = weak || balance
+    ? (c) => (weak ? weak(c) : 1) * (balance ? balance.weight(c) : 1)
     : null;
 
   return {
@@ -150,6 +170,7 @@ export function createSelector({ combos, sport, tier, config, rng, focusWeak, co
       const combo = selectCombo({ pool, tier, config, rng, recent, weakWeight });
       if (combo) {
         recent.push(combo.id);
+        balance?.record(combo);
       }
       return combo;
     },

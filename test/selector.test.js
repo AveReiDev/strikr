@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { categoriesOf } from '../src/engine/balance.js';
 
 import {
   createRng,
@@ -8,6 +9,7 @@ import {
   selectCombo,
   createSelector,
   tierRank,
+  repeatWindow,
 } from '../src/engine/selector.js';
 
 const config = JSON.parse(readFileSync(new URL('../data/config.json', import.meta.url)));
@@ -22,7 +24,7 @@ function drawMany(n, { sport = 'muaythai', tier = 'advanced', seed = 1 } = {}) {
 test('the shipped library is intact', () => {
   const regular = COMBOS.filter((c) => !c.single);
   const singles = COMBOS.filter((c) => c.single);
-  assert.equal(regular.length, 90);
+  assert.equal(regular.length, 223);
   assert.ok(singles.length > 0, 'should have single-strike entries');
   assert.equal(new Set(COMBOS.map((c) => c.id)).size, COMBOS.length);
   for (const c of COMBOS) assert.ok(!c.speech.includes('('), `${c.id} leaks a parenthetical`);
@@ -55,7 +57,9 @@ test('the same seed produces the same sequence', () => {
 
 test('no-repeat window is honoured', () => {
   const ids = drawMany(400).map((c) => c.id);
-  const w = config.noRepeatWindow;
+  const pool = buildPool(COMBOS, { sport: 'muaythai', tier: 'advanced' });
+  const w = repeatWindow(pool.length, config.noRepeatWindow);
+  assert.equal(w, config.noRepeatWindow, 'a large pool keeps the configured window');
   for (let i = w; i < ids.length; i++) {
     const window = ids.slice(i - w, i);
     assert.ok(!window.includes(ids[i]), `${ids[i]} repeated inside the window at ${i}`);
@@ -217,10 +221,10 @@ test('buildPool focus respects tier ceiling for singles', () => {
 });
 
 test('a small pool never repeats inside the window', () => {
-  // Beginner is 10 combos per sport. The old draw-then-redraw loop gave up
-  // about one call in ten here and repeated a combo it had just called.
-  const w = config.noRepeatWindow;
+  // The old draw-then-redraw loop gave up about one call in ten on a small
+  // pool and repeated a combo it had just called.
   for (const sport of ['boxing', 'muaythai', 'kickboxing']) {
+    const w = repeatWindow(buildPool(COMBOS, { sport, tier: 'beginner' }).length, config.noRepeatWindow);
     for (let seed = 1; seed <= 20; seed++) {
       const ids = drawMany(200, { sport, tier: 'beginner', seed }).map((c) => c.id);
       for (let i = 1; i < ids.length; i++) {
@@ -229,4 +233,49 @@ test('a small pool never repeats inside the window', () => {
       }
     }
   }
+});
+
+test('the repeat window is capped at a third of the pool', () => {
+  assert.equal(repeatWindow(0, 8), 0);
+  assert.equal(repeatWindow(1, 8), 0);
+  assert.equal(repeatWindow(2, 8), 1, 'a two-combo pool alternates');
+  assert.equal(repeatWindow(3, 8), 1);
+  assert.equal(repeatWindow(10, 8), 3, 'a pool of ten no longer cycles');
+  assert.equal(repeatWindow(24, 8), 8);
+  assert.equal(repeatWindow(300, 8), 8, 'never above the configured window');
+});
+
+test('beginner pools are big enough that the sequence is not a cycle', () => {
+  for (const sport of ['muaythai', 'kickboxing']) {
+    const pool = buildPool(COMBOS, { sport, tier: 'beginner' });
+    assert.ok(pool.length >= 24, `${sport} beginner pool is only ${pool.length}`);
+  }
+});
+
+test('lead-leg kicks are called about as often as the target says', () => {
+  for (const sport of ['muaythai', 'kickboxing']) {
+    for (const tier of ['beginner', 'intermediate', 'advanced']) {
+      const total = { lead: 0, rear: 0, all: 0 };
+      for (let seed = 1; seed <= 20; seed++) {
+        for (const c of drawMany(300, { sport, tier, seed })) {
+          for (const k of categoriesOf(c)) {
+            total.all += 1;
+            if (k === 'leadKick') total.lead += 1;
+            if (k === 'rearKick') total.rear += 1;
+          }
+        }
+      }
+      const lead = total.lead / total.all;
+      const rear = total.rear / total.all;
+      assert.ok(lead > 0.09, `${sport}/${tier}: lead kicks only ${(lead * 100).toFixed(1)}%`);
+      assert.ok(lead / rear > 0.6, `${sport}/${tier}: lead:rear is ${(lead / rear).toFixed(2)}`);
+    }
+  }
+});
+
+test('balancing can be switched off by leaving the config out', () => {
+  const { balance, ...bare } = config;
+  const a = createSelector({ combos: COMBOS, sport: 'muaythai', tier: 'advanced', config: bare, rng: createRng(5) });
+  const b = createSelector({ combos: COMBOS, sport: 'muaythai', tier: 'advanced', config: bare, rng: createRng(5), balanced: false });
+  for (let i = 0; i < 50; i++) assert.equal(a.next().id, b.next().id);
 });

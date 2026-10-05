@@ -36,7 +36,17 @@
     "lookbackWeeks": 8
   },
 
-  "_comment_noRepeat": "A combo called within the last N calls is not eligible for the next draw. Shrinks automatically to one less than the pool size, so tiny pools still work.",
+  "_comment_balance": "Strike balance: a gentle nudge toward strike categories the workout has under-called, so jab and cross do not dominate. targets are relative shares per sport (sports with no entry, like boxing, are not balanced). The weight is sqrt(target / actual share) clamped to clamp; priorCalls seeds the running counts at the target mix so early calls cannot swing it. Off for focus workouts, the finisher, and ladders.",
+  "balance": {
+    "clamp": [0.67, 1.5],
+    "priorCalls": 30,
+    "targets": {
+      "muaythai":   { "jab": 10, "cross": 13, "hook": 11, "uppercut": 5, "rearKick": 14, "leadKick": 13, "teep": 7, "knee": 9, "elbow": 7, "defense": 5 },
+      "kickboxing": { "jab": 14, "cross": 16, "hook": 14, "uppercut": 6, "rearKick": 18, "leadKick": 14, "teep": 5, "knee": 4, "defense": 5 }
+    }
+  },
+
+  "_comment_noRepeat": "A combo called within the last N calls is not eligible for the next draw. Capped at a third of the pool (never below 1, never the whole pool), so small pools do not become a fixed cycle.",
   "noRepeatWindow": 8,
 
   "_comment_lookahead": "Do not begin a new callout if the estimated time to speak it plus its gap would overrun the remaining round time by more than this. Prevents a combo being cut off by the bell.",

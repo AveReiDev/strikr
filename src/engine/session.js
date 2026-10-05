@@ -66,7 +66,7 @@ export function createSession({ config, settings, combos, rng, intensity: overri
       .filter((c) => c.actions <= fin.maxActions)
     : [];
   const finisherSelector = finisherPool.length
-    ? createSelector({ ...selectorArgs, combos: finisherPool })
+    ? createSelector({ ...selectorArgs, combos: finisherPool, balanced: false })
     : null;
   let finisherAnnounced = false;
 

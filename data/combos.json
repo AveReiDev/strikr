@@ -1307,6 +1307,1943 @@
       ]
     },
     {
+      "id": "mt-beg-11",
+      "sport": "muaythai",
+      "tier": "beginner",
+      "display": "Jab \u2013 Lead low kick",
+      "speech": "Jab, Lead low kick",
+      "actions": 2,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-beg-12",
+      "sport": "muaythai",
+      "tier": "beginner",
+      "display": "Jab \u2013 Cross \u2013 Lead low kick",
+      "speech": "Jab, Cross, Lead low kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-beg-13",
+      "sport": "muaythai",
+      "tier": "beginner",
+      "display": "Jab \u2013 Lead body kick",
+      "speech": "Jab, Lead body kick",
+      "actions": 2,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "mt-beg-14",
+      "sport": "muaythai",
+      "tier": "beginner",
+      "display": "Cross \u2013 Lead body kick",
+      "speech": "Cross, Lead body kick",
+      "actions": 2,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "mt-beg-15",
+      "sport": "muaythai",
+      "tier": "beginner",
+      "display": "Jab \u2013 Cross \u2013 Lead teep",
+      "speech": "Jab, Cross, Lead teep",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-beg-16",
+      "sport": "muaythai",
+      "tier": "beginner",
+      "display": "Lead teep \u2013 Rear low kick",
+      "speech": "Lead teep, Rear low kick",
+      "actions": 2,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-beg-17",
+      "sport": "muaythai",
+      "tier": "beginner",
+      "display": "Jab \u2013 Cross \u2013 Rear low kick",
+      "speech": "Jab, Cross, Rear low kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-beg-18",
+      "sport": "muaythai",
+      "tier": "beginner",
+      "display": "Cross \u2013 Rear body kick",
+      "speech": "Cross, Rear body kick",
+      "actions": 2,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "mt-beg-19",
+      "sport": "muaythai",
+      "tier": "beginner",
+      "display": "Jab \u2013 Cross \u2013 Lead knee",
+      "speech": "Jab, Cross, Lead knee",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-beg-20",
+      "sport": "muaythai",
+      "tier": "beginner",
+      "display": "Jab \u2013 Lead hook \u2013 Cross \u2013 Lead low kick",
+      "speech": "Jab, Lead hook, Cross, Lead low kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-beg-21",
+      "sport": "muaythai",
+      "tier": "beginner",
+      "display": "Cross \u2013 Lead hook \u2013 Rear body kick",
+      "speech": "Cross, Lead hook, Rear body kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "mt-beg-22",
+      "sport": "muaythai",
+      "tier": "beginner",
+      "display": "Jab \u2013 Rear uppercut \u2013 Lead hook",
+      "speech": "Jab, Rear uppercut, Lead hook",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "hands"
+      ]
+    },
+    {
+      "id": "mt-beg-23",
+      "sport": "muaythai",
+      "tier": "beginner",
+      "display": "Rear teep \u2013 Lead low kick",
+      "speech": "Rear teep, Lead low kick",
+      "actions": 2,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-beg-24",
+      "sport": "muaythai",
+      "tier": "beginner",
+      "display": "Lead hook \u2013 Rear low kick",
+      "speech": "Lead hook, Rear low kick",
+      "actions": 2,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-beg-25",
+      "sport": "muaythai",
+      "tier": "beginner",
+      "display": "Jab \u2013 Cross \u2013 Rear teep",
+      "speech": "Jab, Cross, Rear teep",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-beg-26",
+      "sport": "muaythai",
+      "tier": "beginner",
+      "display": "Lead body kick \u2013 Cross",
+      "speech": "Lead body kick, Cross",
+      "actions": 2,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "mt-beg-27",
+      "sport": "muaythai",
+      "tier": "beginner",
+      "display": "Lead low kick \u2013 Cross",
+      "speech": "Lead low kick, Cross",
+      "actions": 2,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-beg-28",
+      "sport": "muaythai",
+      "tier": "beginner",
+      "display": "Rear body kick \u2013 Lead hook",
+      "speech": "Rear body kick, Lead hook",
+      "actions": 2,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "mt-beg-29",
+      "sport": "muaythai",
+      "tier": "beginner",
+      "display": "Lead teep \u2013 Rear body kick",
+      "speech": "Lead teep, Rear body kick",
+      "actions": 2,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "mt-beg-30",
+      "sport": "muaythai",
+      "tier": "beginner",
+      "display": "Lead hook \u2013 Rear knee",
+      "speech": "Lead hook, Rear knee",
+      "actions": 2,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-int-11",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Cross \u2013 Lead elbow",
+      "speech": "Cross, Lead elbow",
+      "actions": 2,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "elbows"
+      ]
+    },
+    {
+      "id": "mt-int-12",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Jab \u2013 Cross \u2013 Lead body kick",
+      "speech": "Jab, Cross, Lead body kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "mt-int-13",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Lead teep \u2013 Jab \u2013 Cross \u2013 Lead low kick",
+      "speech": "Lead teep, Jab, Cross, Lead low kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-int-14",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Jab \u2013 Lead low kick \u2013 Cross \u2013 Rear low kick",
+      "speech": "Jab, Lead low kick, Cross, Rear low kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-int-15",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Lead hook \u2013 Cross \u2013 Lead body kick \u2013 Rear low kick",
+      "speech": "Lead hook, Cross, Lead body kick, Rear low kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "mt-int-16",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Jab \u2013 Cross \u2013 Lead high kick",
+      "speech": "Jab, Cross, Lead high kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-int-17",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Rear teep \u2013 Lead hook \u2013 Rear body kick",
+      "speech": "Rear teep, Lead hook, Rear body kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "mt-int-18",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Jab \u2013 Cross \u2013 Rear knee \u2013 Lead hook",
+      "speech": "Jab, Cross, Rear knee, Lead hook",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-int-19",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Jab \u2013 Cross \u2013 Lead knee \u2013 Rear body kick",
+      "speech": "Jab, Cross, Lead knee, Rear body kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "mt-int-20",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Jab \u2013 Cross \u2013 Lead elbow \u2013 Rear body kick",
+      "speech": "Jab, Cross, Lead elbow, Rear body kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "elbows",
+        "body"
+      ]
+    },
+    {
+      "id": "mt-int-21",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Jab \u2013 Lead elbow \u2013 Rear horizontal elbow",
+      "speech": "Jab, Lead elbow, Rear horizontal elbow",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "elbows"
+      ]
+    },
+    {
+      "id": "mt-int-22",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Jab \u2013 Cross \u2013 Lead hook \u2013 Rear up-elbow",
+      "speech": "Jab, Cross, Lead hook, Rear up-elbow",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "elbows"
+      ]
+    },
+    {
+      "id": "mt-int-23",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Lead hook \u2013 Rear horizontal elbow \u2013 Lead low kick",
+      "speech": "Lead hook, Rear horizontal elbow, Lead low kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "elbows"
+      ]
+    },
+    {
+      "id": "mt-int-24",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Jab \u2013 Lead uppercut \u2013 Cross \u2013 Lead body kick",
+      "speech": "Jab, Lead uppercut, Cross, Lead body kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "mt-int-25",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Check the low kick \u2013 Cross \u2013 Lead hook",
+      "speech": "Check the low kick, Cross, Lead hook",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "defensive"
+      ]
+    },
+    {
+      "id": "mt-int-26",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Check the low kick \u2013 Lead low kick \u2013 Cross",
+      "speech": "Check the low kick, Lead low kick, Cross",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "defensive"
+      ]
+    },
+    {
+      "id": "mt-int-27",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Catch teep \u2013 Lead low kick \u2013 Cross",
+      "speech": "Catch teep, Lead low kick, Cross",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "defensive"
+      ]
+    },
+    {
+      "id": "mt-int-28",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Jab \u2013 Rear low kick \u2013 Lead low kick",
+      "speech": "Jab, Rear low kick, Lead low kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-int-29",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Lead teep \u2013 Rear knee \u2013 Lead low kick",
+      "speech": "Lead teep, Rear knee, Lead low kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-int-30",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Jab \u2013 Lead body kick \u2013 Cross \u2013 Lead hook",
+      "speech": "Jab, Lead body kick, Cross, Lead hook",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "mt-int-31",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Cross \u2013 Lead hook \u2013 Rear uppercut \u2013 Lead low kick",
+      "speech": "Cross, Lead hook, Rear uppercut, Lead low kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-int-32",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Jab \u2013 Cross \u2013 Lead hook \u2013 Rear high kick",
+      "speech": "Jab, Cross, Lead hook, Rear high kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-int-33",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Lead uppercut \u2013 Cross \u2013 Lead body kick",
+      "speech": "Lead uppercut, Cross, Lead body kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "mt-int-34",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Rear uppercut \u2013 Lead hook \u2013 Rear body kick",
+      "speech": "Rear uppercut, Lead hook, Rear body kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "mt-int-35",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Lead body kick \u2013 Cross \u2013 Rear knee",
+      "speech": "Lead body kick, Cross, Rear knee",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "mt-int-36",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Lead hook \u2013 Rear horizontal elbow \u2013 Lead knee",
+      "speech": "Lead hook, Rear horizontal elbow, Lead knee",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "elbows"
+      ]
+    },
+    {
+      "id": "mt-int-37",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Clinch entry \u2013 Rear knee \u2013 Lead knee \u2013 Rear knee",
+      "speech": "Clinch entry, Rear knee, Lead knee, Rear knee",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-int-38",
+      "sport": "muaythai",
+      "tier": "intermediate",
+      "display": "Lead teep \u2013 Cross \u2013 Lead elbow",
+      "speech": "Lead teep, Cross, Lead elbow",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "elbows"
+      ]
+    },
+    {
+      "id": "mt-adv-11",
+      "sport": "muaythai",
+      "tier": "advanced",
+      "display": "Lead hook \u2013 Rear uppercut \u2013 Lead high kick",
+      "speech": "Lead hook, Rear uppercut, Lead high kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-adv-12",
+      "sport": "muaythai",
+      "tier": "advanced",
+      "display": "Jab \u2013 Cross \u2013 Lead low kick \u2013 Rear body kick \u2013 Cross",
+      "speech": "Jab, Cross, Lead low kick, Rear body kick, Cross",
+      "actions": 5,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "mt-adv-13",
+      "sport": "muaythai",
+      "tier": "advanced",
+      "display": "Switch kick \u2013 Cross \u2013 Lead hook \u2013 Rear low kick",
+      "speech": "Switch kick, Cross, Lead hook, Rear low kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-adv-14",
+      "sport": "muaythai",
+      "tier": "advanced",
+      "display": "Jab \u2013 Lead low kick \u2013 Rear low kick \u2013 Lead low kick",
+      "speech": "Jab, Lead low kick, Rear low kick, Lead low kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-adv-15",
+      "sport": "muaythai",
+      "tier": "advanced",
+      "display": "Lead hook \u2013 Cross \u2013 Lead body kick \u2013 Rear body kick \u2013 Lead low kick",
+      "speech": "Lead hook, Cross, Lead body kick, Rear body kick, Lead low kick",
+      "actions": 5,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "mt-adv-16",
+      "sport": "muaythai",
+      "tier": "advanced",
+      "display": "Jab \u2013 Cross \u2013 Rear body kick \u2013 Lead low kick",
+      "speech": "Jab, Cross, Rear body kick, Lead low kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "mt-adv-17",
+      "sport": "muaythai",
+      "tier": "advanced",
+      "display": "Lead teep \u2013 Cross \u2013 Lead hook \u2013 Rear high kick",
+      "speech": "Lead teep, Cross, Lead hook, Rear high kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-adv-18",
+      "sport": "muaythai",
+      "tier": "advanced",
+      "display": "Jab \u2013 Cross \u2013 Lead knee \u2013 Rear knee \u2013 Lead hook",
+      "speech": "Jab, Cross, Lead knee, Rear knee, Lead hook",
+      "actions": 5,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-adv-19",
+      "sport": "muaythai",
+      "tier": "advanced",
+      "display": "Jab \u2013 Cross \u2013 Rear straight knee \u2013 Lead elbow \u2013 Rear low kick",
+      "speech": "Jab, Cross, Rear straight knee, Lead elbow, Rear low kick",
+      "actions": 5,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "elbows"
+      ]
+    },
+    {
+      "id": "mt-adv-20",
+      "sport": "muaythai",
+      "tier": "advanced",
+      "display": "Lead elbow \u2013 Rear horizontal elbow \u2013 Lead up-elbow \u2013 Rear knee",
+      "speech": "Lead elbow, Rear horizontal elbow, Lead up-elbow, Rear knee",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "elbows"
+      ]
+    },
+    {
+      "id": "mt-adv-21",
+      "sport": "muaythai",
+      "tier": "advanced",
+      "display": "Jab \u2013 Cross \u2013 Lead hook \u2013 Rear down-elbow",
+      "speech": "Jab, Cross, Lead hook, Rear down-elbow",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "elbows"
+      ]
+    },
+    {
+      "id": "mt-adv-22",
+      "sport": "muaythai",
+      "tier": "advanced",
+      "display": "Check rear low kick \u2013 Lead hook \u2013 Rear horizontal elbow \u2013 Rear low kick",
+      "speech": "Check rear low kick, Lead hook, Rear horizontal elbow, Rear low kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "elbows",
+        "defensive"
+      ]
+    },
+    {
+      "id": "mt-adv-23",
+      "sport": "muaythai",
+      "tier": "advanced",
+      "display": "Catch teep \u2013 Lead low kick \u2013 Cross \u2013 Lead hook",
+      "speech": "Catch teep, Lead low kick, Cross, Lead hook",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "defensive"
+      ]
+    },
+    {
+      "id": "mt-adv-24",
+      "sport": "muaythai",
+      "tier": "advanced",
+      "display": "Slip \u2013 Lead hook \u2013 Cross \u2013 Lead low kick",
+      "speech": "Slip, Lead hook, Cross, Lead low kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "defensive"
+      ]
+    },
+    {
+      "id": "mt-adv-25",
+      "sport": "muaythai",
+      "tier": "advanced",
+      "display": "Jab \u2013 Lead hook \u2013 Rear uppercut \u2013 Lead body kick \u2013 Rear low kick",
+      "speech": "Jab, Lead hook, Rear uppercut, Lead body kick, Rear low kick",
+      "actions": 5,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "mt-adv-26",
+      "sport": "muaythai",
+      "tier": "advanced",
+      "display": "Rear teep \u2013 Switch kick \u2013 Cross \u2013 Lead hook \u2013 Rear knee",
+      "speech": "Rear teep, Switch kick, Cross, Lead hook, Rear knee",
+      "actions": 5,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-adv-27",
+      "sport": "muaythai",
+      "tier": "advanced",
+      "display": "Spinning rear elbow \u2013 Lead hook \u2013 Rear low kick",
+      "speech": "Spinning rear elbow, Lead hook, Rear low kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "elbows"
+      ]
+    },
+    {
+      "id": "mt-adv-28",
+      "sport": "muaythai",
+      "tier": "advanced",
+      "display": "Jab \u2013 Cross \u2013 Lead hook \u2013 Spinning back kick",
+      "speech": "Jab, Cross, Lead hook, Spinning back kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "mt-adv-29",
+      "sport": "muaythai",
+      "tier": "advanced",
+      "display": "Rear teep \u2013 Lead knee \u2013 Rear elbow \u2013 Lead body kick",
+      "speech": "Rear teep, Lead knee, Rear elbow, Lead body kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "elbows",
+        "body"
+      ]
+    },
+    {
+      "id": "mt-adv-30",
+      "sport": "muaythai",
+      "tier": "advanced",
+      "display": "Cross \u2013 Lead hook \u2013 Rear low kick \u2013 Lead body kick \u2013 Cross",
+      "speech": "Cross, Lead hook, Rear low kick, Lead body kick, Cross",
+      "actions": 5,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "mt-adv-31",
+      "sport": "muaythai",
+      "tier": "advanced",
+      "display": "Rear body kick \u2013 Lead teep \u2013 Rear low kick",
+      "speech": "Rear body kick, Lead teep, Rear low kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "mt-adv-32",
+      "sport": "muaythai",
+      "tier": "advanced",
+      "display": "Switch kick \u2013 Rear body kick \u2013 Lead hook",
+      "speech": "Switch kick, Rear body kick, Lead hook",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "mt-adv-33",
+      "sport": "muaythai",
+      "tier": "advanced",
+      "display": "Lead elbow \u2013 Rear knee \u2013 Lead hook \u2013 Rear low kick",
+      "speech": "Lead elbow, Rear knee, Lead hook, Rear low kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "elbows"
+      ]
+    },
+    {
+      "id": "mt-adv-34",
+      "sport": "muaythai",
+      "tier": "advanced",
+      "display": "Lead body kick \u2013 Rear low kick \u2013 Lead hook \u2013 Rear body kick",
+      "speech": "Lead body kick, Rear low kick, Lead hook, Rear body kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "kb-beg-11",
+      "sport": "kickboxing",
+      "tier": "beginner",
+      "display": "Jab \u2013 Cross \u2013 Lead low kick",
+      "speech": "Jab, Cross, Lead low kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-beg-12",
+      "sport": "kickboxing",
+      "tier": "beginner",
+      "display": "Jab \u2013 Lead body kick",
+      "speech": "Jab, Lead body kick",
+      "actions": 2,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "kb-beg-13",
+      "sport": "kickboxing",
+      "tier": "beginner",
+      "display": "Cross \u2013 Lead low kick",
+      "speech": "Cross, Lead low kick",
+      "actions": 2,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-beg-14",
+      "sport": "kickboxing",
+      "tier": "beginner",
+      "display": "Jab \u2013 Lead low kick \u2013 Cross",
+      "speech": "Jab, Lead low kick, Cross",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-beg-15",
+      "sport": "kickboxing",
+      "tier": "beginner",
+      "display": "Lead teep \u2013 Rear low kick",
+      "speech": "Lead teep, Rear low kick",
+      "actions": 2,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-beg-16",
+      "sport": "kickboxing",
+      "tier": "beginner",
+      "display": "Jab \u2013 Cross \u2013 Lead teep",
+      "speech": "Jab, Cross, Lead teep",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-beg-17",
+      "sport": "kickboxing",
+      "tier": "beginner",
+      "display": "Jab \u2013 Cross \u2013 Rear body kick",
+      "speech": "Jab, Cross, Rear body kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "kb-beg-18",
+      "sport": "kickboxing",
+      "tier": "beginner",
+      "display": "Lead hook \u2013 Cross \u2013 Lead low kick",
+      "speech": "Lead hook, Cross, Lead low kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-beg-19",
+      "sport": "kickboxing",
+      "tier": "beginner",
+      "display": "Cross \u2013 Rear body kick",
+      "speech": "Cross, Rear body kick",
+      "actions": 2,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "kb-beg-20",
+      "sport": "kickboxing",
+      "tier": "beginner",
+      "display": "Lead teep \u2013 Jab \u2013 Cross",
+      "speech": "Lead teep, Jab, Cross",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-beg-21",
+      "sport": "kickboxing",
+      "tier": "beginner",
+      "display": "Jab \u2013 Rear uppercut \u2013 Lead hook",
+      "speech": "Jab, Rear uppercut, Lead hook",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "hands"
+      ]
+    },
+    {
+      "id": "kb-beg-22",
+      "sport": "kickboxing",
+      "tier": "beginner",
+      "display": "Jab \u2013 Lead hook \u2013 Cross \u2013 Lead body kick",
+      "speech": "Jab, Lead hook, Cross, Lead body kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "kb-beg-23",
+      "sport": "kickboxing",
+      "tier": "beginner",
+      "display": "Rear teep \u2013 Lead low kick",
+      "speech": "Rear teep, Lead low kick",
+      "actions": 2,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-beg-24",
+      "sport": "kickboxing",
+      "tier": "beginner",
+      "display": "Lead body kick \u2013 Cross",
+      "speech": "Lead body kick, Cross",
+      "actions": 2,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "kb-beg-25",
+      "sport": "kickboxing",
+      "tier": "beginner",
+      "display": "Lead low kick \u2013 Cross",
+      "speech": "Lead low kick, Cross",
+      "actions": 2,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-beg-26",
+      "sport": "kickboxing",
+      "tier": "beginner",
+      "display": "Rear body kick \u2013 Lead hook",
+      "speech": "Rear body kick, Lead hook",
+      "actions": 2,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "kb-beg-27",
+      "sport": "kickboxing",
+      "tier": "beginner",
+      "display": "Lead teep \u2013 Rear body kick",
+      "speech": "Lead teep, Rear body kick",
+      "actions": 2,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "kb-beg-28",
+      "sport": "kickboxing",
+      "tier": "beginner",
+      "display": "Lead hook \u2013 Rear knee",
+      "speech": "Lead hook, Rear knee",
+      "actions": 2,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-int-11",
+      "sport": "kickboxing",
+      "tier": "intermediate",
+      "display": "Jab \u2013 Lead hook \u2013 Cross \u2013 Lead low kick",
+      "speech": "Jab, Lead hook, Cross, Lead low kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-int-12",
+      "sport": "kickboxing",
+      "tier": "intermediate",
+      "display": "Jab \u2013 Cross \u2013 Lead body kick",
+      "speech": "Jab, Cross, Lead body kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "kb-int-13",
+      "sport": "kickboxing",
+      "tier": "intermediate",
+      "display": "Jab \u2013 Lead low kick \u2013 Rear low kick",
+      "speech": "Jab, Lead low kick, Rear low kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-int-14",
+      "sport": "kickboxing",
+      "tier": "intermediate",
+      "display": "Lead hook \u2013 Cross \u2013 Lead body kick \u2013 Rear low kick",
+      "speech": "Lead hook, Cross, Lead body kick, Rear low kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "kb-int-15",
+      "sport": "kickboxing",
+      "tier": "intermediate",
+      "display": "Jab \u2013 Cross \u2013 Rear high kick",
+      "speech": "Jab, Cross, Rear high kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-int-16",
+      "sport": "kickboxing",
+      "tier": "intermediate",
+      "display": "Jab \u2013 Cross \u2013 Lead high kick",
+      "speech": "Jab, Cross, Lead high kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-int-17",
+      "sport": "kickboxing",
+      "tier": "intermediate",
+      "display": "Lead teep \u2013 Cross \u2013 Lead hook \u2013 Lead low kick",
+      "speech": "Lead teep, Cross, Lead hook, Lead low kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-int-18",
+      "sport": "kickboxing",
+      "tier": "intermediate",
+      "display": "Jab \u2013 Cross \u2013 Rear low kick \u2013 Lead low kick",
+      "speech": "Jab, Cross, Rear low kick, Lead low kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-int-19",
+      "sport": "kickboxing",
+      "tier": "intermediate",
+      "display": "Cross \u2013 Lead hook \u2013 Switch kick",
+      "speech": "Cross, Lead hook, Switch kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-int-20",
+      "sport": "kickboxing",
+      "tier": "intermediate",
+      "display": "Jab \u2013 Switch kick \u2013 Cross \u2013 Rear low kick",
+      "speech": "Jab, Switch kick, Cross, Rear low kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-int-21",
+      "sport": "kickboxing",
+      "tier": "intermediate",
+      "display": "Rear teep \u2013 Jab \u2013 Cross \u2013 Rear body kick",
+      "speech": "Rear teep, Jab, Cross, Rear body kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "kb-int-22",
+      "sport": "kickboxing",
+      "tier": "intermediate",
+      "display": "Jab \u2013 Cross \u2013 Lead hook \u2013 Rear high kick",
+      "speech": "Jab, Cross, Lead hook, Rear high kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-int-23",
+      "sport": "kickboxing",
+      "tier": "intermediate",
+      "display": "Jab \u2013 Lead uppercut \u2013 Cross \u2013 Lead body kick",
+      "speech": "Jab, Lead uppercut, Cross, Lead body kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "kb-int-24",
+      "sport": "kickboxing",
+      "tier": "intermediate",
+      "display": "Check the low kick \u2013 Cross \u2013 Lead hook",
+      "speech": "Check the low kick, Cross, Lead hook",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "defensive"
+      ]
+    },
+    {
+      "id": "kb-int-25",
+      "sport": "kickboxing",
+      "tier": "intermediate",
+      "display": "Check the low kick \u2013 Lead low kick \u2013 Cross",
+      "speech": "Check the low kick, Lead low kick, Cross",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "defensive"
+      ]
+    },
+    {
+      "id": "kb-int-26",
+      "sport": "kickboxing",
+      "tier": "intermediate",
+      "display": "Slip \u2013 Cross \u2013 Lead hook \u2013 Rear low kick",
+      "speech": "Slip, Cross, Lead hook, Rear low kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "defensive"
+      ]
+    },
+    {
+      "id": "kb-int-27",
+      "sport": "kickboxing",
+      "tier": "intermediate",
+      "display": "Jab \u2013 Cross \u2013 Lead knee \u2013 Rear body kick",
+      "speech": "Jab, Cross, Lead knee, Rear body kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "kb-int-28",
+      "sport": "kickboxing",
+      "tier": "intermediate",
+      "display": "Catch teep \u2013 Cross \u2013 Lead low kick",
+      "speech": "Catch teep, Cross, Lead low kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "defensive"
+      ]
+    },
+    {
+      "id": "kb-int-29",
+      "sport": "kickboxing",
+      "tier": "intermediate",
+      "display": "Lead hook \u2013 Rear uppercut \u2013 Lead hook \u2013 Lead low kick",
+      "speech": "Lead hook, Rear uppercut, Lead hook, Lead low kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-int-30",
+      "sport": "kickboxing",
+      "tier": "intermediate",
+      "display": "Jab \u2013 Lead body kick \u2013 Cross \u2013 Lead hook",
+      "speech": "Jab, Lead body kick, Cross, Lead hook",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "kb-int-31",
+      "sport": "kickboxing",
+      "tier": "intermediate",
+      "display": "Lead uppercut \u2013 Cross \u2013 Lead body kick",
+      "speech": "Lead uppercut, Cross, Lead body kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "kb-int-32",
+      "sport": "kickboxing",
+      "tier": "intermediate",
+      "display": "Rear uppercut \u2013 Lead hook \u2013 Rear body kick",
+      "speech": "Rear uppercut, Lead hook, Rear body kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "kb-int-33",
+      "sport": "kickboxing",
+      "tier": "intermediate",
+      "display": "Lead body kick \u2013 Cross \u2013 Rear knee",
+      "speech": "Lead body kick, Cross, Rear knee",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "kb-adv-11",
+      "sport": "kickboxing",
+      "tier": "advanced",
+      "display": "Lead hook \u2013 Rear uppercut \u2013 Lead high kick",
+      "speech": "Lead hook, Rear uppercut, Lead high kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-adv-12",
+      "sport": "kickboxing",
+      "tier": "advanced",
+      "display": "Jab \u2013 Cross \u2013 Lead low kick \u2013 Rear body kick \u2013 Cross",
+      "speech": "Jab, Cross, Lead low kick, Rear body kick, Cross",
+      "actions": 5,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "kb-adv-13",
+      "sport": "kickboxing",
+      "tier": "advanced",
+      "display": "Switch kick \u2013 Cross \u2013 Lead hook \u2013 Rear low kick",
+      "speech": "Switch kick, Cross, Lead hook, Rear low kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-adv-14",
+      "sport": "kickboxing",
+      "tier": "advanced",
+      "display": "Jab \u2013 Lead low kick \u2013 Rear low kick \u2013 Lead low kick",
+      "speech": "Jab, Lead low kick, Rear low kick, Lead low kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-adv-15",
+      "sport": "kickboxing",
+      "tier": "advanced",
+      "display": "Lead hook \u2013 Cross \u2013 Lead body kick \u2013 Rear body kick \u2013 Lead low kick",
+      "speech": "Lead hook, Cross, Lead body kick, Rear body kick, Lead low kick",
+      "actions": 5,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "kb-adv-16",
+      "sport": "kickboxing",
+      "tier": "advanced",
+      "display": "Jab \u2013 Cross \u2013 Rear body kick \u2013 Lead low kick",
+      "speech": "Jab, Cross, Rear body kick, Lead low kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "kb-adv-17",
+      "sport": "kickboxing",
+      "tier": "advanced",
+      "display": "Lead teep \u2013 Cross \u2013 Lead hook \u2013 Rear high kick",
+      "speech": "Lead teep, Cross, Lead hook, Rear high kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-adv-18",
+      "sport": "kickboxing",
+      "tier": "advanced",
+      "display": "Jab \u2013 Cross \u2013 Lead hook \u2013 Switch kick",
+      "speech": "Jab, Cross, Lead hook, Switch kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-adv-19",
+      "sport": "kickboxing",
+      "tier": "advanced",
+      "display": "Jab \u2013 Cross \u2013 Lead knee \u2013 Rear knee \u2013 Lead hook",
+      "speech": "Jab, Cross, Lead knee, Rear knee, Lead hook",
+      "actions": 5,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-adv-20",
+      "sport": "kickboxing",
+      "tier": "advanced",
+      "display": "Catch teep \u2013 Lead low kick \u2013 Cross \u2013 Lead hook",
+      "speech": "Catch teep, Lead low kick, Cross, Lead hook",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "defensive"
+      ]
+    },
+    {
+      "id": "kb-adv-21",
+      "sport": "kickboxing",
+      "tier": "advanced",
+      "display": "Slip \u2013 Lead hook \u2013 Cross \u2013 Lead low kick",
+      "speech": "Slip, Lead hook, Cross, Lead low kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "defensive"
+      ]
+    },
+    {
+      "id": "kb-adv-22",
+      "sport": "kickboxing",
+      "tier": "advanced",
+      "display": "Jab \u2013 Lead hook \u2013 Rear uppercut \u2013 Lead body kick \u2013 Rear low kick",
+      "speech": "Jab, Lead hook, Rear uppercut, Lead body kick, Rear low kick",
+      "actions": 5,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "kb-adv-23",
+      "sport": "kickboxing",
+      "tier": "advanced",
+      "display": "Rear teep \u2013 Switch kick \u2013 Cross \u2013 Lead hook \u2013 Rear high kick",
+      "speech": "Rear teep, Switch kick, Cross, Lead hook, Rear high kick",
+      "actions": 5,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-adv-24",
+      "sport": "kickboxing",
+      "tier": "advanced",
+      "display": "Cross \u2013 Lead hook \u2013 Rear low kick \u2013 Lead body kick \u2013 Cross",
+      "speech": "Cross, Lead hook, Rear low kick, Lead body kick, Cross",
+      "actions": 5,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "kb-adv-25",
+      "sport": "kickboxing",
+      "tier": "advanced",
+      "display": "Jab \u2013 Cross \u2013 Roll under \u2013 Lead hook \u2013 Cross \u2013 Lead body kick",
+      "speech": "Jab, Cross, Roll under, Lead hook, Cross, Lead body kick",
+      "actions": 6,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body",
+        "defensive"
+      ]
+    },
+    {
+      "id": "kb-adv-26",
+      "sport": "kickboxing",
+      "tier": "advanced",
+      "display": "Jab \u2013 Cross \u2013 Rear low kick \u2013 Lead hook \u2013 Rear high kick",
+      "speech": "Jab, Cross, Rear low kick, Lead hook, Rear high kick",
+      "actions": 5,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks"
+      ]
+    },
+    {
+      "id": "kb-adv-27",
+      "sport": "kickboxing",
+      "tier": "advanced",
+      "display": "Lead body kick \u2013 Cross \u2013 Lead hook \u2013 Rear low kick",
+      "speech": "Lead body kick, Cross, Lead hook, Rear low kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "kb-adv-28",
+      "sport": "kickboxing",
+      "tier": "advanced",
+      "display": "Rear body kick \u2013 Lead teep \u2013 Rear low kick",
+      "speech": "Rear body kick, Lead teep, Rear low kick",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "kb-adv-29",
+      "sport": "kickboxing",
+      "tier": "advanced",
+      "display": "Switch kick \u2013 Rear body kick \u2013 Lead hook",
+      "speech": "Switch kick, Rear body kick, Lead hook",
+      "actions": 3,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
+      "id": "kb-adv-30",
+      "sport": "kickboxing",
+      "tier": "advanced",
+      "display": "Lead body kick \u2013 Rear low kick \u2013 Lead hook \u2013 Rear body kick",
+      "speech": "Lead body kick, Rear low kick, Lead hook, Rear body kick",
+      "actions": 4,
+      "frequency": "common",
+      "enabled": true,
+      "custom": false,
+      "tags": [
+        "kicks",
+        "body"
+      ]
+    },
+    {
       "id": "bx-s-01",
       "sport": "boxing",
       "display": "Jab",

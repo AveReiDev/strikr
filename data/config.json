@@ -41,8 +41,8 @@
     "clamp": [0.67, 1.5],
     "priorCalls": 30,
     "targets": {
-      "muaythai":   { "jab": 10, "cross": 13, "hook": 11, "uppercut": 5, "rearKick": 14, "leadKick": 13, "teep": 7, "knee": 9, "elbow": 7, "defense": 5 },
-      "kickboxing": { "jab": 14, "cross": 16, "hook": 14, "uppercut": 6, "rearKick": 18, "leadKick": 14, "teep": 5, "knee": 4, "defense": 5 }
+      "muaythai":   { "jab": 10, "cross": 13, "hook": 11, "uppercut": 5, "rearKick": 14, "leadKick": 13, "highKick": 8, "teep": 7, "knee": 9, "elbow": 7, "defense": 5 },
+      "kickboxing": { "jab": 14, "cross": 16, "hook": 14, "uppercut": 6, "rearKick": 18, "leadKick": 14, "highKick": 8, "teep": 5, "knee": 4, "defense": 5 }
     }
   },
 

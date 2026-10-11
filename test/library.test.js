@@ -85,7 +85,7 @@ test('rejects bad sport, tier or frequency', () => {
 test('a fresh library is exactly the shipped one', () => {
   const lib = makeLib();
   assert.equal(lib.all().length, SHIPPED.length);
-  assert.equal(lib.activePool().length, SHIPPED.length);
+  assert.equal(lib.activePool().length, SHIPPED.filter((c) => c.enabled).length);
 });
 
 test('the shipped library is never written into storage', () => {
@@ -234,7 +234,7 @@ test('a corrupt library key falls back to the shipped library untouched', () => 
     let lib;
     assert.doesNotThrow(() => { lib = makeLib(backend); }, `threw on ${junk}`);
     assert.equal(lib.all().length, SHIPPED.length);
-    assert.equal(lib.activePool().length, SHIPPED.length);
+    assert.equal(lib.activePool().length, SHIPPED.filter((c) => c.enabled).length);
   }
 });
 
@@ -317,7 +317,7 @@ test('custom combos sort above shipped ones in their sport', () => {
 test('counts report active against total', () => {
   const lib = makeLib();
   const before = lib.counts('muaythai');
-  assert.equal(before.active, before.total);
+  assert.equal(before.active, SHIPPED.filter((c) => c.sport === 'muaythai' && c.enabled).length);
   lib.setEnabled('mt-beg-01', false);
   assert.equal(lib.counts('muaythai').active, before.active - 1);
   assert.equal(lib.counts('muaythai').total, before.total);

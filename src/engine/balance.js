@@ -27,6 +27,7 @@ export function categoryOf(strike) {
   if (/elbow/.test(s)) return 'elbow';
   if (/knee/.test(s)) return 'knee';
   if (/teep/.test(s)) return 'teep';
+  if (/\bhigh kick$|^question mark kick$/.test(s)) return 'highKick';
   if (/^(lead|switch)\b.*\bkick$/.test(s)) return 'leadKick';
   if (/^rear\b.*\bkick$/.test(s)) return 'rearKick';
   if (/^(double )?jab/.test(s)) return 'jab';

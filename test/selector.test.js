@@ -32,6 +32,24 @@ test('the shipped library is intact', () => {
   for (const c of singles) assert.ok(Array.isArray(c.tags) && c.tags.length, `${c.id} should have tags`);
 });
 
+test('the 3-kicks-in-a-row combos stay disabled; the other long kick strings are kept', () => {
+  for (const id of ['mt-adv-14', 'kb-adv-14']) {
+    assert.equal(COMBOS.find((c) => c.id === id).enabled, false, id);
+  }
+  for (const id of ['mt-adv-15', 'kb-adv-15']) {
+    assert.equal(COMBOS.find((c) => c.id === id).enabled, true, id);
+  }
+});
+
+test('head-kick combos are weighted up and have their own balance category', () => {
+  const head = COMBOS.filter((c) => c.enabled && categoriesOf(c).includes('highKick'));
+  assert.ok(head.length >= 14, `only ${head.length} head-kick combos`);
+  for (const c of head) assert.equal(c.frequency, 'constant', c.id);
+  for (const sport of ['muaythai', 'kickboxing']) {
+    assert.ok(config.balance.targets[sport].highKick > 0, sport);
+  }
+});
+
 test('pool respects sport, enabled and tier ceiling', () => {
   const beg = buildPool(COMBOS, { sport: 'boxing', tier: 'beginner' });
   assert.ok(beg.length > 0);

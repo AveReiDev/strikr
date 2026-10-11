@@ -15,7 +15,10 @@ test('strikes are classified by what they are, not by words they contain', () =>
   assert.equal(categoryOf('Lead hook to body'), 'hook');
   assert.equal(categoryOf('Rear uppercut'), 'uppercut');
   assert.equal(categoryOf('Rear low kick'), 'rearKick');
-  assert.equal(categoryOf('Rear high kick'), 'rearKick');
+  assert.equal(categoryOf('Rear high kick'), 'highKick');
+  assert.equal(categoryOf('Lead high kick'), 'highKick');
+  assert.equal(categoryOf('Switch high kick'), 'highKick');
+  assert.equal(categoryOf('Question mark kick'), 'highKick');
   assert.equal(categoryOf('Lead body kick'), 'leadKick');
   assert.equal(categoryOf('Switch kick'), 'leadKick');
   assert.equal(categoryOf('Lead teep'), 'teep');
@@ -34,7 +37,7 @@ test('defence is recognised before the kick it names', () => {
 });
 
 test('things that are not a balanced category are ignored', () => {
-  for (const s of ['Spinning back kick', 'Question mark kick', 'Sweep', 'Clinch entry', 'Turn and dump', '(land switched)', '']) {
+  for (const s of ['Spinning back kick', 'Sweep', 'Clinch entry', 'Turn and dump', '(land switched)', '']) {
     assert.equal(categoryOf(s), null, s);
   }
   assert.deepEqual(

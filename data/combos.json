@@ -36,7 +36,7 @@
       "display": "Jab \u2013 Cross \u2013 Rear body kick",
       "speech": "Jab, Cross, Rear body kick",
       "actions": 3,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -79,7 +79,7 @@
       "display": "Jab \u2013 Lead hook \u2013 Rear low kick",
       "speech": "Jab, Lead hook, Rear low kick",
       "actions": 3,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -149,7 +149,7 @@
       "display": "Jab \u2013 Cross \u2013 Lead hook \u2013 Rear body kick",
       "speech": "Jab, Cross, Lead hook, Rear body kick",
       "actions": 4,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -207,7 +207,7 @@
       "display": "Jab \u2013 Rear uppercut \u2013 Lead hook \u2013 Rear low kick",
       "speech": "Jab, Rear uppercut, Lead hook, Rear low kick",
       "actions": 4,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -221,7 +221,7 @@
       "display": "Cross \u2013 Lead hook \u2013 Switch kick",
       "speech": "Cross, Lead hook, Switch kick",
       "actions": 3,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -308,7 +308,7 @@
       "display": "Question mark kick \u2013 Cross \u2013 Lead hook",
       "speech": "Question mark kick, Cross, Lead hook",
       "actions": 3,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -881,7 +881,7 @@
       "display": "Jab \u2013 Cross \u2013 Rear low kick",
       "speech": "Jab, Cross, Rear low kick",
       "actions": 3,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -895,7 +895,7 @@
       "display": "Jab \u2013 Cross \u2013 Lead hook \u2013 Rear low kick",
       "speech": "Jab, Cross, Lead hook, Rear low kick",
       "actions": 4,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -938,7 +938,7 @@
       "display": "Cross \u2013 Lead hook \u2013 Rear low kick",
       "speech": "Cross, Lead hook, Rear low kick",
       "actions": 3,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -1023,7 +1023,7 @@
       "display": "Jab \u2013 Cross \u2013 Lead hook \u2013 Rear body kick",
       "speech": "Jab, Cross, Lead hook, Rear body kick",
       "actions": 4,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -1081,7 +1081,7 @@
       "display": "Cross \u2013 Lead hook \u2013 Cross \u2013 Switch body kick",
       "speech": "Cross, Lead hook, Cross, Switch body kick",
       "actions": 4,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -1111,7 +1111,7 @@
       "display": "Jab \u2013 Cross \u2013 Lead hook to body \u2013 Rear high kick",
       "speech": "Jab, Cross, Lead hook to body, Rear high kick",
       "actions": 4,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -1154,7 +1154,7 @@
       "display": "Lead hook \u2013 Cross \u2013 Switch low kick",
       "speech": "Lead hook, Cross, Switch low kick",
       "actions": 3,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -1182,7 +1182,7 @@
       "display": "Jab \u2013 Cross \u2013 Roll under \u2013 Lead hook \u2013 Cross \u2013 Rear high kick",
       "speech": "Jab, Cross, Roll under, Lead hook, Cross, Rear high kick",
       "actions": 6,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -1212,7 +1212,7 @@
       "display": "Jab \u2013 Cross \u2013 Lead hook \u2013 Spinning back kick",
       "speech": "Jab, Cross, Lead hook, Spinning back kick",
       "actions": 4,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -1226,7 +1226,7 @@
       "display": "Question mark kick \u2013 Cross \u2013 Lead hook \u2013 Rear low kick",
       "speech": "Question mark kick, Cross, Lead hook, Rear low kick",
       "actions": 4,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -1255,7 +1255,7 @@
       "display": "Teep feint \u2013 Jab \u2013 Cross \u2013 Rear uppercut \u2013 Switch high kick",
       "speech": "Teep feint, Jab, Cross, Rear uppercut, Switch high kick",
       "actions": 5,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -1327,7 +1327,7 @@
       "display": "Jab \u2013 Cross \u2013 Lead low kick",
       "speech": "Jab, Cross, Lead low kick",
       "actions": 3,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -1399,7 +1399,7 @@
       "display": "Jab \u2013 Cross \u2013 Rear low kick",
       "speech": "Jab, Cross, Rear low kick",
       "actions": 3,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -1442,7 +1442,7 @@
       "display": "Jab \u2013 Lead hook \u2013 Cross \u2013 Lead low kick",
       "speech": "Jab, Lead hook, Cross, Lead low kick",
       "actions": 4,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -1456,7 +1456,7 @@
       "display": "Cross \u2013 Lead hook \u2013 Rear body kick",
       "speech": "Cross, Lead hook, Rear body kick",
       "actions": 3,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -1614,7 +1614,7 @@
       "display": "Jab \u2013 Cross \u2013 Lead body kick",
       "speech": "Jab, Cross, Lead body kick",
       "actions": 3,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -1672,7 +1672,7 @@
       "display": "Jab \u2013 Cross \u2013 Lead high kick",
       "speech": "Jab, Cross, Lead high kick",
       "actions": 3,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -1789,7 +1789,7 @@
       "display": "Jab \u2013 Lead uppercut \u2013 Cross \u2013 Lead body kick",
       "speech": "Jab, Lead uppercut, Cross, Lead body kick",
       "actions": 4,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -1892,7 +1892,7 @@
       "display": "Cross \u2013 Lead hook \u2013 Rear uppercut \u2013 Lead low kick",
       "speech": "Cross, Lead hook, Rear uppercut, Lead low kick",
       "actions": 4,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -1906,7 +1906,7 @@
       "display": "Jab \u2013 Cross \u2013 Lead hook \u2013 Rear high kick",
       "speech": "Jab, Cross, Lead hook, Rear high kick",
       "actions": 4,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -1920,7 +1920,7 @@
       "display": "Lead uppercut \u2013 Cross \u2013 Lead body kick",
       "speech": "Lead uppercut, Cross, Lead body kick",
       "actions": 3,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -1935,7 +1935,7 @@
       "display": "Rear uppercut \u2013 Lead hook \u2013 Rear body kick",
       "speech": "Rear uppercut, Lead hook, Rear body kick",
       "actions": 3,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -2009,7 +2009,7 @@
       "display": "Lead hook \u2013 Rear uppercut \u2013 Lead high kick",
       "speech": "Lead hook, Rear uppercut, Lead high kick",
       "actions": 3,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -2053,7 +2053,7 @@
       "speech": "Jab, Lead low kick, Rear low kick, Lead low kick",
       "actions": 4,
       "frequency": "common",
-      "enabled": true,
+      "enabled": false,
       "custom": false,
       "tags": [
         "kicks"
@@ -2096,7 +2096,7 @@
       "display": "Lead teep \u2013 Cross \u2013 Lead hook \u2013 Rear high kick",
       "speech": "Lead teep, Cross, Lead hook, Rear high kick",
       "actions": 4,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -2258,7 +2258,7 @@
       "display": "Jab \u2013 Cross \u2013 Lead hook \u2013 Spinning back kick",
       "speech": "Jab, Cross, Lead hook, Spinning back kick",
       "actions": 4,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -2363,7 +2363,7 @@
       "display": "Jab \u2013 Cross \u2013 Lead low kick",
       "speech": "Jab, Cross, Lead low kick",
       "actions": 3,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -2448,7 +2448,7 @@
       "display": "Jab \u2013 Cross \u2013 Rear body kick",
       "speech": "Jab, Cross, Rear body kick",
       "actions": 3,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -2463,7 +2463,7 @@
       "display": "Lead hook \u2013 Cross \u2013 Lead low kick",
       "speech": "Lead hook, Cross, Lead low kick",
       "actions": 3,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -2520,7 +2520,7 @@
       "display": "Jab \u2013 Lead hook \u2013 Cross \u2013 Lead body kick",
       "speech": "Jab, Lead hook, Cross, Lead body kick",
       "actions": 4,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -2622,7 +2622,7 @@
       "display": "Jab \u2013 Lead hook \u2013 Cross \u2013 Lead low kick",
       "speech": "Jab, Lead hook, Cross, Lead low kick",
       "actions": 4,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -2636,7 +2636,7 @@
       "display": "Jab \u2013 Cross \u2013 Lead body kick",
       "speech": "Jab, Cross, Lead body kick",
       "actions": 3,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -2680,7 +2680,7 @@
       "display": "Jab \u2013 Cross \u2013 Rear high kick",
       "speech": "Jab, Cross, Rear high kick",
       "actions": 3,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -2694,7 +2694,7 @@
       "display": "Jab \u2013 Cross \u2013 Lead high kick",
       "speech": "Jab, Cross, Lead high kick",
       "actions": 3,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -2736,7 +2736,7 @@
       "display": "Cross \u2013 Lead hook \u2013 Switch kick",
       "speech": "Cross, Lead hook, Switch kick",
       "actions": 3,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -2779,7 +2779,7 @@
       "display": "Jab \u2013 Cross \u2013 Lead hook \u2013 Rear high kick",
       "speech": "Jab, Cross, Lead hook, Rear high kick",
       "actions": 4,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -2793,7 +2793,7 @@
       "display": "Jab \u2013 Lead uppercut \u2013 Cross \u2013 Lead body kick",
       "speech": "Jab, Lead uppercut, Cross, Lead body kick",
       "actions": 4,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -2883,7 +2883,7 @@
       "display": "Lead hook \u2013 Rear uppercut \u2013 Lead hook \u2013 Lead low kick",
       "speech": "Lead hook, Rear uppercut, Lead hook, Lead low kick",
       "actions": 4,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -2912,7 +2912,7 @@
       "display": "Lead uppercut \u2013 Cross \u2013 Lead body kick",
       "speech": "Lead uppercut, Cross, Lead body kick",
       "actions": 3,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -2927,7 +2927,7 @@
       "display": "Rear uppercut \u2013 Lead hook \u2013 Rear body kick",
       "speech": "Rear uppercut, Lead hook, Rear body kick",
       "actions": 3,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -2957,7 +2957,7 @@
       "display": "Lead hook \u2013 Rear uppercut \u2013 Lead high kick",
       "speech": "Lead hook, Rear uppercut, Lead high kick",
       "actions": 3,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -3001,7 +3001,7 @@
       "speech": "Jab, Lead low kick, Rear low kick, Lead low kick",
       "actions": 4,
       "frequency": "common",
-      "enabled": true,
+      "enabled": false,
       "custom": false,
       "tags": [
         "kicks"
@@ -3044,7 +3044,7 @@
       "display": "Lead teep \u2013 Cross \u2013 Lead hook \u2013 Rear high kick",
       "speech": "Lead teep, Cross, Lead hook, Rear high kick",
       "actions": 4,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -3058,7 +3058,7 @@
       "display": "Jab \u2013 Cross \u2013 Lead hook \u2013 Switch kick",
       "speech": "Jab, Cross, Lead hook, Switch kick",
       "actions": 4,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -3131,7 +3131,7 @@
       "display": "Rear teep \u2013 Switch kick \u2013 Cross \u2013 Lead hook \u2013 Rear high kick",
       "speech": "Rear teep, Switch kick, Cross, Lead hook, Rear high kick",
       "actions": 5,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [
@@ -3176,7 +3176,7 @@
       "display": "Jab \u2013 Cross \u2013 Rear low kick \u2013 Lead hook \u2013 Rear high kick",
       "speech": "Jab, Cross, Rear low kick, Lead hook, Rear high kick",
       "actions": 5,
-      "frequency": "common",
+      "frequency": "constant",
       "enabled": true,
       "custom": false,
       "tags": [

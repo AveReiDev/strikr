@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cd \"$CLAUDE_PROJECT_DIR\" && git config core.hooksPath .githooks"
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && git config core.hooksPath .githooks && git config user.name AveReiDev && git config user.email 332603001+AveReiDev@users.noreply.github.com"
           }
         ]
       }

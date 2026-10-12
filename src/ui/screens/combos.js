@@ -6,12 +6,15 @@
  */
 
 import { FREQUENCIES, SPORTS, TIERS, SPORT_LABEL, TAGS, TAG_LABEL, deriveFromDisplay } from '../../store/library.js';
+import { profileOf } from '../../engine/strikes.js';
 import { openPicker, closePicker } from '../components/picker.js';
 import { comboFrequency, comboCoverage } from '../../store/history.js';
 
 const FREQ_LABEL = { occasional: 'Occasional', common: 'Common', constant: 'Constant' };
 
-export function createCombosScreen({ root, library, settings, history, onChange }) {
+const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+
+export function createCombosScreen({ root, library, strikes, settings, history, onChange }) {
   let query = '';
   let expanded = new Set();
 
@@ -217,6 +220,7 @@ export function createCombosScreen({ root, library, settings, history, onChange 
         b.addEventListener('click', () => {
           chosen[field] = v;
           for (const c of box.children) c.setAttribute('aria-pressed', String(c === b));
+          if (field === 'sport') updatePreview();   // boxing names ranges differently
         });
         box.appendChild(b);
       }
@@ -246,12 +250,27 @@ export function createCombosScreen({ root, library, settings, history, onChange 
     const preview = overlay.querySelector('#combo-preview');
     const errorsEl = overlay.querySelector('#combo-errors');
 
+    // What the app reads from the strike names: levels, ranges, and any name
+    // it does not know (that still works, it just counts toward neither).
+    function profileLines(display) {
+      const p = profileOf({ display, sport: chosen.sport }, strikes);
+      const lines = [];
+      if (p.levels.length) {
+        const changes = p.levelChanges ? ` (${p.levelChanges} level change${p.levelChanges === 1 ? '' : 's'})` : '';
+        lines.push(`Levels: ${p.levels.map(cap).join(', ')}${changes}`);
+      }
+      if (p.ranges.length) lines.push(`Range: ${p.ranges.map(cap).join(', ')}`);
+      if (p.unknown.length) lines.push(`Not recognised: ${p.unknown.join(', ')}`);
+      return lines.map((l) => `<div class="preview-speech">${escapeHtml(l)}</div>`).join('');
+    }
+
     function updatePreview() {
       const d = deriveFromDisplay(input.value);
       preview.innerHTML = d.actions
         ? `<div class="preview-display">${escapeHtml(d.display)}</div>
            <div class="preview-speech">Voice says: &ldquo;${escapeHtml(d.speech)}&rdquo;</div>
-           <div class="preview-speech">${d.actions} action${d.actions === 1 ? '' : 's'} for timing</div>`
+           <div class="preview-speech">${d.actions} action${d.actions === 1 ? '' : 's'} for timing</div>
+           ${profileLines(d.display)}`
         : '<div class="preview-speech">Nothing yet</div>';
     }
     input.addEventListener('input', updatePreview);

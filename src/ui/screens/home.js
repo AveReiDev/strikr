@@ -11,7 +11,7 @@ import { buildLadderPool, LADDER_MODES } from '../../engine/ladder.js';
 import { dailyVolume, weeklyLoad, FEELS, FEEL_LABEL } from '../../store/history.js';
 import { computeSuggestion } from '../../engine/suggest.js';
 import { sessionLoad, weekPlan, applyWeekPlan } from '../../engine/load.js';
-import { TAG_LABEL } from '../../store/library.js';
+import { TAGS, DRILL_TAGS, TAG_LABEL } from '../../store/library.js';
 
 const SPORT_LABEL = { boxing: 'Boxing', muaythai: 'Muay Thai', kickboxing: 'Kickboxing' };
 
@@ -257,6 +257,11 @@ export function createHomeScreen({ root, settings, config, library, history, onS
     }
   }
 
+  const rank = (tag, known) => {
+    const i = known.indexOf(tag);
+    return i < 0 ? known.length : i;
+  };
+
   // Focus: dynamic tag picker based on the current sport's combos.
   function availableTags() {
     const sport = settings.get('sport');
@@ -267,7 +272,9 @@ export function createHomeScreen({ root, settings, config, library, history, onS
       if (!Array.isArray(c.tags)) continue;
       for (const t of c.tags) (c.single ? drillTags : comboTags).add(t);
     }
-    return { comboTags: [...comboTags], drillTags: [...drillTags] };
+    // Known tags in their declared order, anything else after.
+    const ordered = (set, known) => [...set].sort((a, b) => rank(a, known) - rank(b, known));
+    return { comboTags: ordered(comboTags, TAGS), drillTags: ordered(drillTags, DRILL_TAGS) };
   }
 
   function renderFocusPicker() {

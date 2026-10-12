@@ -14,7 +14,7 @@
  * has startRound(), which the session calls so every round opens on rung one.
  */
 
-import { buildPool, selectCombo } from './selector.js';
+import { buildPool, selectCombo, weakSpotWeight } from './selector.js';
 
 export const LADDER_MODES = ['ladder', 'pyramid'];
 export const MIN_RUNGS = 3;
@@ -86,9 +86,7 @@ export function createLadderSelector({
   const recent = [];          // base combo ids, so the next ladder is a different combo
   let queue = [];
 
-  const weakWeight = focusWeak && comboFrequencyMap
-    ? (c) => 1 / ((comboFrequencyMap.get(c.id) || 0) + 1)
-    : null;
+  const weakWeight = weakSpotWeight(focusWeak, comboFrequencyMap);
 
   return {
     pool,

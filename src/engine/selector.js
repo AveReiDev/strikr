@@ -138,15 +138,32 @@ export function selectCombo({ pool, tier, config, rng, recent = [], weakWeight }
 }
 
 /**
+ * Multiply any number of per-combo weight functions into one. Missing ones
+ * (null, undefined) are skipped; with none left the result is null, which
+ * selectCombo reads as "no extra weighting".
+ */
+export function composeWeights(...fns) {
+  const active = fns.filter(Boolean);
+  if (!active.length) return null;
+  if (active.length === 1) return active[0];
+  return (c) => active.reduce((w, f) => w * f(c), 1);
+}
+
+/**
+ * Weak spots: combos with fewer historical calls weigh more, 1 / (count + 1).
+ * `comboFrequencyMap` is a Map<comboId, count> from history. Null when off.
+ */
+export function weakSpotWeight(focusWeak, comboFrequencyMap) {
+  return focusWeak && comboFrequencyMap
+    ? (c) => 1 / ((comboFrequencyMap.get(c.id) || 0) + 1)
+    : null;
+}
+
+/**
  * Convenience wrapper that keeps its own recent-ids list, which is what the
  * session actually wants. Still pure with respect to randomness — the rng is
- * injected.
- */
-/**
- * `comboFrequencyMap` is an optional Map<comboId, count> from history.
- * When `focusWeak` is true, combos with fewer historical calls get higher
- * weight: weight = 1 / (count + 1). This multiplies into the existing
- * frequency weight, so tier and frequency weighting still apply.
+ * injected. Weak spots and strike balance multiply into the frequency weight,
+ * so tier and frequency weighting still apply.
  */
 export function createSelector({ combos, sport, tier, config, rng, focusWeak, comboFrequencyMap, focus, balanced = true }) {
   const pool = buildPool(combos, { sport, tier, focus });
@@ -154,14 +171,14 @@ export function createSelector({ combos, sport, tier, config, rng, focusWeak, co
 
   // Strike balancing applies to ordinary draws only: a focus is a deliberate
   // skew, and the finisher's tiny pool of short combos is its own thing.
-  const balance = balanced && !focus ? createBalance({ sport, balance: config.balance }) : null;
+  const balance = balanced && !focus
+    ? createBalance({ sport, balance: config.balance, strikes: config.strikes })
+    : null;
 
-  const weak = focusWeak && comboFrequencyMap
-    ? (c) => 1 / ((comboFrequencyMap.get(c.id) || 0) + 1)
-    : null;
-  const weakWeight = weak || balance
-    ? (c) => (weak ? weak(c) : 1) * (balance ? balance.weight(c) : 1)
-    : null;
+  const weakWeight = composeWeights(
+    weakSpotWeight(focusWeak, comboFrequencyMap),
+    balance && ((c) => balance.weight(c)),
+  );
 
   return {
     pool,

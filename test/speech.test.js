@@ -7,9 +7,9 @@
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { loadConfig } from './fixtures.js';
 
-const config = JSON.parse(readFileSync(new URL('../data/config.json', import.meta.url)));
+const config = loadConfig();
 
 /* A minimal stand-in for the browser speech API. */
 function installFakeSpeechSynthesis(voices) {

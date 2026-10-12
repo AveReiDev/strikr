@@ -1,13 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { loadConfig } from './fixtures.js';
 
 import { createSession, STATES } from '../src/engine/session.js';
 import { createRng } from '../src/engine/selector.js';
 import { estimateSpeechMs, voiceRate, gapMsFor } from '../src/engine/timing.js';
 import { createSettingsStore } from '../src/store/settings.js';
 
-const config = JSON.parse(readFileSync(new URL('../data/config.json', import.meta.url)));
+const config = loadConfig();
 const COMBOS = JSON.parse(readFileSync(new URL('../data/combos.json', import.meta.url))).combos;
 
 const BASE = {

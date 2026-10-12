@@ -1,12 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { loadConfig } from './fixtures.js';
 
 import { sessionLoad, roundLoad, weekPlan, applyWeekPlan } from '../src/engine/load.js';
 import { weeklyLoad } from '../src/store/history.js';
 import { CHOICES } from '../src/store/settings.js';
 
-const config = JSON.parse(readFileSync(new URL('../data/config.json', import.meta.url)));
+const config = loadConfig();
 const L = config.load;
 
 const weeks = (...loads) => loads.map((load) => ({ load }));

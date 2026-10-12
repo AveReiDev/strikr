@@ -1,6 +1,6 @@
 # STRIKR — project summary
 
-Last updated 24 September 2026.
+Last updated 12 October 2026.
 
 ---
 
@@ -22,6 +22,10 @@ Last updated 24 September 2026.
 | 7B — Post-workout feel rating (v1.6.0) | **Done**, live |
 | 7C — Ramp up and finishers (v1.7.0) | **Done**, live |
 | 7D — Weekly load and easy weeks (v1.8.0) | **Done**, awaiting device test |
+| Combo pool expansion and strike balance (v1.9.0) | **Done**, live |
+| Punch-punch-kick and head-kick weighting (v1.10.0) | **Done**, live |
+| 8A — Strike dictionary (v1.11.0) | **Done**, awaiting device test |
+| 8B–8H — New training modes | Planned, see `PHASE8-PLAN.md` |
 
 ### Installing it on your phone
 
@@ -46,7 +50,7 @@ tell that `app.css` is new. **After editing any file in the app, bump
 `CACHE_VERSION` at the top of `sw.js`.** Forget, and an installed phone may keep
 serving the old version. This is written at the top of `sw.js` too.
 
-**221 tests pass.** Run them with `npm test`, or:
+**248 tests pass.** Run them with `npm test`, or:
 
 ```bash
 node --test 'test/*.test.js'
@@ -379,12 +383,54 @@ constants are under `load` in `data/config.json`.
   "building your baseline" before there is a reference. This line also shows
   on the Set goal card.
 
+## Combo pool and strike balance, 5 October 2026 (v1.9.0)
+
+- Muay Thai and kickboxing gained 133 combos, mostly lead-leg kicks, knees,
+  elbows, teeps and defence, so beginner pools are no longer 10 combos.
+- The no-repeat window is capped at a third of the pool, so small pools stop
+  cycling.
+- `src/engine/balance.js` gently weights draws toward strike types the
+  workout has under-called so far, against a per-sport target mix in
+  `config.balance`. It is off for a focus, for the finisher and for boxing.
+
+## Punch-punch-kick and head kicks, 11 October 2026 (v1.10.0)
+
+- The two "Jab, Lead low, Rear low, Lead low" combos are disabled.
+- 42 "two or three punches, then one kick" combos and all 16 head-kick combos
+  are raised to constant.
+- High kicks and the question mark kick get their own balance category.
+
+## Phase 8A: strike dictionary, 12 October 2026 (v1.11.0)
+
+The foundation for the Phase 8 modes (`PHASE8-PLAN.md`).
+
+- `data/strikes.json` holds ordered rules that classify each spoken strike by
+  kind (strike, defence, footwork, feint), weapon, level (head, body, leg),
+  range (kicking, punching, close, clinch; boxing uses inside and outside)
+  and balance category. The first match wins, and defence is tested first.
+- `src/engine/strikes.js` is pure: `classifyStrike` and `profileOf`, which
+  gives a combo's levels, ranges, weapons and level changes. `main.js` puts
+  the dictionary on `config.strikes`.
+- `test/strikes.test.js` fails on any strike in `combos.json` that no rule
+  matches, and on any `kicks`, `knees`, `elbows`, `defensive` or `hands` tag
+  that disagrees with the combo's contents. **A new strike name needs a rule.**
+- Balance now classifies through the dictionary. "Long jab" and "Pull counter
+  cross" count as jab and cross; they were ignored before.
+- `composeWeights` and `weakSpotWeight` in `selector.js` replace the weak-spot
+  code the ladder selector had copied.
+- Tags: a new `knees` tag on the 25 combos with a knee (Home shows "Knees" for
+  Muay Thai and kickboxing). `kicks` was removed from the 17 combos with no
+  kick or teep: 14 knee, elbow and clinch combos, and 3 that only defend a
+  kick. `mt-int-09` gained `defensive`; `bx-adv-10` lost it.
+- "Switch kick" classifies as a body kick. Its spoken text is unchanged.
+- The custom combo form previews the levels, ranges and any strike name it
+  does not recognise. An unrecognised name still works but counts toward
+  neither balance nor levels.
+- Home lists focus tags in a fixed order instead of the order combos happen
+  to appear in.
+
 ## Still open
 
-- **Stable address.** The dev cert expired 4 Sep and is tied to an old IP;
-  every IP change is a new origin with empty storage. Options: GitHub Pages /
-  Cloudflare Pages (real HTTPS, no Mac needed), or serving on
-  the Mac's `.local` name. Export a backup first either way.
 - `gen.py` predates tags and singles — do not re-run it.
 
 - **6C needs a device test.**
@@ -399,7 +445,8 @@ constants are under `load` in `data/config.json`.
 ```
 index.html            shell: five screen containers plus the tab bar
 data/
-  combos.json         90 combos + 25 singles — shipped, read-only, never written to storage
+  combos.json         223 combos + 25 singles — shipped, read-only, never written to storage
+  strikes.json        strike dictionary: level, range and category rules
   config.json         every tunable constant: gaps, weights, voice, audio
 src/
   engine/             pure and testable; no clock, no DOM, no global randomness
@@ -409,6 +456,8 @@ src/
     suggest.js          progressive training suggestion algorithm
     ladder.js           ladder / pyramid drills cut from existing combos
     load.js             weekly load, the +10% cap and easy weeks
+    balance.js          strike balance across a workout's draws
+    strikes.js          classifies strike names using data/strikes.json
   audio/
     speech.js           the ONLY file touching SpeechSynthesis
     context.js          shared AudioContext: keep-alive tone and bell
@@ -421,7 +470,7 @@ src/
 styles/
   tokens.css          every colour and size; light mode is a token override
   app.css             components only, no raw colours
-test/                 node --test, 221 tests
+test/                 node --test, 248 tests (fixtures.js mirrors main.js config)
 ```
 
 Three storage keys, independently readable so one corrupt value cannot brick the

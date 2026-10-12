@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { categoriesOf } from '../src/engine/balance.js';
+import { loadConfig } from './fixtures.js';
 
 import {
   createRng,
@@ -10,9 +11,11 @@ import {
   createSelector,
   tierRank,
   repeatWindow,
+  composeWeights,
+  weakSpotWeight,
 } from '../src/engine/selector.js';
 
-const config = JSON.parse(readFileSync(new URL('../data/config.json', import.meta.url)));
+const config = loadConfig();
 const library = JSON.parse(readFileSync(new URL('../data/combos.json', import.meta.url)));
 const COMBOS = library.combos;
 
@@ -42,7 +45,7 @@ test('the 3-kicks-in-a-row combos stay disabled; the other long kick strings are
 });
 
 test('head-kick combos are weighted up and have their own balance category', () => {
-  const head = COMBOS.filter((c) => c.enabled && categoriesOf(c).includes('highKick'));
+  const head = COMBOS.filter((c) => c.enabled && categoriesOf(c, config.strikes).includes('highKick'));
   assert.ok(head.length >= 14, `only ${head.length} head-kick combos`);
   for (const c of head) assert.equal(c.frequency, 'constant', c.id);
   for (const sport of ['muaythai', 'kickboxing']) {
@@ -183,7 +186,7 @@ test('weak-spot weighting biases toward unpracticed combos', () => {
   }));
 
   const freqMap = new Map([['stale', 20]]);
-  const weakWeight = (c) => 1 / ((freqMap.get(c.id) || 0) + 1);
+  const weakWeight = weakSpotWeight(true, freqMap);
 
   const N = 10000;
   const rng = createRng(999);
@@ -276,7 +279,7 @@ test('lead-leg kicks are called about as often as the target says', () => {
       const total = { lead: 0, rear: 0, all: 0 };
       for (let seed = 1; seed <= 20; seed++) {
         for (const c of drawMany(300, { sport, tier, seed })) {
-          for (const k of categoriesOf(c)) {
+          for (const k of categoriesOf(c, config.strikes)) {
             total.all += 1;
             if (k === 'leadKick') total.lead += 1;
             if (k === 'rearKick') total.rear += 1;
@@ -296,4 +299,20 @@ test('balancing can be switched off by leaving the config out', () => {
   const a = createSelector({ combos: COMBOS, sport: 'muaythai', tier: 'advanced', config: bare, rng: createRng(5) });
   const b = createSelector({ combos: COMBOS, sport: 'muaythai', tier: 'advanced', config: bare, rng: createRng(5), balanced: false });
   for (let i = 0; i < 50; i++) assert.equal(a.next().id, b.next().id);
+});
+
+test('weights compose by multiplying, and nothing to compose is null', () => {
+  assert.equal(composeWeights(), null);
+  assert.equal(composeWeights(null, undefined, false), null);
+  const half = () => 0.5;
+  assert.equal(composeWeights(half), half);
+  assert.equal(composeWeights(half, null, () => 4)({}), 2);
+});
+
+test('weak spots are off unless asked for and given a history', () => {
+  assert.equal(weakSpotWeight(false, new Map()), null);
+  assert.equal(weakSpotWeight(true, null), null);
+  const w = weakSpotWeight(true, new Map([['a', 3]]));
+  assert.equal(w({ id: 'a' }), 0.25);
+  assert.equal(w({ id: 'b' }), 1);
 });

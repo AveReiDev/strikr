@@ -47,11 +47,11 @@ export function deriveFromDisplay(input) {
   };
 }
 
-export const TAGS = ['hands', 'kicks', 'elbows', 'body', 'defensive'];
+export const TAGS = ['hands', 'kicks', 'knees', 'elbows', 'body', 'defensive'];
 export const DRILL_TAGS = ['jab', 'cross', 'hook', 'uppercut', 'kick', 'teep', 'knee'];
 
 export const TAG_LABEL = {
-  hands: 'Hands', kicks: 'Kicks', elbows: 'Elbows',
+  hands: 'Hands', kicks: 'Kicks', knees: 'Knees', elbows: 'Elbows',
   body: 'Body', defensive: 'Defense',
   jab: 'Jab', cross: 'Cross', hook: 'Hook', uppercut: 'Uppercut',
   kick: 'Kick', teep: 'Teep', knee: 'Knee',

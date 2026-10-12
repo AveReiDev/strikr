@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { loadConfig } from './fixtures.js';
 
 import {
   gapMsFor,
@@ -11,7 +11,7 @@ import {
   formatClock,
 } from '../src/engine/timing.js';
 
-const config = JSON.parse(readFileSync(new URL('../data/config.json', import.meta.url)));
+const config = loadConfig();
 
 test('gap maths for every intensity across 2 to 7 actions', () => {
   // Expected values follow baseGapMs + perActionMs * actions.

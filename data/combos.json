@@ -139,7 +139,7 @@
       "enabled": true,
       "custom": false,
       "tags": [
-        "kicks"
+        "knees"
       ]
     },
     {
@@ -268,7 +268,8 @@
       "enabled": true,
       "custom": false,
       "tags": [
-        "kicks"
+        "knees",
+        "defensive"
       ]
     },
     {
@@ -356,7 +357,7 @@
       "enabled": true,
       "custom": false,
       "tags": [
-        "kicks",
+        "knees",
         "elbows"
       ]
     },
@@ -385,7 +386,7 @@
       "enabled": true,
       "custom": false,
       "tags": [
-        "kicks",
+        "knees",
         "elbows"
       ]
     },
@@ -416,7 +417,6 @@
       "enabled": true,
       "custom": false,
       "tags": [
-        "kicks",
         "defensive"
       ]
     },
@@ -432,6 +432,7 @@
       "custom": false,
       "tags": [
         "kicks",
+        "knees",
         "elbows",
         "body"
       ]
@@ -870,8 +871,7 @@
       "enabled": true,
       "custom": false,
       "tags": [
-        "hands",
-        "defensive"
+        "hands"
       ]
     },
     {
@@ -1144,7 +1144,7 @@
       "enabled": true,
       "custom": false,
       "tags": [
-        "kicks"
+        "knees"
       ]
     },
     {
@@ -1303,7 +1303,8 @@
       "enabled": true,
       "custom": false,
       "tags": [
-        "kicks"
+        "kicks",
+        "knees"
       ]
     },
     {
@@ -1432,7 +1433,7 @@
       "enabled": true,
       "custom": false,
       "tags": [
-        "kicks"
+        "knees"
       ]
     },
     {
@@ -1590,7 +1591,7 @@
       "enabled": true,
       "custom": false,
       "tags": [
-        "kicks"
+        "knees"
       ]
     },
     {
@@ -1705,7 +1706,7 @@
       "enabled": true,
       "custom": false,
       "tags": [
-        "kicks"
+        "knees"
       ]
     },
     {
@@ -1720,6 +1721,7 @@
       "custom": false,
       "tags": [
         "kicks",
+        "knees",
         "body"
       ]
     },
@@ -1808,7 +1810,6 @@
       "enabled": true,
       "custom": false,
       "tags": [
-        "kicks",
         "defensive"
       ]
     },
@@ -1867,7 +1868,8 @@
       "enabled": true,
       "custom": false,
       "tags": [
-        "kicks"
+        "kicks",
+        "knees"
       ]
     },
     {
@@ -1955,6 +1957,7 @@
       "custom": false,
       "tags": [
         "kicks",
+        "knees",
         "body"
       ]
     },
@@ -1969,7 +1972,7 @@
       "enabled": true,
       "custom": false,
       "tags": [
-        "kicks",
+        "knees",
         "elbows"
       ]
     },
@@ -1984,7 +1987,7 @@
       "enabled": true,
       "custom": false,
       "tags": [
-        "kicks"
+        "knees"
       ]
     },
     {
@@ -2114,7 +2117,7 @@
       "enabled": true,
       "custom": false,
       "tags": [
-        "kicks"
+        "knees"
       ]
     },
     {
@@ -2129,6 +2132,7 @@
       "custom": false,
       "tags": [
         "kicks",
+        "knees",
         "elbows"
       ]
     },
@@ -2143,7 +2147,7 @@
       "enabled": true,
       "custom": false,
       "tags": [
-        "kicks",
+        "knees",
         "elbows"
       ]
     },
@@ -2233,7 +2237,8 @@
       "enabled": true,
       "custom": false,
       "tags": [
-        "kicks"
+        "kicks",
+        "knees"
       ]
     },
     {
@@ -2277,6 +2282,7 @@
       "custom": false,
       "tags": [
         "kicks",
+        "knees",
         "elbows",
         "body"
       ]
@@ -2338,6 +2344,7 @@
       "custom": false,
       "tags": [
         "kicks",
+        "knees",
         "elbows"
       ]
     },
@@ -2612,7 +2619,7 @@
       "enabled": true,
       "custom": false,
       "tags": [
-        "kicks"
+        "knees"
       ]
     },
     {
@@ -2812,7 +2819,6 @@
       "enabled": true,
       "custom": false,
       "tags": [
-        "kicks",
         "defensive"
       ]
     },
@@ -2858,6 +2864,7 @@
       "custom": false,
       "tags": [
         "kicks",
+        "knees",
         "body"
       ]
     },
@@ -2947,6 +2954,7 @@
       "custom": false,
       "tags": [
         "kicks",
+        "knees",
         "body"
       ]
     },
@@ -3076,7 +3084,7 @@
       "enabled": true,
       "custom": false,
       "tags": [
-        "kicks"
+        "knees"
       ]
     },
     {

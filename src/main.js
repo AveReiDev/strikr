@@ -38,10 +38,13 @@ const app = {
 };
 
 async function boot() {
-  const [config, library] = await Promise.all([
+  const [config, library, strikes] = await Promise.all([
     fetch('./data/config.json').then((r) => r.json()),
     fetch('./data/combos.json').then((r) => r.json()),
+    fetch('./data/strikes.json').then((r) => r.json()),
   ]);
+  // The strike dictionary rides on config so every selector can reach it.
+  config.strikes = strikes;
   app.config = config;
   app.combos = library.combos;
 
@@ -91,6 +94,7 @@ async function boot() {
   app.screens.combos = createCombosScreen({
     root: document.getElementById('screen-combos'),
     library: app.library,
+    strikes,
     settings: app.settings,
     history: app.history,
     onChange: () => app.screens.home.refresh(),

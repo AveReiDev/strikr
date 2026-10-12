@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "_comment": "How each spoken strike is classified. Rules are tested in order against the lower-cased strike and the first match wins, so defence comes before the kick it names ('Check rear low kick'). kind: strike | defense | footwork | feint. A feint takes its category from the strike it fakes. level: head | body | leg. range: kicking | punching | close | clinch. category feeds strike balance (config.balance.targets). Boxing uses boxingRange instead of range: first match of inside, then outside. test/strikes.test.js fails on any strike in combos.json that no rule matches.",
+  "rules": [
+    { "match": "^(check|catch|slip|roll|parry|block|frame|cover)", "kind": "defense", "category": "defense" },
+    { "match": "^(step (in|out|back|left|right)|pivot|circle|angle|switch stance|slide|hop)\\b", "kind": "footwork" },
+    { "match": " feint$", "kind": "feint" },
+    { "match": "^(clinch|long guard)|dump|^sweep", "kind": "strike", "weapon": "clinch", "range": "clinch" },
+    { "match": "elbow", "kind": "strike", "weapon": "elbow", "category": "elbow", "level": "head", "range": "close" },
+    { "match": "straight knee|step-up knee", "kind": "strike", "weapon": "knee", "category": "knee", "level": "body", "range": "punching" },
+    { "match": "knee", "kind": "strike", "weapon": "knee", "category": "knee", "level": "body", "range": "close" },
+    { "match": "high kick$|^question mark kick$", "kind": "strike", "weapon": "kick", "category": "highKick", "level": "head", "range": "kicking" },
+    { "match": "teep$", "kind": "strike", "weapon": "kick", "category": "teep", "level": "body", "range": "kicking" },
+    { "match": "^(lead|switch)\\b.*low kick$", "kind": "strike", "weapon": "kick", "category": "leadKick", "level": "leg", "range": "kicking" },
+    { "match": "^rear\\b.*low kick$", "kind": "strike", "weapon": "kick", "category": "rearKick", "level": "leg", "range": "kicking" },
+    { "match": "^(lead|switch)\\b.*kick$", "kind": "strike", "weapon": "kick", "category": "leadKick", "level": "body", "range": "kicking" },
+    { "match": "^rear\\b.*kick$", "kind": "strike", "weapon": "kick", "category": "rearKick", "level": "body", "range": "kicking" },
+    { "match": "kick$", "kind": "strike", "weapon": "kick", "level": "body", "range": "kicking" },
+    { "match": "uppercut", "kind": "strike", "weapon": "punch", "category": "uppercut", "level": "head", "range": "close" },
+    { "match": "hook to body$", "kind": "strike", "weapon": "punch", "category": "hook", "level": "body", "range": "punching" },
+    { "match": "hook", "kind": "strike", "weapon": "punch", "category": "hook", "level": "head", "range": "punching" },
+    { "match": "^(double |long )?jab to body$", "kind": "strike", "weapon": "punch", "category": "jab", "level": "body", "range": "punching" },
+    { "match": "^(double |long )?jab", "kind": "strike", "weapon": "punch", "category": "jab", "level": "head", "range": "punching" },
+    { "match": "cross to body$", "kind": "strike", "weapon": "punch", "category": "cross", "level": "body", "range": "punching" },
+    { "match": "cross", "kind": "strike", "weapon": "punch", "category": "cross", "level": "head", "range": "punching" },
+    { "match": "back fist", "kind": "strike", "weapon": "punch", "level": "head", "range": "punching" }
+  ],
+  "boxingRange": { "inside": "hook|uppercut|to body", "outside": "jab|cross|back fist" }
+}

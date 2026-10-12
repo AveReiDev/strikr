@@ -13,43 +13,30 @@
  * category predictable instead.
  */
 
-const DEFENSIVE = /^(check|catch|slip|roll|parry|block|frame)/i;
+import { classifyStrike, segmentsOf } from './strikes.js';
 
 /**
- * Category of one spoken strike, or null when it should not count (spins,
- * sweeps, clinch moves, anything unrecognised). Defence is tested first
- * because "Check rear low kick" contains "rear low kick".
+ * Balance category of one spoken strike, or null when it should not count
+ * (spins, sweeps, clinch moves, footwork, anything unrecognised). The
+ * categories come from the strike dictionary, data/strikes.json.
  */
-export function categoryOf(strike) {
-  const s = String(strike).trim().toLowerCase();
-  if (!s || s.startsWith('(')) return null;
-  if (DEFENSIVE.test(s)) return 'defense';
-  if (/elbow/.test(s)) return 'elbow';
-  if (/knee/.test(s)) return 'knee';
-  if (/teep/.test(s)) return 'teep';
-  if (/\bhigh kick$|^question mark kick$/.test(s)) return 'highKick';
-  if (/^(lead|switch)\b.*\bkick$/.test(s)) return 'leadKick';
-  if (/^rear\b.*\bkick$/.test(s)) return 'rearKick';
-  if (/^(double )?jab/.test(s)) return 'jab';
-  if (/^cross/.test(s)) return 'cross';
-  if (/hook/.test(s)) return 'hook';
-  if (/uppercut/.test(s)) return 'uppercut';
-  return null;
+export function categoryOf(strike, strikes) {
+  return classifyStrike(strike, strikes)?.category ?? null;
 }
 
 /** The categories of a combo's spoken strikes, in order. */
-export function categoriesOf(combo) {
-  return String(combo.display ?? '').split(' – ').map(categoryOf).filter(Boolean);
+export function categoriesOf(combo, strikes) {
+  return segmentsOf(combo).map((s) => categoryOf(s, strikes)).filter(Boolean);
 }
 
 /**
  * A running tally of what has been called, with a weight function over combos.
- * Returns null when there is no target mix for the sport (boxing, say), which
- * callers treat as "no balancing".
+ * Returns null when there is no target mix for the sport (boxing, say) or no
+ * strike dictionary to classify with, which callers treat as "no balancing".
  */
-export function createBalance({ sport, balance }) {
+export function createBalance({ sport, balance, strikes }) {
   const targets = balance?.targets?.[sport];
-  if (!targets) return null;
+  if (!targets || !strikes?.rules?.length) return null;
   const total = Object.values(targets).reduce((a, b) => a + b, 0);
   if (!(total > 0)) return null;
 
@@ -62,7 +49,7 @@ export function createBalance({ sport, balance }) {
   return {
     /** Multiplier for drawing this combo given everything recorded so far. */
     weight(combo) {
-      const cats = categoriesOf(combo).filter((c) => c in targets);
+      const cats = categoriesOf(combo, strikes).filter((c) => c in targets);
       if (!cats.length) return 1;
       const n = sum();
       let acc = 0;
@@ -74,7 +61,7 @@ export function createBalance({ sport, balance }) {
       return acc / cats.length;
     },
     record(combo) {
-      for (const c of categoriesOf(combo)) if (c in counts) counts[c] += 1;
+      for (const c of categoriesOf(combo, strikes)) if (c in counts) counts[c] += 1;
     },
     get counts() { return { ...counts }; },
   };

@@ -7,7 +7,7 @@
  */
 
 import { createBalance } from './balance.js';
-import { emphasisWeight } from './emphasis.js';
+import { emphasisWeight, emphasisPrefer } from './emphasis.js';
 
 const TIER_RANK = { beginner: 0, intermediate: 1, advanced: 2 };
 
@@ -117,13 +117,22 @@ export function repeatWindow(poolSize, configured) {
  *
  * Tiers are weighted over whichever still have an eligible combo, so the
  * selected tier keeps its share until every combo in it is in the window.
+ * `prefer` (range calls) works the same way: tiers with nothing preferred
+ * drop out of that draw.
  */
-export function selectCombo({ pool, tier, config, rng, recent = [], weakWeight }) {
+export function selectCombo({ pool, tier, config, rng, recent = [], weakWeight, prefer }) {
   if (!pool.length) return null;
 
   const size = repeatWindow(pool.length, config.noRepeatWindow);
   const blocked = new Set(size > 0 ? recent.slice(-size) : []);
-  const eligible = pool.filter((c) => !blocked.has(c.id));
+  let eligible = pool.filter((c) => !blocked.has(c.id));
+  // `prefer` (one test, or several best first) narrows the draw only when it
+  // leaves something, and only after the no-repeat window, which is still
+  // sized on the whole pool.
+  for (const test of prefer ? [].concat(prefer) : []) {
+    const preferred = eligible.filter(test);
+    if (preferred.length) { eligible = preferred; break; }
+  }
 
   const groups = groupByTier(eligible, tier, config.tierWeights);
   if (!groups.length) return null;
@@ -166,7 +175,9 @@ export function weakSpotWeight(focusWeak, comboFrequencyMap) {
  * injected. Weak spots, strike balance and emphasis multiply into the frequency weight,
  * so tier and frequency weighting still apply.
  */
-export function createSelector({ combos, sport, tier, config, rng, focusWeak, comboFrequencyMap, focus, emphasis, balanced = true }) {
+export function createSelector({
+  combos, sport, tier, config, rng, focusWeak, comboFrequencyMap, focus, emphasis, rangeCursor, balanced = true,
+}) {
   const pool = buildPool(combos, { sport, tier, focus });
   const recent = [];
 
@@ -179,14 +190,15 @@ export function createSelector({ combos, sport, tier, config, rng, focusWeak, co
   const weakWeight = composeWeights(
     weakSpotWeight(focusWeak, comboFrequencyMap),
     balance && ((c) => balance.weight(c)),
-    emphasisWeight(emphasis, { strikes: config.strikes, config }),
+    emphasisWeight(emphasis, { strikes: config.strikes, config, cursor: rangeCursor }),
   );
+  const prefer = emphasisPrefer(emphasis, { strikes: config.strikes, cursor: rangeCursor });
 
   return {
     pool,
     get recent() { return [...recent]; },
     next() {
-      const combo = selectCombo({ pool, tier, config, rng, recent, weakWeight });
+      const combo = selectCombo({ pool, tier, config, rng, recent, weakWeight, prefer });
       if (combo) {
         recent.push(combo.id);
         balance?.record(combo);

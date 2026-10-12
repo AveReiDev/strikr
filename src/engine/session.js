@@ -18,6 +18,7 @@ import { createSelector, buildPool } from './selector.js';
 import { createLadderSelector, LADDER_MODES } from './ladder.js';
 import { createDefenseSelector } from './defense.js';
 import { createFootworkSelector } from './footwork.js';
+import { createRangeSelector, callableRanges } from './emphasis.js';
 import { buildPlan } from './plan.js';
 import { createConditioningPicker } from './conditioning.js';
 import {
@@ -82,14 +83,39 @@ export function createSession({ config, settings, combos, rng, intensity: overri
     comboFrequencyMap,
     focus,
     emphasis: settings.emphasis,
+    // Range calls: createRangeSelector moves this, the draw weights read it.
+    rangeCursor: settings.emphasis === 'ranges' ? { current: null } : null,
   };
-  const selector = LADDER_MODES.includes(settings.workoutMode)
+  let base = LADDER_MODES.includes(settings.workoutMode)
     ? createLadderSelector({ ...selectorArgs, reps: settings.ladderReps ?? 1 })
-    : settings.workoutMode === 'defense'
-      ? createDefenseSelector(createSelector(selectorArgs), { moves: config.moves?.defense, strikes: config.strikes, rng })
-      : settings.workoutMode === 'footwork'
-        ? createFootworkSelector(createSelector(selectorArgs), { moves: config.moves?.footwork, strikes: config.strikes, rng })
-        : createSelector(selectorArgs);
+    : createSelector(selectorArgs);
+  if (selectorArgs.rangeCursor) {
+    const rc = config.emphasis ?? {};
+    base = createRangeSelector(base, {
+      ranges: callableRanges(base.pool, settings.sport, config.strikes, rc.rangeCallMinCombos),
+      cursor: selectorArgs.rangeCursor,
+      rng,
+      every: rc.rangeCallEvery,
+    });
+  }
+  const selector = settings.workoutMode === 'defense'
+    ? createDefenseSelector(base, { moves: config.moves?.defense, strikes: config.strikes, rng })
+    : settings.workoutMode === 'footwork'
+      ? createFootworkSelector(base, { moves: config.moves?.footwork, strikes: config.strikes, rng })
+      : base;
+
+  // Range calls: the callout ("Clinch"), then a fixed beat to move there
+  // before the combo is called. The beat is time to move, not recovery, so it
+  // is the same at every intensity.
+  const rangeTiming = (combo) => {
+    if (!combo.rangeCall || !combo.range) return null;
+    const text = applyPronunciation(combo.range.callout, config.pronunciation);
+    return {
+      text,
+      estSpeechMs: estimateSpeechMs(text, rate, config.speechEstimate),
+      afterMs: config.emphasis?.rangeCallMoveMs ?? 800,
+    };
+  };
 
   // Defense mode: the defense is called once the combo has had time to land
   // (its per-action time) plus a short beat, like the opponent's return.
@@ -151,6 +177,7 @@ export function createSession({ config, settings, combos, rng, intensity: overri
   let currentCombo = null;
   let pendingCombo = null;       // drawn but held back by the lookahead
   let pendingDefense = null;     // to call once the current combo's beat is up
+  let owedCombo = null;          // range calls: the combo whose range was just called
 
   let startedAt = null;
   const said = new Set();        // announcements already made this phase
@@ -209,6 +236,7 @@ export function createSession({ config, settings, combos, rng, intensity: overri
     awaitingSpeech = false;
     pendingCombo = null;
     pendingDefense = null;
+    owedCombo = null;
     currentCombo = null;
     selector.startRound?.();   // a ladder opens every round on rung one
     gapStart = now;
@@ -277,6 +305,15 @@ export function createSession({ config, settings, combos, rng, intensity: overri
       return;
     }
 
+    // Likewise the combo a range call announced: its time is reserved too.
+    if (owedCombo) {
+      if (now - gapStart < currentGapMs) return;
+      const o = owedCombo;
+      owedCombo = null;
+      callCombo(o.combo, o.text, o.gapMs, o.def);
+      return;
+    }
+
     const finishing = inFinisher(now);
     if (finishing && !finisherAnnounced) {
       // Announce straight away rather than sitting out the rest of the gap,
@@ -304,18 +341,33 @@ export function createSession({ config, settings, combos, rng, intensity: overri
     const estSpeechMs = estimateSpeechMs(text, rate, config.speechEstimate);
     // A combo and its defense are one unit: never start a combo whose
     // defense the bell would cut off, or the drill teaches leaving it out.
+    // A range call and the combo it announces are one unit the same way.
     const def = finishing ? null : defenseTiming(combo);
+    const call = finishing ? null : rangeTiming(combo);
 
     if (!canStartCallout({
       remainingMs: left,
-      estSpeechMs: estSpeechMs + (def ? def.estSpeechMs : 0),
-      gapMs: def ? def.beforeMs + def.afterMs : gapMs,
+      estSpeechMs: estSpeechMs + (def ? def.estSpeechMs : 0) + (call ? call.estSpeechMs : 0),
+      gapMs: (def ? def.beforeMs + def.afterMs : gapMs) + (call ? call.afterMs : 0),
       lookaheadMs: config.roundEndLookaheadMs,
     })) {
       return;   // let the round run out quietly
     }
 
     pendingCombo = null;
+    if (call) {
+      owedCombo = { combo, text, gapMs, def };
+      currentGapMs = call.afterMs;
+      gapStart = null;
+      awaitingSpeech = true;
+      emit({ type: 'range', range: combo.range });
+      emit({ type: 'say', text: call.text, tag: 'range' });
+      return;
+    }
+    callCombo(combo, text, gapMs, def);
+  }
+
+  function callCombo(combo, text, gapMs, def) {
     pendingDefense = def;
     currentCombo = combo;
     currentGapMs = def ? def.beforeMs : gapMs;
@@ -416,6 +468,9 @@ export function createSession({ config, settings, combos, rng, intensity: overri
       gapStart = now;
       // A defense owed from before the pause would come out of nowhere.
       if (pendingDefense) { pendingDefense = null; currentGapMs = intensity.baseGapMs; }
+      // A combo owed after a range call is held instead, so the range is
+      // called again before it.
+      if (owedCombo) { pendingCombo = owedCombo.combo; owedCombo = null; currentGapMs = intensity.baseGapMs; }
       if (currentGapMs <= 0) currentGapMs = intensity.baseGapMs;
       return drain();
     },

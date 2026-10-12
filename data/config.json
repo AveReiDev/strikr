@@ -29,8 +29,14 @@
   "_comment_defense": "Defense mode: the defense is called this long after the combo's execution time (perActionMs x actions) has passed, so it lands like the opponent's return. Tune on the bag.",
   "defense": { "delayMs": 300 },
 
-  "_comment_emphasis": "Emphasis is a soft weight, never a filter. Levels: a combo's draw weight is multiplied by 1 + levelsPerChange x (number of times adjacent strikes switch between head, body and leg).",
-  "emphasis": { "levelsPerChange": 1 },
+  "_comment_emphasis": "Emphasis is a soft weight, never a filter. Levels: a combo's draw weight is multiplied by 1 + levelsPerChange x (number of times adjacent strikes switch between head, body and leg). A range (kicking, punching, close, clinch; boxing outside, inside): 1 + rangePerShare x the share of the combo's strikes from that range. Range calls: every rangeCallEvery [min, max] combos, and at the start of each round, the voice names a new range, waits rangeCallMoveMs (time to move, the same at every intensity; tune on the bag), then calls a combo with at least one strike from that range, weighted as above. A range is only called when the pool has rangeCallMinCombos combos for it. Ranges and their callouts are in data/strikes.json.",
+  "emphasis": {
+    "levelsPerChange": 1,
+    "rangePerShare": 8,
+    "rangeCallEvery": [3, 5],
+    "rangeCallMoveMs": 800,
+    "rangeCallMinCombos": 4
+  },
 
   "_comment_warmup": "Guided warm-up (routines in data/warmups.json). After it, a rest of transitionSec to glove up, opened with doneCallout, then the usual 10 / 3-2-1 lead-in to round 1. Warm-up time never counts toward weekly load.",
   "warmup": { "transitionSec": 45, "doneCallout": "Warm-up done. Gloves on." },

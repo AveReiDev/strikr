@@ -367,7 +367,7 @@ Each phase ships on its own: tests, then a browser smoke test, then
 | 8D | Round plan + `TIMED` state + guided warmup — **done, v1.15.0** | Builds the timed-segment engine on the simpler use |
 | 8E | S&C exercise rounds, bodyweight library (gym kit deferred, decision 8), load integration — **done, v1.17.0** | Reuses 8D |
 | 8F | Footwork mode — **done, v1.18.0** | Reuses the 8B wrapper pattern |
-| 8G | Range emphasis + range calls + ~30 combos | Most combo authoring; can move earlier if you want it sooner |
+| 8G | Range emphasis + range calls + ~30 combos — **done, v1.19.0** (awaiting smoke and bag test) | Most combo authoring; can move earlier if you want it sooner |
 | 8H | HR Stage 1, then Stage 2 after on-device checks | Round timestamps fall out of 8D's plan |
 
 ## Decisions (11 October 2026)
@@ -389,6 +389,12 @@ Each phase ships on its own: tests, then a browser smoke test, then
    bodyweight and glove-friendly moves only. The gym list (kettlebells,
    dumbbells, TRX straps, plates, battle ropes) waits; a gloves-off gym
    block at the end of a session is a possible later addition.
+
+9. **Range calls (8G, 12 October):** the plan named no setting for the
+   optional range-change calls, so they are a ninth Emphasis value,
+   `ranges` ("Range calls"), rather than a separate toggle: a fixed range
+   and rotating calls do not combine. Built in a cloud session; the move
+   beat (800 ms) and the weight (8) want checking on the bag.
 
 ## Check on the phone before HR Stage 2
 

@@ -4,10 +4,11 @@
  * Every choice writes straight through to settings, so it survives a reload.
  */
 
-import { SPORTS, TIERS, INTENSITIES, ROUND_LENGTHS, WORKOUT_MODES, EMPHASES, CHOICES } from '../../store/settings.js';
+import { SPORTS, TIERS, INTENSITIES, ROUND_LENGTHS, WORKOUT_MODES, EMPHASES, EMPHASIS_LABEL, CHOICES } from '../../store/settings.js';
 import { gapMsFor } from '../../engine/timing.js';
 import { buildPool } from '../../engine/selector.js';
 import { buildLadderPool, LADDER_MODES } from '../../engine/ladder.js';
+import { emphasisApplies, callableRanges, rangeShare } from '../../engine/emphasis.js';
 import { dailyVolume, weeklyLoad, FEELS, FEEL_LABEL } from '../../store/history.js';
 import { computeSuggestion } from '../../engine/suggest.js';
 import { sessionLoad, weekPlan, applyWeekPlan } from '../../engine/load.js';
@@ -26,8 +27,17 @@ const MODE_SUB = {
 /** 45 → "45s", 60 → "1 min", 90 → "90s", 120 → "2 min". */
 const secLabel = (s) => (s % 60 === 0 ? `${s / 60} min` : `${s}s`);
 
-const EMPHASIS_LABEL = { off: 'Off', levels: 'Levels' };
-const EMPHASIS_SUB = { off: 'Any combo', levels: 'Head, body, legs' };
+const EMPHASIS_SUB = {
+  off: 'Any combo',
+  levels: 'Head, body, legs',
+  ranges: 'Switches as you go',
+  kicking: 'Teeps and kicks',
+  punching: 'Punches, long knees',
+  close: 'Knees, elbows, uppercuts',
+  clinch: 'Clinch, knees, dumps',
+  outside: 'Jab and cross',
+  inside: 'Hooks, uppercuts, body',
+};
 
 /**
  * A collapsible Home section. The header is a button; when the section is
@@ -157,6 +167,9 @@ export function createHomeScreen({ root, settings, config, library, history, onS
     if (group === 'sport') {
       settings.set('focus', null);
       renderFocusPicker();
+      // Clinch means nothing in boxing: drop a range the new sport lacks.
+      if (!emphasisApplies(settings.get('emphasis'), value, config.strikes)) settings.set('emphasis', 'off');
+      renderEmphasisPicker();
     }
     if (group === 'roundLengthMin') renderRounds();
     renderPoolSize();
@@ -171,11 +184,12 @@ export function createHomeScreen({ root, settings, config, library, history, onS
   const poolSizeEl = root.querySelector('#pool-size');
   function renderPoolSize() {
     const ladder = LADDER_MODES.includes(settings.get('workoutMode'));
-    const n = (ladder ? buildLadderPool : buildPool)(library.activePool(), {
+    const pool = (ladder ? buildLadderPool : buildPool)(library.activePool(), {
       sport: settings.get('sport'),
       tier: settings.get('tier'),
       focus: settings.get('focus') || null,
-    }).length;
+    });
+    const n = pool.length;
     const noun = ladder ? 'ladder' : 'combo';
     // Ramp and finisher live in Settings, so say here that they are on.
     const extras = [
@@ -185,10 +199,29 @@ export function createHomeScreen({ root, settings, config, library, history, onS
       settings.get('finisherSec') ? `${settings.get('finisherSec')}s finisher` : '',
     ].filter(Boolean).map((x) => ` · ${x}`).join('');
     poolSizeEl.textContent = n
-      ? `${n} ${noun}${n === 1 ? '' : 's'} in rotation${extras}`
+      ? `${n} ${noun}${n === 1 ? '' : 's'} in rotation${extras}${rangeNote(pool)}`
       : ladder
         ? 'No combos here are long enough to ladder'
         : 'No combos match these choices';
+  }
+
+  /**
+   * A range emphasis never shrinks the pool, but it can find little to lean
+   * on (no clinch at Beginner), so say how much it has, or which ranges
+   * range calls will use.
+   */
+  function rangeNote(pool) {
+    const e = settings.get('emphasis');
+    const sport = settings.get('sport');
+    if (e === 'ranges') {
+      const ranges = callableRanges(pool, sport, config.strikes, config.emphasis?.rangeCallMinCombos);
+      return ranges.length >= 2
+        ? ` · calls ${ranges.map((r) => EMPHASIS_LABEL[r.name]?.toLowerCase() ?? r.name).join(', ')}`
+        : ' · too few combos to change range';
+    }
+    if (e === 'off' || e === 'levels' || !emphasisApplies(e, sport, config.strikes)) return '';
+    const k = pool.filter((c) => rangeShare(c, e, config.strikes) > 0).length;
+    return ` · ${k} ${k === 1 ? 'works' : 'work'} ${EMPHASIS_LABEL[e].toLowerCase()}`;
   }
 
   /** A left-aligned chip carrying a title and a sub-line, as in the reference. */
@@ -364,10 +397,16 @@ export function createHomeScreen({ root, settings, config, library, history, onS
   }
 
   // Emphasis leans the draw toward combos that work one thing; it never
-  // shrinks the pool, so the count below does not change with it.
-  for (const e of EMPHASES) {
-    groups.emphasis.appendChild(stackChip('emphasis', e, EMPHASIS_LABEL[e], EMPHASIS_SUB[e]));
+  // shrinks the pool, so the count below does not change with it. Only the
+  // ranges the sport has are offered.
+  function renderEmphasisPicker() {
+    groups.emphasis.innerHTML = '';
+    for (const e of EMPHASES) {
+      if (!emphasisApplies(e, settings.get('sport'), config.strikes)) continue;
+      groups.emphasis.appendChild(stackChip('emphasis', e, EMPHASIS_LABEL[e], EMPHASIS_SUB[e]));
+    }
   }
+  renderEmphasisPicker();
 
   for (const r of ROUND_LENGTHS) groups.roundLengthMin.appendChild(chip('roundLengthMin', r));
 
@@ -571,6 +610,7 @@ export function createHomeScreen({ root, settings, config, library, history, onS
   });
 
   function refreshAll() {
+    renderEmphasisPicker();
     for (const group of ['sport', 'tier', 'intensity', 'workoutMode', 'emphasis', 'roundLengthMin']) {
       for (const el of buttonsFor(group)) {
         el.setAttribute('aria-pressed', String(el.dataset.value === String(settings.get(group))));

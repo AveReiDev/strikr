@@ -9,7 +9,7 @@ import { createSpeech } from './audio/speech.js';
 import { createAudio } from './audio/context.js';
 import { createWakeLock } from './audio/wakelock.js';
 import { createStorage } from './store/storage.js';
-import { createSettingsStore } from './store/settings.js';
+import { createSettingsStore, EMPHASIS_LABEL } from './store/settings.js';
 import { createLibrary } from './store/library.js';
 import { createHistory, newSessionId, comboFrequency } from './store/history.js';
 import { TAG_LABEL } from './store/library.js';
@@ -236,17 +236,23 @@ function handle(events) {
     switch (e.type) {
       case 'say':
         app.speech.speak(e.text).then(() => {
-          // A defense is timed like a combo: its gap starts when the voice stops.
-          if ((e.tag === 'combo' || e.tag === 'defense') && app.session) handle(app.session.speechEnded(now()));
+          // A defense or range call is timed like a combo: its gap starts when the voice stops.
+          if ((e.tag === 'combo' || e.tag === 'defense' || e.tag === 'range') && app.session) {
+            handle(app.session.speechEnded(now()));
+          }
         });
         break;
       case 'bell':
         app.audio.bell();
         break;
       case 'combo':
+        // Range calls keep the range on screen under every combo thrown in it.
         app.screens.workout.setCombo(
           e.combo.display,
-          e.combo.ladder ? `Rung ${e.combo.ladder.rung} of ${e.combo.ladder.of}` : '',
+          [
+            e.combo.range ? e.combo.range.callout : '',
+            e.combo.ladder ? `Rung ${e.combo.ladder.rung} of ${e.combo.ladder.of}` : '',
+          ].filter(Boolean).join(' · '),
         );
         // Only a full combo counts toward per-combo history. A ladder's partial
         // rungs would otherwise log "jab" hundreds of times as practice.
@@ -256,6 +262,9 @@ function handle(events) {
         break;
       case 'defense':
         app.screens.workout.showDefense(e.defense.name);
+        break;
+      case 'range':
+        app.screens.workout.setCombo(e.range.callout, 'Move to range');
         break;
       case 'step':
         // A conditioning round opens with a get-set step for the same
@@ -369,7 +378,7 @@ function repeatSession(record) {
     `Loaded that session: ${record.sport}, ${record.tier}, ${record.intensity}, ` +
     `${rounds} &times; ${Math.round(record.roundLengthSec / 60)} min` +
     (record.mode ? `, ${record.mode}` : '') +
-    (record.emphasis ? `, ${record.emphasis} emphasis` : '') +
+    (record.emphasis ? `, ${(EMPHASIS_LABEL[record.emphasis] ?? record.emphasis).toLowerCase()} emphasis` : '') +
     (record.rampUp ? ', ramp up' : '') +
     (record.finisherSec ? `, ${record.finisherSec}s finisher` : '') +
     (record.warmupMin ? `, ${record.warmupMin} min warm-up` : '') +

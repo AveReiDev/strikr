@@ -10,6 +10,7 @@ import { createSession } from '../src/engine/session.js';
 import { createRng } from '../src/engine/selector.js';
 import { estimateSpeechMs, voiceRate } from '../src/engine/timing.js';
 import { createSettingsStore } from '../src/store/settings.js';
+import { KEYS } from '../src/store/storage.js';
 
 const config = loadConfig();
 const COMBOS = JSON.parse(readFileSync(new URL('../data/combos.json', import.meta.url))).combos;
@@ -62,21 +63,19 @@ test('ladder pool holds only non-single combos with enough rungs', () => {
   assert.equal(buildLadderPool(COMBOS, { sport: 'muaythai', tier: 'advanced', focus: 'jab' }).length, 0);
 });
 
-test('ladder sequence climbs, pyramid climbs then descends', () => {
-  const up = ladderSequence(JCHC, { mode: 'ladder' }).map((c) => c.ladder.rung);
+test('a ladder climbs one strike at a time and stops at the full combo', () => {
+  const up = ladderSequence(JCHC).map((c) => c.ladder.rung);
   assert.deepEqual(up, [1, 2, 3, 4]);
-  const pyr = ladderSequence(JCHC, { mode: 'pyramid' }).map((c) => c.ladder.rung);
-  assert.deepEqual(pyr, [1, 2, 3, 4, 3, 2, 1]);
 });
 
-test('reps repeat each rung; the pyramid top is not doubled', () => {
-  const seq = ladderSequence(JCHC, { mode: 'pyramid', reps: 2 }).map((c) => c.ladder.rung);
-  assert.deepEqual(seq, [1, 1, 2, 2, 3, 3, 4, 4, 3, 3, 2, 2, 1, 1]);
+test('reps repeat each rung', () => {
+  const seq = ladderSequence(JCHC, { reps: 2 }).map((c) => c.ladder.rung);
+  assert.deepEqual(seq, [1, 1, 2, 2, 3, 3, 4, 4]);
 });
 
 test('only the top rung carries the real combo id', () => {
-  const seq = ladderSequence(JCHC, { mode: 'pyramid' });
-  assert.deepEqual(seq.map((c) => c.id), ['x-1#1', 'x-1#2', 'x-1#3', 'x-1', 'x-1#3', 'x-1#2', 'x-1#1']);
+  const seq = ladderSequence(JCHC);
+  assert.deepEqual(seq.map((c) => c.id), ['x-1#1', 'x-1#2', 'x-1#3', 'x-1']);
   for (const c of seq) assert.equal(c.ladder.baseId, 'x-1');
 });
 
@@ -165,13 +164,26 @@ test('settings accept the ladder modes and reps, and reject anything else', () =
   const settings = createSettingsStore({ config, storage });
   assert.equal(settings.get('workoutMode'), 'random');
   assert.equal(settings.get('ladderReps'), 1);
-  settings.set('workoutMode', 'pyramid');
+  settings.set('workoutMode', 'ladder');
   settings.set('ladderReps', 3);
-  assert.equal(settings.get('workoutMode'), 'pyramid');
+  assert.equal(settings.get('workoutMode'), 'ladder');
   assert.equal(settings.get('ladderReps'), 3);
   // Out-of-list values never land; the store falls back to the default.
   settings.set('workoutMode', 'staircase');
   settings.set('ladderReps', 7);
   assert.equal(settings.get('workoutMode'), 'random');
   assert.equal(settings.get('ladderReps'), 1);
+});
+
+test('a saved Pyramid choice becomes Ladder; Pyramid can no longer be set', () => {
+  const mem = new Map([[KEYS.settings, { workoutMode: 'pyramid', ladderReps: 2 }]]);
+  const storage = {
+    read: (k, fallback, sanitise) => (mem.has(k) ? sanitise(mem.get(k), fallback) : fallback),
+    write: (k, v) => mem.set(k, JSON.parse(JSON.stringify(v))),
+  };
+  const settings = createSettingsStore({ config, storage });
+  assert.equal(settings.get('workoutMode'), 'ladder');
+  assert.equal(settings.get('ladderReps'), 2);
+  settings.set('workoutMode', 'pyramid');
+  assert.equal(settings.get('workoutMode'), 'random');
 });

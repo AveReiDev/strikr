@@ -3,7 +3,6 @@
  *
  * A ladder builds one combo up a strike at a time:
  *   Jab / Jab, Cross / Jab, Cross, Lead hook / ...
- * A pyramid climbs to the full combo and then strips it back down.
  *
  * The rungs are cut from existing combos rather than written by hand, so every
  * combo with three or more spoken strikes is a ladder for free. The gap already
@@ -17,7 +16,7 @@
 import { buildPool, selectCombo, weakSpotWeight, composeWeights } from './selector.js';
 import { emphasisWeight } from './emphasis.js';
 
-export const LADDER_MODES = ['ladder', 'pyramid'];
+export const LADDER_MODES = ['ladder'];
 export const MIN_RUNGS = 3;
 
 const SEP = ' – ';
@@ -51,14 +50,13 @@ export function buildLadderPool(combos, { sport, tier, focus }) {
 /**
  * The full call sequence for one combo.
  *
- * `reps` repeats each rung before moving on. In a pyramid the top rung is
- * thrown once per rep, not twice, since the way down starts one rung below it.
+ * `reps` repeats each rung before moving on. (A Pyramid mode that climbed
+ * back down again was removed in v1.16.0: it added little over the ladder.)
  */
-export function ladderSequence(combo, { mode = 'ladder', reps = 1 } = {}) {
+export function ladderSequence(combo, { reps = 1 } = {}) {
   const rungs = rungsOf(combo);
   const of = rungs.length;
   const order = rungs.map((_, i) => i);
-  if (mode === 'pyramid') for (let i = of - 2; i >= 0; i--) order.push(i);
 
   const out = [];
   for (const i of order) {
@@ -81,7 +79,7 @@ export function ladderSequence(combo, { mode = 'ladder', reps = 1 } = {}) {
 }
 
 export function createLadderSelector({
-  combos, sport, tier, config, rng, focusWeak, comboFrequencyMap, focus, emphasis, mode, reps,
+  combos, sport, tier, config, rng, focusWeak, comboFrequencyMap, focus, emphasis, reps,
 }) {
   const pool = buildLadderPool(combos, { sport, tier, focus });
   const recent = [];          // base combo ids, so the next ladder is a different combo
@@ -101,7 +99,7 @@ export function createLadderSelector({
         const base = selectCombo({ pool, tier, config, rng, recent, weakWeight });
         if (!base) return null;
         recent.push(base.id);
-        queue = ladderSequence(base, { mode, reps });
+        queue = ladderSequence(base, { reps });
       }
       return queue.shift() ?? null;
     },

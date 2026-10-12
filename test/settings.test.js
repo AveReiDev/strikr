@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { loadConfig } from './fixtures.js';
 
 import { createSettingsStore, HOME_SECTIONS } from '../src/store/settings.js';
+import { KEYS } from '../src/store/storage.js';
 
 const config = loadConfig();
 
@@ -42,8 +43,10 @@ test('changing another setting keeps the collapsed sections', () => {
 
 test('a corrupt stored value falls back to all open', () => {
   const storage = memoryStorage();
-  storage.mem.set('strikr.v1.settings', { homeCollapsed: { focus: true } });
-  assert.deepEqual(createSettingsStore({ config, storage }).get('homeCollapsed'), []);
+  storage.mem.set(KEYS.settings, { homeCollapsed: { focus: true }, roundsPerWorkout: 7 });
+  const settings = createSettingsStore({ config, storage });
+  assert.deepEqual(settings.get('homeCollapsed'), []);
+  assert.equal(settings.get('roundsPerWorkout'), 7, 'the stored record was really read');
 });
 
 test('reset opens every section', () => {

@@ -14,7 +14,8 @@ export const PERIOD_LABEL = { week: 'This Week', month: 'This Month', all: 'All 
 const SPORTS = ['boxing', 'muaythai', 'kickboxing'];
 const TIERS = ['beginner', 'intermediate', 'advanced'];
 const INTENSITIES = ['light', 'medium', 'hard', 'custom'];
-// Random workouts store no mode, so only the drill modes are listed.
+// Random workouts store no mode, so only the drill modes are listed. Pyramid
+// is gone from the app but stays here so old records keep their label.
 const MODES = ['ladder', 'pyramid', 'defense'];
 // Likewise only a real emphasis is stored; off is the default.
 const EMPHASES = ['levels'];

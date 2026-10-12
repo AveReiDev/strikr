@@ -343,7 +343,7 @@ function repeatSession(record) {
   app.settings.set('restBetweenRoundsSec', record.restSec);
   app.settings.set('focus', record.focus ?? null);
   if (typeof record.focusWeak === 'boolean') app.settings.set('focusWeak', record.focusWeak);
-  app.settings.set('workoutMode', record.mode ?? 'random');
+  app.settings.set('workoutMode', record.mode === 'pyramid' ? 'ladder' : record.mode ?? 'random');
   app.settings.set('emphasis', record.emphasis ?? 'off');
   app.settings.set('rampUp', record.rampUp === true);
   app.settings.set('finisherSec', record.finisherSec ?? 0);

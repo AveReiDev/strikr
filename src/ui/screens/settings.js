@@ -82,7 +82,7 @@ export function createSettingsScreen({ root, settings, speech, onReset, onThemeC
       <button class="row" data-pick="ladderReps">
         <span>
           <span class="row-title">Ladder reps per rung</span>
-          <span class="row-sub">Times each step is called in Ladder and Pyramid</span>
+          <span class="row-sub">Times each step is called in Ladder</span>
         </span>
         <span class="row-value"><span data-val="ladderReps"></span><span class="chev">&rsaquo;</span></span>
       </button>

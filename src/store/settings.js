@@ -12,7 +12,7 @@ export const SPORTS = ['boxing', 'muaythai', 'kickboxing'];
 export const TIERS = ['beginner', 'intermediate', 'advanced'];
 export const INTENSITIES = ['light', 'medium', 'hard', 'custom'];
 export const ROUND_LENGTHS = [1, 2, 3, 4, 5, 10];
-export const WORKOUT_MODES = ['random', 'ladder', 'pyramid', 'defense'];
+export const WORKOUT_MODES = ['random', 'ladder', 'defense'];
 export const EMPHASES = ['off', 'levels'];
 
 /** Home's collapsible sections, by id. `homeCollapsed` lists the closed ones. */
@@ -127,7 +127,9 @@ export function createSettingsStore({ config, storage, onChange }) {
     KEYS.settings,
     defaults,
     (raw, fallback) => {
-      const out = sanitiseFields(raw, fallback, schema);
+      // Pyramid was removed in v1.16.0; its closest survivor is Ladder.
+      const migrated = raw?.workoutMode === 'pyramid' ? { ...raw, workoutMode: 'ladder' } : raw;
+      const out = sanitiseFields(migrated, fallback, schema);
       out.focus = sanitiseFocus(raw?.focus);
       out.goal = sanitiseGoal(raw?.goal);
       out.homeCollapsed = sanitiseCollapsed(raw?.homeCollapsed);

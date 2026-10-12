@@ -70,7 +70,7 @@ export function createSession({ config, settings, combos, rng, intensity: overri
     emphasis: settings.emphasis,
   };
   const selector = LADDER_MODES.includes(settings.workoutMode)
-    ? createLadderSelector({ ...selectorArgs, mode: settings.workoutMode, reps: settings.ladderReps ?? 1 })
+    ? createLadderSelector({ ...selectorArgs, reps: settings.ladderReps ?? 1 })
     : settings.workoutMode === 'defense'
       ? createDefenseSelector(createSelector(selectorArgs), { moves: config.moves?.defense, strikes: config.strikes, rng })
       : createSelector(selectorArgs);

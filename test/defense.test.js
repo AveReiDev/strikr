@@ -686,8 +686,8 @@ test('a workout with no mode set behaves as random', () => {
   assert.equal(summary.mode, 'random');
 });
 
-test('ladder and pyramid modes have no defense either', () => {
-  for (const workoutMode of ['ladder', 'pyramid']) {
+test('ladder mode has no defense either', () => {
+  for (const workoutMode of ['ladder']) {
     const { log } = runWorkout({ settings: { workoutMode, roundLengthMin: 2, roundsPerWorkout: 1 } });
     assert.equal(only(log, 'defense').length, 0, workoutMode);
     assert.ok(only(log, 'combo').length > 3, workoutMode);

@@ -508,6 +508,13 @@ The foundation for the Phase 8 modes (`PHASE8-PLAN.md`).
 - Warm-up time never counts toward weekly load (load is rounds × round
   length). History, Repeat and Home's pool line show it.
 
+## Pyramid removed, 12 October 2026 (v1.16.0)
+
+Climbing back down to a jab after the full combo added little over Ladder,
+and it went unused. A saved Pyramid choice loads as Ladder, and Repeat on an
+old Pyramid session loads Ladder. Old history records keep their "pyramid"
+label. The Mode row is Random, Ladder, Defense.
+
 ## Still open
 
 - `gen.py` predates tags and singles — do not re-run it.

@@ -31,7 +31,7 @@ Last updated 12 October 2026.
 | 8D — Workout plan and guided warm-up (v1.15.0) | **Done**, live, awaiting device test |
 | 8E — Conditioning between rounds (v1.17.0) | **Done**, live, awaiting device test |
 | 8F — Footwork mode (v1.18.0) | **Done**, live, awaiting bag test |
-| 8G — Range emphasis and range calls (v1.19.0) | **Done**, awaiting browser smoke test and bag test |
+| 8G — Range emphasis and range calls (v1.19.0) | **Done**, live, awaiting bag test |
 | 8H — Heart rate | Planned, see `PHASE8-PLAN.md` |
 
 ### Installing it on your phone

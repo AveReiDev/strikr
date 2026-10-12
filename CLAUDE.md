@@ -37,3 +37,23 @@ screenshots, gitignored). Commits use the GitHub noreply email.
   strikes — running it would destroy them.
 - localStorage keys: `strikr.v1.settings`, `strikr.v1.library`, `strikr.v1.history`.
   Data is per-origin, so a changed host/IP/port means an empty app.
+- Delegate well-bounded pieces to Sonnet subagents with a full brief: test
+  suites against a finished API, ~30-combo batches, data lint. Tell them not to
+  touch `src/` when writing tests and to report suspected bugs. Keep engine and
+  timing changes and final verification yourself; re-run `npm test` on what
+  they hand back.
+
+## Cloud sessions
+
+When `CLAUDE_CODE_REMOTE=true` you are in a cloud session: a fresh clone, no
+browser pane, no phone, no local notes.
+
+- **Never push to or merge into `main`** — that publishes to the phone. Work on
+  the session's own branch and open a PR; the user merges after testing.
+- The SessionStart hook in `.claude/settings.json` enables the pre-commit hook.
+  Never commit with `--no-verify`.
+- You cannot run the browser smoke test. Run `npm test`, then end the PR body
+  with **"Smoke test: pending"** and the exact screens and taps to check, so
+  nothing is merged untested.
+- `PROJECT-STATUS.md` and `PHASE8-PLAN.md` are the record of where the project
+  stands; update them in the same PR.

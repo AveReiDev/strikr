@@ -30,7 +30,7 @@ Last updated 12 October 2026.
 | 8C — Levels emphasis (v1.14.0) | **Done**, live, awaiting bag test |
 | 8D — Workout plan and guided warm-up (v1.15.0) | **Done**, live, awaiting device test |
 | 8E — Conditioning between rounds (v1.17.0) | **Done**, live, awaiting device test |
-| 8F — Footwork mode (v1.18.0) | **Done**, awaiting bag test |
+| 8F — Footwork mode (v1.18.0) | **Done**, live, awaiting bag test |
 | 8G–8H — Range emphasis, heart rate | Planned, see `PHASE8-PLAN.md` |
 
 ### Installing it on your phone
@@ -56,7 +56,7 @@ tell that `app.css` is new. **After editing any file in the app, bump
 `CACHE_VERSION` at the top of `sw.js`.** Forget, and an installed phone may keep
 serving the old version. This is written at the top of `sw.js` too.
 
-**253 tests pass.** Run them with `npm test`, or:
+**485 tests pass.** Run them with `npm test`, or:
 
 ```bash
 node --test 'test/*.test.js'
@@ -576,6 +576,9 @@ index.html            shell: five screen containers plus the tab bar
 data/
   combos.json         223 combos + 25 singles — shipped, read-only, never written to storage
   strikes.json        strike dictionary: level, range and category rules
+  moves.json          defense and footwork callouts, paired to strikes
+  warmups.json        guided warm-up routines (5 / 8 / 12 min)
+  exercises.json      bodyweight conditioning exercises (gloves on)
   config.json         every tunable constant: gaps, weights, voice, audio
 src/
   engine/             pure and testable; no clock, no DOM, no global randomness
@@ -587,6 +590,11 @@ src/
     load.js             weekly load, the +10% cap and easy weeks
     balance.js          strike balance across a workout's draws
     strikes.js          classifies strike names using data/strikes.json
+    plan.js             the workout as bag / rest / timed segments
+    defense.js          Defense mode wrapper
+    footwork.js         Footwork mode wrapper
+    emphasis.js         Levels emphasis weight
+    conditioning.js     picks conditioning stations
   audio/
     speech.js           the ONLY file touching SpeechSynthesis
     context.js          shared AudioContext: keep-alive tone and bell
@@ -599,7 +607,7 @@ src/
 styles/
   tokens.css          every colour and size; light mode is a token override
   app.css             components only, no raw colours
-test/                 node --test, 253 tests (fixtures.js mirrors main.js config)
+test/                 node --test, 485 tests (fixtures.js mirrors main.js config)
 ```
 
 Three storage keys, independently readable so one corrupt value cannot brick the

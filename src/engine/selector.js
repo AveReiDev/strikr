@@ -7,6 +7,7 @@
  */
 
 import { createBalance } from './balance.js';
+import { emphasisWeight } from './emphasis.js';
 
 const TIER_RANK = { beginner: 0, intermediate: 1, advanced: 2 };
 
@@ -162,10 +163,10 @@ export function weakSpotWeight(focusWeak, comboFrequencyMap) {
 /**
  * Convenience wrapper that keeps its own recent-ids list, which is what the
  * session actually wants. Still pure with respect to randomness — the rng is
- * injected. Weak spots and strike balance multiply into the frequency weight,
+ * injected. Weak spots, strike balance and emphasis multiply into the frequency weight,
  * so tier and frequency weighting still apply.
  */
-export function createSelector({ combos, sport, tier, config, rng, focusWeak, comboFrequencyMap, focus, balanced = true }) {
+export function createSelector({ combos, sport, tier, config, rng, focusWeak, comboFrequencyMap, focus, emphasis, balanced = true }) {
   const pool = buildPool(combos, { sport, tier, focus });
   const recent = [];
 
@@ -178,6 +179,7 @@ export function createSelector({ combos, sport, tier, config, rng, focusWeak, co
   const weakWeight = composeWeights(
     weakSpotWeight(focusWeak, comboFrequencyMap),
     balance && ((c) => balance.weight(c)),
+    emphasisWeight(emphasis, { strikes: config.strikes, config }),
   );
 
   return {

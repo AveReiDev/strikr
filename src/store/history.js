@@ -16,6 +16,8 @@ const TIERS = ['beginner', 'intermediate', 'advanced'];
 const INTENSITIES = ['light', 'medium', 'hard', 'custom'];
 // Random workouts store no mode, so only the drill modes are listed.
 const MODES = ['ladder', 'pyramid', 'defense'];
+// Likewise only a real emphasis is stored; off is the default.
+const EMPHASES = ['levels'];
 
 /**
  * How a session felt, rated once it ends: 1 Easy … 5 Brutal. Unrated
@@ -133,6 +135,7 @@ function sanitiseHistory(raw) {
     if (typeof r.focus === 'string' && r.focus) rec.focus = r.focus;
     if (typeof r.focusWeak === 'boolean') rec.focusWeak = r.focusWeak;
     if (MODES.includes(r.mode)) rec.mode = r.mode;
+    if (EMPHASES.includes(r.emphasis)) rec.emphasis = r.emphasis;
     if (FEELS.includes(r.feel)) rec.feel = r.feel;
     if (r.rampUp === true) rec.rampUp = true;
     if ([15, 20, 30].includes(r.finisherSec)) rec.finisherSec = r.finisherSec;

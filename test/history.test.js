@@ -467,3 +467,13 @@ test('drill modes survive a reload; random and unknown modes are not stored', ()
   const modes = makeHistory(backend).all().map((r) => r.mode);
   assert.deepEqual(modes.sort(), ['defense', 'ladder', undefined, undefined].sort());
 });
+
+test('a levels emphasis is kept; off and unknown emphases are not stored', () => {
+  const backend = fakeBackend();
+  const h = makeHistory(backend);
+  h.add(record({ emphasis: 'levels' }));
+  h.add(record({ emphasis: 'off' }));
+  h.add(record({ emphasis: 'sideways' }));
+  const kept = makeHistory(backend).all().map((r) => r.emphasis).filter(Boolean);
+  assert.deepEqual(kept, ['levels']);
+});

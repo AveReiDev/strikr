@@ -14,7 +14,8 @@
  * has startRound(), which the session calls so every round opens on rung one.
  */
 
-import { buildPool, selectCombo, weakSpotWeight } from './selector.js';
+import { buildPool, selectCombo, weakSpotWeight, composeWeights } from './selector.js';
+import { emphasisWeight } from './emphasis.js';
 
 export const LADDER_MODES = ['ladder', 'pyramid'];
 export const MIN_RUNGS = 3;
@@ -80,13 +81,16 @@ export function ladderSequence(combo, { mode = 'ladder', reps = 1 } = {}) {
 }
 
 export function createLadderSelector({
-  combos, sport, tier, config, rng, focusWeak, comboFrequencyMap, focus, mode, reps,
+  combos, sport, tier, config, rng, focusWeak, comboFrequencyMap, focus, emphasis, mode, reps,
 }) {
   const pool = buildLadderPool(combos, { sport, tier, focus });
   const recent = [];          // base combo ids, so the next ladder is a different combo
   let queue = [];
 
-  const weakWeight = weakSpotWeight(focusWeak, comboFrequencyMap);
+  const weakWeight = composeWeights(
+    weakSpotWeight(focusWeak, comboFrequencyMap),
+    emphasisWeight(emphasis, { strikes: config.strikes, config }),
+  );
 
   return {
     pool,

@@ -26,8 +26,9 @@ Last updated 12 October 2026.
 | Punch-punch-kick and head-kick weighting (v1.10.0) | **Done**, live |
 | 8A — Strike dictionary (v1.11.0) | **Done**, awaiting device test |
 | Collapsible Home, rounds on Home (v1.12.0) | **Done**, live |
-| 8B — Defense mode (v1.13.0) | **Done**, awaiting bag test |
-| 8C–8H — New training modes | Planned, see `PHASE8-PLAN.md` |
+| 8B — Defense mode (v1.13.0) | **Done**, live, awaiting bag test |
+| 8C — Levels emphasis (v1.14.0) | **Done**, awaiting bag test |
+| 8D–8H — New training modes | Planned, see `PHASE8-PLAN.md` |
 
 ### Installing it on your phone
 
@@ -466,6 +467,22 @@ The foundation for the Phase 8 modes (`PHASE8-PLAN.md`).
   Repeat keep the mode.
 - The weak-spots pair on Home is now two half-width buttons; at phone width
   "All combos" used to break mid-word.
+
+## Phase 8C: levels emphasis, 12 October 2026 (v1.14.0)
+
+- A new Home section, **Emphasis**: Off or Levels ("Head, body, legs").
+  Levels leans the draw toward combos whose adjacent strikes switch level,
+  since attacking one level pulls the guard and opens another.
+- It is a weight, never a filter, so the pool and the no-repeat window are
+  untouched. Weight = 1 + `config.emphasis.levelsPerChange` (1) × level
+  changes, from the strike dictionary. It multiplies with weak spots and
+  strike balance (`composeWeights`), and applies to Random, Defense and the
+  choice of combo a ladder climbs. Finishers ignore it.
+- Watch on the bag: on top of strike balance it may lean toward kicks.
+- New combos (Sonnet-authored, checked by the dictionary tests) fill the
+  gap: boxing had almost no body/head alternation, and Muay Thai and
+  kickboxing beginners had no combo with two level changes.
+- History, Repeat and the history list keep the emphasis.
 
 ## Still open
 

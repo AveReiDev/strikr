@@ -4,7 +4,7 @@
  * Every choice writes straight through to settings, so it survives a reload.
  */
 
-import { SPORTS, TIERS, INTENSITIES, ROUND_LENGTHS, WORKOUT_MODES, CHOICES } from '../../store/settings.js';
+import { SPORTS, TIERS, INTENSITIES, ROUND_LENGTHS, WORKOUT_MODES, EMPHASES, CHOICES } from '../../store/settings.js';
 import { gapMsFor } from '../../engine/timing.js';
 import { buildPool } from '../../engine/selector.js';
 import { buildLadderPool, LADDER_MODES } from '../../engine/ladder.js';
@@ -22,6 +22,9 @@ const MODE_SUB = {
   pyramid: 'Up, then down',
   defense: 'Attack, then defend',
 };
+
+const EMPHASIS_LABEL = { off: 'Off', levels: 'Levels' };
+const EMPHASIS_SUB = { off: 'Any combo', levels: 'Head, body, legs' };
 
 /**
  * A collapsible Home section. The header is a button; when the section is
@@ -63,6 +66,7 @@ export function createHomeScreen({ root, settings, config, library, history, onS
     ${section('focus', 'Focus', `
       <div class="grid wrap" data-group="focus"></div>
       <div class="grid" data-group="weakSpots" style="margin-top:var(--sp-2)"></div>`)}
+    ${section('emphasis', 'Emphasis', '<div class="grid" data-group="emphasis"></div>')}
     ${section('rounds', 'Rounds', `
       <div class="stepper" data-group="rounds">
         <button class="chip num" data-step="-1" aria-label="One round fewer">&minus;</button>
@@ -93,6 +97,7 @@ export function createHomeScreen({ root, settings, config, library, history, onS
     focus: root.querySelector('[data-group="focus"]'),
     weakSpots: root.querySelector('[data-group="weakSpots"]'),
     workoutMode: root.querySelector('[data-group="workoutMode"]'),
+    emphasis: root.querySelector('[data-group="emphasis"]'),
     roundLengthMin: root.querySelector('[data-group="roundLengthMin"]'),
   };
 
@@ -353,6 +358,12 @@ export function createHomeScreen({ root, settings, config, library, history, onS
     groups.workoutMode.appendChild(stackChip('workoutMode', m, MODE_LABEL[m], MODE_SUB[m]));
   }
 
+  // Emphasis leans the draw toward combos that work one thing; it never
+  // shrinks the pool, so the count below does not change with it.
+  for (const e of EMPHASES) {
+    groups.emphasis.appendChild(stackChip('emphasis', e, EMPHASIS_LABEL[e], EMPHASIS_SUB[e]));
+  }
+
   for (const r of ROUND_LENGTHS) groups.roundLengthMin.appendChild(chip('roundLengthMin', r));
 
   /* ---- rounds stepper -------------------------------------------------- */
@@ -402,6 +413,7 @@ export function createHomeScreen({ root, settings, config, library, history, onS
         const label = f ? TAG_LABEL[f] || f : 'All';
         return settings.get('focusWeak') ? `${label} · Weak spots` : label;
       }
+      case 'emphasis': return EMPHASIS_LABEL[settings.get('emphasis')] ?? '';
       case 'rounds': return `${settings.get('roundsPerWorkout')} × ${settings.get('roundLengthMin')} min`;
       default: return '';
     }
@@ -552,7 +564,7 @@ export function createHomeScreen({ root, settings, config, library, history, onS
   });
 
   function refreshAll() {
-    for (const group of ['sport', 'tier', 'intensity', 'workoutMode', 'roundLengthMin']) {
+    for (const group of ['sport', 'tier', 'intensity', 'workoutMode', 'emphasis', 'roundLengthMin']) {
       for (const el of buttonsFor(group)) {
         el.setAttribute('aria-pressed', String(el.dataset.value === String(settings.get(group))));
       }

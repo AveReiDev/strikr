@@ -482,7 +482,15 @@ test('the next combo waits a one-action gap after the defense', () => {
 });
 
 test('a combo with no defense keeps the ordinary gap', () => {
-  const { log } = runWorkout({ settings: { roundLengthMin: 2 }, seed: 6 });
+  // A fixed pool, so the check never depends on which combos a seed happens
+  // to draw: one combo that ends on its own defense, one that does not.
+  const make = (id, display) => ({
+    id, sport: 'muaythai', tier: 'beginner', display,
+    speech: display.split(' – ').join(', '), actions: display.split(' – ').length,
+    frequency: 'common', enabled: true, custom: false, tags: [],
+  });
+  const combos = [make('own-def', 'Jab – Cross – Rear knee – Frame off'), make('plain', 'Jab – Cross – Lead hook')];
+  const { log } = runWorkout({ settings: { roundLengthMin: 2 }, combos });
   const per = config.intensity.hard;
   let checked = 0;
   for (const r of roundsOf(log)) {
@@ -495,8 +503,7 @@ test('a combo with no defense keeps the ordinary gap', () => {
       checked += 1;
     }
   }
-  // Muay Thai pools do contain combos that end on a defense/footwork move.
-  assert.ok(checked >= 1, 'saw at least one combo without a defense');
+  assert.ok(checked >= 5, `saw ${checked} combos without a defense`);
 });
 
 test('combosCalled counts combos only, not defenses', () => {

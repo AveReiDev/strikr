@@ -300,6 +300,7 @@ function finished(summary) {
     focus: app.workoutFocus ?? undefined,
     focusWeak: app.workoutFocusWeak,
     mode: app.workoutMode && app.workoutMode !== 'random' ? app.workoutMode : undefined,
+    emphasis: summary.emphasis !== 'off' ? summary.emphasis : undefined,
     rampUp: summary.rampUp || undefined,
     finisherSec: summary.finisherSec || undefined,
   });
@@ -334,6 +335,7 @@ function repeatSession(record) {
   app.settings.set('focus', record.focus ?? null);
   if (typeof record.focusWeak === 'boolean') app.settings.set('focusWeak', record.focusWeak);
   app.settings.set('workoutMode', record.mode ?? 'random');
+  app.settings.set('emphasis', record.emphasis ?? 'off');
   app.settings.set('rampUp', record.rampUp === true);
   app.settings.set('finisherSec', record.finisherSec ?? 0);
 
@@ -344,6 +346,7 @@ function repeatSession(record) {
     `Loaded that session: ${record.sport}, ${record.tier}, ${record.intensity}, ` +
     `${rounds} &times; ${Math.round(record.roundLengthSec / 60)} min` +
     (record.mode ? `, ${record.mode}` : '') +
+    (record.emphasis ? `, ${record.emphasis} emphasis` : '') +
     (record.rampUp ? ', ramp up' : '') +
     (record.finisherSec ? `, ${record.finisherSec}s finisher` : '') +
     (record.focus ? `, ${TAG_LABEL[record.focus] ?? record.focus} focus.` : '.')

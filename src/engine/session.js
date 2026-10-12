@@ -52,6 +52,7 @@ export function createSession({ config, settings, combos, rng, intensity: overri
     focusWeak,
     comboFrequencyMap,
     focus,
+    emphasis: settings.emphasis,
   };
   const selector = LADDER_MODES.includes(settings.workoutMode)
     ? createLadderSelector({ ...selectorArgs, mode: settings.workoutMode, reps: settings.ladderReps ?? 1 })
@@ -84,7 +85,7 @@ export function createSession({ config, settings, combos, rng, intensity: overri
       .filter((c) => c.actions <= fin.maxActions)
     : [];
   const finisherSelector = finisherPool.length
-    ? createSelector({ ...selectorArgs, combos: finisherPool, balanced: false })
+    ? createSelector({ ...selectorArgs, combos: finisherPool, balanced: false, emphasis: 'off' })
     : null;
   let finisherAnnounced = false;
 
@@ -172,6 +173,7 @@ export function createSession({ config, settings, combos, rng, intensity: overri
       rounds: roundsCompleted,
       roundsPlanned: settings.roundsPerWorkout,
       mode: settings.workoutMode ?? 'random',
+      emphasis: settings.emphasis ?? 'off',
       rampUp: Boolean(settings.rampUp),
       finisherSec: finisherSelector ? settings.finisherSec : 0,
       roundLengthSec: settings.roundLengthMin * 60,

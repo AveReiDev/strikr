@@ -13,9 +13,10 @@ export const TIERS = ['beginner', 'intermediate', 'advanced'];
 export const INTENSITIES = ['light', 'medium', 'hard', 'custom'];
 export const ROUND_LENGTHS = [1, 2, 3, 4, 5, 10];
 export const WORKOUT_MODES = ['random', 'ladder', 'pyramid', 'defense'];
+export const EMPHASES = ['off', 'levels'];
 
 /** Home's collapsible sections, by id. `homeCollapsed` lists the closed ones. */
-export const HOME_SECTIONS = ['sport', 'tier', 'intensity', 'workoutMode', 'focus', 'rounds'];
+export const HOME_SECTIONS = ['sport', 'tier', 'intensity', 'workoutMode', 'focus', 'emphasis', 'rounds'];
 
 /**
  * Allowed values for the picker rows on the settings screen.
@@ -52,6 +53,7 @@ export function settingsSchema(config) {
     darkMode: { type: 'boolean' },
     focusWeak: { type: 'boolean' },
     workoutMode: { oneOf: WORKOUT_MODES },
+    emphasis: { oneOf: EMPHASES },
     ladderReps: { oneOf: CHOICES.ladderReps },
     rampUp: { type: 'boolean' },
     finisherSec: { oneOf: CHOICES.finisherSec },
@@ -81,6 +83,7 @@ export function defaultSettings(config) {
     darkMode: d.darkMode,
     focusWeak: false,
     workoutMode: 'random',
+    emphasis: 'off',
     ladderReps: 1,
     rampUp: false,
     finisherSec: 0,

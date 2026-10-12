@@ -238,7 +238,8 @@ body[data-mode="workout"] #tabbar { display: none; }
 /* Two-choice rows split in half: four modes sit two by two, and the weak
    spots pair no longer breaks "combos" mid-word in a third of the width. */
 [data-group="workoutMode"],
-[data-group="weakSpots"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+[data-group="weakSpots"],
+[data-group="emphasis"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
 /* ---- primary action -------------------------------------------------- */
 

@@ -27,7 +27,7 @@ function drawMany(n, { sport = 'muaythai', tier = 'advanced', seed = 1 } = {}) {
 test('the shipped library is intact', () => {
   const regular = COMBOS.filter((c) => !c.single);
   const singles = COMBOS.filter((c) => c.single);
-  assert.equal(regular.length, 223);
+  assert.equal(regular.length, 253);
   assert.ok(singles.length > 0, 'should have single-strike entries');
   assert.equal(new Set(COMBOS.map((c) => c.id)).size, COMBOS.length);
   for (const c of COMBOS) assert.ok(!c.speech.includes('('), `${c.id} leaks a parenthetical`);
@@ -59,7 +59,7 @@ test('pool respects sport, enabled and tier ceiling', () => {
   assert.ok(beg.every((c) => c.sport === 'boxing' && c.tier === 'beginner'));
 
   const adv = buildPool(COMBOS, { sport: 'boxing', tier: 'advanced' });
-  assert.equal(adv.length, 30);
+  assert.equal(adv.length, 42);
   assert.ok(adv.every((c) => tierRank(c.tier) <= 2));
 
   const disabled = COMBOS.map((c) => ({ ...c, enabled: c.id !== 'bx-beg-01' }));

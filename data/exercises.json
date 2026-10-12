@@ -1,0 +1,281 @@
+{
+  "schemaVersion": 1,
+  "_comment": "Bodyweight conditioning exercises for timed rounds between bag rounds. Every exercise is doable with boxing gloves ON and NO equipment: no grip, no kit, no pull-ups, no benches. Fields: name is spoken by text-to-speech (1-3 plain words, no digits or parentheses, unique); category (legs, push, core, full) drives variety, so the selector avoids two consecutive stations from the same category; intensity 1 steady, 2 hard, 3 very hard or explosive, used for ramping and for keeping intensity-3 plyometrics out of the last third of a session; impact is true when feet or hands leave the floor or land hard, and the low-impact setting removes every impact exercise; plyo is true for true plyometrics (jumping for height or distance) and implies impact, and the selector never puts two plyo exercises back to back; sides is true only for one-sided moves that need both sides, which triggers the Switch sides call halfway (omitted when false); cue is a coaching point of at most 6 words spoken after the name. The app calls time only and never counts reps.",
+  "exercises": [
+    {
+      "name": "Squats",
+      "category": "legs",
+      "intensity": 1,
+      "impact": false,
+      "cue": "Sit back, chest tall"
+    },
+    {
+      "name": "Reverse lunges",
+      "category": "legs",
+      "intensity": 1,
+      "impact": false,
+      "cue": "Step back, knee kisses floor"
+    },
+    {
+      "name": "Wall sit",
+      "category": "legs",
+      "intensity": 2,
+      "impact": false,
+      "cue": "Thighs level, back flat"
+    },
+    {
+      "name": "Split squat pulses",
+      "category": "legs",
+      "intensity": 2,
+      "impact": false,
+      "cue": "Short pulses, stay low"
+    },
+    {
+      "name": "Glute bridges",
+      "category": "legs",
+      "intensity": 1,
+      "impact": false,
+      "cue": "Drive hips up, squeeze"
+    },
+    {
+      "name": "Single leg bridge",
+      "category": "legs",
+      "intensity": 2,
+      "impact": false,
+      "sides": true,
+      "cue": "Hips level, other leg straight"
+    },
+    {
+      "name": "Calf raises",
+      "category": "legs",
+      "intensity": 1,
+      "impact": false,
+      "cue": "Rise high, slow down"
+    },
+    {
+      "name": "Skater hops",
+      "category": "legs",
+      "intensity": 2,
+      "impact": true,
+      "plyo": true,
+      "cue": "Bound side to side, soft landing"
+    },
+    {
+      "name": "Jump squats",
+      "category": "legs",
+      "intensity": 3,
+      "impact": true,
+      "plyo": true,
+      "cue": "Explode up, land soft"
+    },
+    {
+      "name": "Jumping lunges",
+      "category": "legs",
+      "intensity": 3,
+      "impact": true,
+      "plyo": true,
+      "cue": "Switch in the air"
+    },
+    {
+      "name": "Push ups",
+      "category": "push",
+      "intensity": 2,
+      "impact": false,
+      "cue": "Body straight, chest to floor"
+    },
+    {
+      "name": "Wide push ups",
+      "category": "push",
+      "intensity": 2,
+      "impact": false,
+      "cue": "Hands wide, elbows out"
+    },
+    {
+      "name": "Slow push ups",
+      "category": "push",
+      "intensity": 1,
+      "impact": false,
+      "cue": "Down three, up one"
+    },
+    {
+      "name": "Pike push ups",
+      "category": "push",
+      "intensity": 2,
+      "impact": false,
+      "cue": "Hips high, head between arms"
+    },
+    {
+      "name": "Hindu push ups",
+      "category": "push",
+      "intensity": 2,
+      "impact": false,
+      "cue": "Sweep down and forward"
+    },
+    {
+      "name": "Plank up downs",
+      "category": "push",
+      "intensity": 2,
+      "impact": false,
+      "cue": "Forearms to hands, alternate lead"
+    },
+    {
+      "name": "Shoulder taps",
+      "category": "push",
+      "intensity": 1,
+      "impact": false,
+      "cue": "Hips still, tap fast"
+    },
+    {
+      "name": "Clap push ups",
+      "category": "push",
+      "intensity": 3,
+      "impact": true,
+      "plyo": true,
+      "cue": "Push off hard, clap"
+    },
+    {
+      "name": "Plank",
+      "category": "core",
+      "intensity": 1,
+      "impact": false,
+      "cue": "Forearms down, squeeze everything"
+    },
+    {
+      "name": "Side plank",
+      "category": "core",
+      "intensity": 1,
+      "impact": false,
+      "sides": true,
+      "cue": "Hips high, long line"
+    },
+    {
+      "name": "Hollow hold",
+      "category": "core",
+      "intensity": 2,
+      "impact": false,
+      "cue": "Lower back glued to floor"
+    },
+    {
+      "name": "Dead bugs",
+      "category": "core",
+      "intensity": 1,
+      "impact": false,
+      "cue": "Opposite arm and leg, slow"
+    },
+    {
+      "name": "Russian twists",
+      "category": "core",
+      "intensity": 2,
+      "impact": false,
+      "cue": "Lean back, rotate shoulders"
+    },
+    {
+      "name": "Sit up punches",
+      "category": "core",
+      "intensity": 2,
+      "impact": false,
+      "cue": "Sit up, punch at top"
+    },
+    {
+      "name": "Flutter kicks",
+      "category": "core",
+      "intensity": 2,
+      "impact": false,
+      "cue": "Low legs, small fast kicks"
+    },
+    {
+      "name": "Mountain climbers",
+      "category": "core",
+      "intensity": 2,
+      "impact": false,
+      "cue": "Knees to chest, hips low"
+    },
+    {
+      "name": "Bicycle crunches",
+      "category": "core",
+      "intensity": 1,
+      "impact": false,
+      "cue": "Elbow to opposite knee"
+    },
+    {
+      "name": "Burpees",
+      "category": "full",
+      "intensity": 3,
+      "impact": true,
+      "plyo": true,
+      "cue": "Chest to floor, jump tall"
+    },
+    {
+      "name": "Tuck jumps",
+      "category": "full",
+      "intensity": 3,
+      "impact": true,
+      "plyo": true,
+      "cue": "Knees high, land quiet"
+    },
+    {
+      "name": "Star jumps",
+      "category": "full",
+      "intensity": 2,
+      "impact": true,
+      "plyo": true,
+      "cue": "Arms and legs wide"
+    },
+    {
+      "name": "Sprawls",
+      "category": "full",
+      "intensity": 3,
+      "impact": true,
+      "cue": "Hips down, kick back fast"
+    },
+    {
+      "name": "Squat thrusts",
+      "category": "full",
+      "intensity": 2,
+      "impact": true,
+      "cue": "Hands down, feet back, in"
+    },
+    {
+      "name": "High knees",
+      "category": "full",
+      "intensity": 2,
+      "impact": true,
+      "cue": "Drive knees to waist"
+    },
+    {
+      "name": "Jumping jacks",
+      "category": "full",
+      "intensity": 1,
+      "impact": true,
+      "cue": "Light feet, stay bouncy"
+    },
+    {
+      "name": "Step burpees",
+      "category": "full",
+      "intensity": 2,
+      "impact": false,
+      "cue": "Step back, step in, stand"
+    },
+    {
+      "name": "Bear crawl",
+      "category": "full",
+      "intensity": 2,
+      "impact": false,
+      "cue": "Knees hover, move opposite limbs"
+    },
+    {
+      "name": "Inchworms",
+      "category": "full",
+      "intensity": 1,
+      "impact": false,
+      "cue": "Walk out long, walk back"
+    },
+    {
+      "name": "Crab reach",
+      "category": "full",
+      "intensity": 1,
+      "impact": false,
+      "cue": "Hips up, reach and rotate"
+    }
+  ]
+}

@@ -141,6 +141,12 @@ function sanitiseHistory(raw) {
     if (r.rampUp === true) rec.rampUp = true;
     if ([15, 20, 30].includes(r.finisherSec)) rec.finisherSec = r.finisherSec;
     if ([5, 8, 12].includes(r.warmupMin)) rec.warmupMin = r.warmupMin;
+    // Conditioning counts toward weekly load, so both numbers are kept.
+    if ([30, 45, 60, 90, 120].includes(r.conditioningSec)) {
+      rec.conditioningSec = r.conditioningSec;
+      rec.conditioningRounds = Number.isInteger(r.conditioningRounds) && r.conditioningRounds >= 0 ? r.conditioningRounds : 0;
+      if (r.lowImpact === true) rec.lowImpact = true;
+    }
     out.push(rec);
   }
   return out;

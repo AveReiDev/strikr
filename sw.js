@@ -24,7 +24,7 @@
  *                       signal; updates land on the following launch.
  */
 
-const CACHE_VERSION = 'strikr-v1.16.0';
+const CACHE_VERSION = 'strikr-v1.17.0';
 
 /** Everything needed to run with no network. */
 const SHELL = [
@@ -38,6 +38,7 @@ const SHELL = [
   './data/strikes.json',
   './data/moves.json',
   './data/warmups.json',
+  './data/exercises.json',
   './src/main.js',
   './src/engine/selector.js',
   './src/engine/timing.js',
@@ -49,6 +50,7 @@ const SHELL = [
   './src/engine/defense.js',
   './src/engine/emphasis.js',
   './src/engine/plan.js',
+  './src/engine/conditioning.js',
   './src/engine/load.js',
   './src/audio/speech.js',
   './src/audio/context.js',

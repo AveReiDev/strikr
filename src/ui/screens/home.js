@@ -22,6 +22,9 @@ const MODE_SUB = {
   defense: 'Attack, then defend',
 };
 
+/** 45 → "45s", 60 → "1 min", 90 → "90s", 120 → "2 min". */
+const secLabel = (s) => (s % 60 === 0 ? `${s / 60} min` : `${s}s`);
+
 const EMPHASIS_LABEL = { off: 'Off', levels: 'Levels' };
 const EMPHASIS_SUB = { off: 'Any combo', levels: 'Head, body, legs' };
 
@@ -176,6 +179,7 @@ export function createHomeScreen({ root, settings, config, library, history, onS
     // Ramp and finisher live in Settings, so say here that they are on.
     const extras = [
       settings.get('warmupMin') ? `${settings.get('warmupMin')} min warm-up` : '',
+      settings.get('conditioningSec') ? `${secLabel(settings.get('conditioningSec'))} conditioning` : '',
       settings.get('rampUp') ? 'ramp up' : '',
       settings.get('finisherSec') ? `${settings.get('finisherSec')}s finisher` : '',
     ].filter(Boolean).map((x) => ` · ${x}`).join('');
@@ -473,7 +477,9 @@ export function createHomeScreen({ root, settings, config, library, history, onS
     if (!goal) return { week, suggestion: null };
     const since = now - 14 * 24 * 60 * 60 * 1000;
     const volumes = dailyVolume(all, { sport: settings.get('sport'), since });
-    const suggestion = applyWeekPlan(computeSuggestion(goal, volumes, settings.all), week, loadCfg);
+    const suggestion = applyWeekPlan(computeSuggestion(goal, volumes, settings.all), week, loadCfg, {
+      conditioningSec: settings.get('conditioningSec'),
+    });
     return { week, suggestion };
   }
 

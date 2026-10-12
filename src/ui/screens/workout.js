@@ -72,6 +72,7 @@ export function createWorkoutScreen({ root, onPause, onAbort }) {
         ? 'Paused'
         : snap.finisher ? 'Finisher'
           : snap.segmentKind === 'warmup' ? 'Warm-up'
+            : snap.segmentKind === 'conditioning' ? 'Conditioning'
             : (PHASE_LABEL[snap.state] ?? snap.state);
       root.classList.toggle('finisher', Boolean(snap.finisher && !snap.paused));
       // Round 0 is the rest after a warm-up: no round has happened yet.

@@ -42,7 +42,8 @@
     "easyAfterWeeks": 3,
     "easyRatio": 0.6,
     "easyDetectRatio": 0.7,
-    "lookbackWeeks": 8
+    "lookbackWeeks": 8,
+    "conditioningFactor": 1
   },
 
   "_comment_balance": "Strike balance: a gentle nudge toward strike categories the workout has under-called, so jab and cross do not dominate. targets are relative shares per sport (sports with no entry, like boxing, are not balanced). The weight is sqrt(target / actual share) clamped to clamp; priorCalls seeds the running counts at the target mix so early calls cannot swing it. Off for focus workouts, the finisher, and ladders.",

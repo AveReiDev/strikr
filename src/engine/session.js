@@ -18,6 +18,7 @@ import { createSelector, buildPool } from './selector.js';
 import { createLadderSelector, LADDER_MODES } from './ladder.js';
 import { createDefenseSelector } from './defense.js';
 import { buildPlan } from './plan.js';
+import { createConditioningPicker } from './conditioning.js';
 import {
   gapMsFor,
   voiceRate,
@@ -51,7 +52,19 @@ export function createSession({ config, settings, combos, rng, intensity: overri
   // No steps (a missing or empty routine) means no warm-up at all.
   const routine = settings.warmupMin ? config.warmups?.routines?.[String(settings.warmupMin)] : null;
   const warmupSteps = routine?.length ? routine : null;
-  const plan = buildPlan(settings, { warmup: warmupSteps, rate, config });
+  // Conditioning between bag rounds: picked up front, so the plan is fixed
+  // for the whole workout and the session never draws mid-round.
+  const conditioning = settings.conditioningSec > 0 && config.exercises?.exercises?.length
+    ? createConditioningPicker({
+      exercises: config.exercises.exercises,
+      lowImpact: Boolean(settings.lowImpact),
+      rng,
+      totalRounds: Math.max(0, settings.roundsPerWorkout - 1),
+      config,
+    })
+    : null;
+  const plan = buildPlan(settings, { warmup: warmupSteps, conditioning, rate, config });
+  let conditioningRounds = 0;    // conditioning rounds finished in full
   let segIndex = -1;
   let restMs = 0;                // the current rest segment's length
   let timed = null;              // the current timed segment
@@ -166,6 +179,7 @@ export function createSession({ config, settings, combos, rng, intensity: overri
 
   /** Move on to the next plan segment, or finish after the last. */
   function advance(now) {
+    if (state === STATES.TIMED && timed?.kind === 'conditioning') conditioningRounds += 1;
     segIndex += 1;
     const seg = plan[segIndex];
     if (!seg) { finish(now, true); return; }
@@ -209,6 +223,9 @@ export function createSession({ config, settings, combos, rng, intensity: overri
       mode: settings.workoutMode ?? 'random',
       emphasis: settings.emphasis ?? 'off',
       warmupMin: warmupSteps ? settings.warmupMin : 0,
+      conditioningSec: conditioning ? settings.conditioningSec : 0,
+      conditioningRounds,
+      lowImpact: Boolean(conditioning && settings.lowImpact),
       rampUp: Boolean(settings.rampUp),
       finisherSec: finisherSelector ? settings.finisherSec : 0,
       roundLengthSec: settings.roundLengthMin * 60,
@@ -346,6 +363,7 @@ export function createSession({ config, settings, combos, rng, intensity: overri
       if (state !== STATES.IDLE) return drain();
       startedAt = now;
       segIndex = -1;
+      conditioningRounds = 0;
       roundIndex = 0;
       roundsCompleted = 0;
       combosCalled = 0;

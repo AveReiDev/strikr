@@ -2,7 +2,8 @@
  * Weekly training load. Pure — no clock, no DOM, no storage.
  *
  * Load is a rough, honest measure of work: minutes of round time weighted by
- * intensity. It feeds two rules on top of the day-to-day suggestion:
+ * intensity. Conditioning rounds between bag rounds count too (their minutes
+ * × the same intensity factor × conditioningFactor); a warm-up does not. It feeds two rules on top of the day-to-day suggestion:
  *
  *   - a week may grow by at most `weeklyIncrease` over the last normal week
  *   - after `easyAfterWeeks` normal weeks running, the next is an easy week
@@ -19,7 +20,18 @@
 /** Load of one history record. Rounds are the ones actually finished. */
 export function sessionLoad(record, load) {
   const factor = load.intensityFactor[record.intensity] ?? 1;
-  return record.rounds * (record.roundLengthSec / 60) * factor;
+  const bag = record.rounds * (record.roundLengthSec / 60);
+  const cond = (record.conditioningRounds ?? 0) * ((record.conditioningSec ?? 0) / 60) * (load.conditioningFactor ?? 1);
+  return (bag + cond) * factor;
+}
+
+/**
+ * Load of a whole workout of `rounds` bag rounds with conditioning between
+ * them (one fewer conditioning round than bag rounds).
+ */
+export function workoutLoad(rounds, intensity, roundLengthMin, conditioningSec, load) {
+  const cond = Math.max(0, rounds - 1) * ((conditioningSec ?? 0) / 60) * (load.conditioningFactor ?? 1);
+  return (rounds * roundLengthMin + cond) * (load.intensityFactor[intensity] ?? 1);
 }
 
 /** Load of one round at a given intensity and length. */
@@ -80,8 +92,11 @@ export function weekPlan(weeks, load) {
  * not quality). Then the rounds are capped at whatever load the week has
  * left. If not even one round fits, the week is done: the suggestion becomes
  * an optional light session and says so.
+ *
+ * `conditioningSec` prices the conditioning round between each pair of bag
+ * rounds, or the cap would over-suggest whenever conditioning is on.
  */
-export function applyWeekPlan(suggestion, plan, load) {
+export function applyWeekPlan(suggestion, plan, load, { conditioningSec = 0 } = {}) {
   if (!suggestion || suggestion.goalReached || plan.target === null) return suggestion;
 
   let s = { ...suggestion };
@@ -91,7 +106,10 @@ export function applyWeekPlan(suggestion, plan, load) {
   }
 
   const remaining = plan.target - plan.thisWeek;
-  const fits = Math.floor(remaining / roundLoad(s.intensity, s.roundLengthMin, load));
+  let fits = 0;
+  // Capped: a zero-length round must not spin forever.
+  while (fits < 99 && workoutLoad(fits + 1, s.intensity, s.roundLengthMin, conditioningSec, load) <= remaining) fits += 1;
+  const why = conditioningSec > 0 ? ' (conditioning counts toward it)' : '';
 
   if (fits < 1) {
     return {
@@ -105,8 +123,8 @@ export function applyWeekPlan(suggestion, plan, load) {
   if (s.rounds > fits) {
     s.rounds = fits;
     s.reason = plan.easy
-      ? 'Easy week — trimmed to fit its lighter load'
-      : 'Trimmed to fit this week’s load';
+      ? `Easy week — trimmed to fit its lighter load${why}`
+      : `Trimmed to fit this week’s load${why}`;
   }
   return s;
 }

@@ -38,18 +38,20 @@ const app = {
 };
 
 async function boot() {
-  const [config, library, strikes, moves, warmups] = await Promise.all([
+  const [config, library, strikes, moves, warmups, exercises] = await Promise.all([
     fetch('./data/config.json').then((r) => r.json()),
     fetch('./data/combos.json').then((r) => r.json()),
     fetch('./data/strikes.json').then((r) => r.json()),
     fetch('./data/moves.json').then((r) => r.json()),
     fetch('./data/warmups.json').then((r) => r.json()),
+    fetch('./data/exercises.json').then((r) => r.json()),
   ]);
   // The strike dictionary and the defense list ride on config so every
   // selector can reach them.
   config.strikes = strikes;
   config.moves = moves;
   config.warmups = warmups;
+  config.exercises = exercises;
   app.config = config;
   app.combos = library.combos;
 
@@ -256,9 +258,15 @@ function handle(events) {
         app.screens.workout.showDefense(e.defense.name);
         break;
       case 'step':
+        // A conditioning round opens with a get-set step for the same
+        // exercise, so "Next" is only worth showing when it is different.
         app.screens.workout.setCombo(
           e.step.name,
-          [e.step.cue, e.next ? `Next: ${e.next.name}` : ''].filter(Boolean).join(' · '),
+          [
+            e.step.setup ? 'Get set' : '',
+            e.step.cue,
+            e.next && e.next.name !== e.step.name ? `Next: ${e.next.name}` : '',
+          ].filter(Boolean).join(' · '),
         );
         break;
       case 'finisher':
@@ -268,7 +276,7 @@ function handle(events) {
         app.speech.cancel();
         break;
       case 'state':
-        if (e.to === STATES.REST || e.to === STATES.COUNTDOWN) {
+        if (e.to === STATES.REST || e.to === STATES.COUNTDOWN || e.to === STATES.TIMED) {
           app.screens.workout.clearCombo();
         }
         break;
@@ -312,6 +320,9 @@ function finished(summary) {
     rampUp: summary.rampUp || undefined,
     finisherSec: summary.finisherSec || undefined,
     warmupMin: summary.warmupMin || undefined,
+    conditioningSec: summary.conditioningSec || undefined,
+    conditioningRounds: summary.conditioningSec ? summary.conditioningRounds : undefined,
+    lowImpact: summary.lowImpact || undefined,
   });
   app.screens.history.refresh();
   if (saved) app.screens.home.askFeel(saved.id);
@@ -348,6 +359,8 @@ function repeatSession(record) {
   app.settings.set('rampUp', record.rampUp === true);
   app.settings.set('finisherSec', record.finisherSec ?? 0);
   app.settings.set('warmupMin', record.warmupMin ?? 0);
+  app.settings.set('conditioningSec', record.conditioningSec ?? 0);
+  app.settings.set('lowImpact', record.lowImpact === true);
 
   app.screens.home.refresh();
   app.screens.settings.refresh();
@@ -360,6 +373,7 @@ function repeatSession(record) {
     (record.rampUp ? ', ramp up' : '') +
     (record.finisherSec ? `, ${record.finisherSec}s finisher` : '') +
     (record.warmupMin ? `, ${record.warmupMin} min warm-up` : '') +
+    (record.conditioningSec ? `, ${record.conditioningSec}s conditioning` : '') +
     (record.focus ? `, ${TAG_LABEL[record.focus] ?? record.focus} focus.` : '.')
   );
 }

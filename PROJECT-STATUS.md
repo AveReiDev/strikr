@@ -28,8 +28,9 @@ Last updated 12 October 2026.
 | Collapsible Home, rounds on Home (v1.12.0) | **Done**, live |
 | 8B — Defense mode (v1.13.0) | **Done**, live, awaiting bag test |
 | 8C — Levels emphasis (v1.14.0) | **Done**, live, awaiting bag test |
-| 8D — Workout plan and guided warm-up (v1.15.0) | **Done**, awaiting device test |
-| 8E–8H — New training modes | Planned, see `PHASE8-PLAN.md` |
+| 8D — Workout plan and guided warm-up (v1.15.0) | **Done**, live, awaiting device test |
+| 8E — Conditioning between rounds (v1.17.0) | **Done**, awaiting device test |
+| 8F–8H — New training modes | Planned, see `PHASE8-PLAN.md` |
 
 ### Installing it on your phone
 
@@ -514,6 +515,31 @@ Climbing back down to a jab after the full combo added little over Ladder,
 and it went unused. A saved Pyramid choice loads as Ladder, and Repeat on an
 old Pyramid session loads Ladder. Old history records keep their "pyramid"
 label. The Mode row is Random, Ladder, Defense.
+
+## Phase 8E: conditioning between rounds, 12 October 2026 (v1.17.0)
+
+- **Settings › Conditioning:** Off, 30 s, 45 s, 1 min, 90 s, 2 min. After
+  every bag round but the last comes a conditioning round, then the usual
+  rest ("Rest" is said on entry). **Low impact** removes jumps and landings.
+- **Gloves stay on** (decision 8 in the plan), so `data/exercises.json` is
+  38 bodyweight moves, Sonnet-authored: legs, push, core and full body, each
+  with intensity, impact, plyometric and one-sided flags and a coaching cue.
+  The gym kit (kettlebells, TRX straps, …) waits.
+- **Shape:** 5 s to get set (name and cue), "Go", then one exercise up to
+  1 min, two stations at 90 s, three at 2 min with "Switch, <name>".
+  "Switch sides" halfway through one-sided moves, "Ten seconds" near the
+  end. Time is called, never reps.
+- **Safety, enforced by `src/engine/conditioning.js`:** never two
+  plyometrics back to back, no intensity-3 plyometrics in the last third of
+  the session, low impact honoured. It also avoids the same body area twice
+  running and repeats within a workout.
+- **Weekly load:** conditioning minutes count, at the same intensity factor
+  × `load.conditioningFactor` (1). The "how many rounds fit" check prices
+  each bag round with its conditioning round, and a trimmed suggestion says
+  "(conditioning counts toward it)". Only conditioning rounds finished in
+  full count. History, Repeat and Home's pool line show it.
+- Timed segments learned `speak` (say "Go" rather than the step name) and
+  `marks` (cues timed from the end).
 
 ## Still open
 

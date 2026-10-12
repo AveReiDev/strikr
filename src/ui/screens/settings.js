@@ -61,6 +61,24 @@ export function createSettingsScreen({ root, settings, speech, onReset, onThemeC
         <span class="row-value"><span data-val="warmupMin"></span><span class="chev">&rsaquo;</span></span>
       </button>
 
+      <button class="row" data-pick="conditioningSec">
+        <span>
+          <span class="row-title">Conditioning</span>
+          <span class="row-sub">Bodyweight between rounds, gloves on. Stop if anything hurts sharply</span>
+        </span>
+        <span class="row-value"><span data-val="conditioningSec"></span><span class="chev">&rsaquo;</span></span>
+      </button>
+
+      <div class="row">
+        <span>
+          <span class="row-title">Low impact</span>
+          <span class="row-sub">Conditioning without jumps or landings</span>
+        </span>
+        <span class="row-value">
+          <button class="toggle" id="low-impact" aria-label="Low impact"></button>
+        </span>
+      </div>
+
       <div class="row">
         <span>
           <span class="row-title">Ramp up</span>
@@ -195,6 +213,7 @@ export function createSettingsScreen({ root, settings, speech, onReset, onThemeC
     ladderReps: (v) => `${v}×`,
     finisherSec: (v) => (v === 0 ? 'Off' : `Last ${v}s`),
     warmupMin: (v) => (v === 0 ? 'Off' : `${v} min`),
+    conditioningSec: (v) => (v === 0 ? 'Off' : v % 60 === 0 ? `${v / 60} min` : `${v}s`),
   };
 
   const PICKER_TITLE = {
@@ -204,6 +223,7 @@ export function createSettingsScreen({ root, settings, speech, onReset, onThemeC
     ladderReps: 'Ladder reps per rung',
     finisherSec: 'Finisher',
     warmupMin: 'Guided warm-up',
+    conditioningSec: 'Conditioning',
   };
 
   const goalFmt = {
@@ -236,6 +256,7 @@ export function createSettingsScreen({ root, settings, speech, onReset, onThemeC
     root.querySelector('#voice-speed-val').textContent = `${speed}%`;
     root.querySelector('#dark-mode').setAttribute('aria-pressed', String(settings.get('darkMode')));
     root.querySelector('#ramp-up').setAttribute('aria-pressed', String(settings.get('rampUp')));
+    root.querySelector('#low-impact').setAttribute('aria-pressed', String(settings.get('lowImpact')));
     root.querySelector('#voice-name').textContent = speech?.voiceName ?? '—';
     renderGoal();
 
@@ -335,6 +356,11 @@ export function createSettingsScreen({ root, settings, speech, onReset, onThemeC
 
   root.querySelector('#ramp-up').addEventListener('click', () => {
     settings.set('rampUp', !settings.get('rampUp'));
+    render();
+  });
+
+  root.querySelector('#low-impact').addEventListener('click', () => {
+    settings.set('lowImpact', !settings.get('lowImpact'));
     render();
   });
 

@@ -365,7 +365,7 @@ Each phase ships on its own: tests, then a browser smoke test, then
 | 8B | Defense mode — **done, v1.13.0** | Highest training value; no new combos; small engine change |
 | 8C | Levels emphasis + ~30 combos — **done, v1.14.0** | Cheapest new mode once 8A exists |
 | 8D | Round plan + `TIMED` state + guided warmup — **done, v1.15.0** | Builds the timed-segment engine on the simpler use |
-| 8E | S&C exercise rounds, bodyweight + gym library, load integration | Reuses 8D |
+| 8E | S&C exercise rounds, bodyweight library (gym kit deferred, decision 8), load integration — **done, v1.17.0** | Reuses 8D |
 | 8F | Footwork mode | Reuses the 8B wrapper pattern |
 | 8G | Range emphasis + range calls + ~30 combos | Most combo authoring; can move earlier if you want it sooner |
 | 8H | HR Stage 1, then Stage 2 after on-device checks | Round timestamps fall out of 8D's plan |
@@ -385,6 +385,10 @@ Each phase ships on its own: tests, then a browser smoke test, then
 
 7. **TRX (12 October):** TRX means the suspension straps. Battle ropes stay
    in the gym list as their own equipment.
+8. **Gloves (12 October):** gloves stay on between bag rounds, so 8E is
+   bodyweight and glove-friendly moves only. The gym list (kettlebells,
+   dumbbells, TRX straps, plates, battle ropes) waits; a gloves-off gym
+   block at the end of a session is a possible later addition.
 
 ## Check on the phone before HR Stage 2
 

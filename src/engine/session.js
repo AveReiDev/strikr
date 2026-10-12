@@ -17,6 +17,7 @@
 import { createSelector, buildPool } from './selector.js';
 import { createLadderSelector, LADDER_MODES } from './ladder.js';
 import { createDefenseSelector } from './defense.js';
+import { createFootworkSelector } from './footwork.js';
 import { buildPlan } from './plan.js';
 import { createConditioningPicker } from './conditioning.js';
 import {
@@ -86,7 +87,9 @@ export function createSession({ config, settings, combos, rng, intensity: overri
     ? createLadderSelector({ ...selectorArgs, reps: settings.ladderReps ?? 1 })
     : settings.workoutMode === 'defense'
       ? createDefenseSelector(createSelector(selectorArgs), { moves: config.moves?.defense, strikes: config.strikes, rng })
-      : createSelector(selectorArgs);
+      : settings.workoutMode === 'footwork'
+        ? createFootworkSelector(createSelector(selectorArgs), { moves: config.moves?.footwork, strikes: config.strikes, rng })
+        : createSelector(selectorArgs);
 
   // Defense mode: the defense is called once the combo has had time to land
   // (its per-action time) plus a short beat, like the opponent's return.

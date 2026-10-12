@@ -15,11 +15,12 @@ import { TAGS, DRILL_TAGS, TAG_LABEL } from '../../store/library.js';
 
 const SPORT_LABEL = { boxing: 'Boxing', muaythai: 'Muay Thai', kickboxing: 'Kickboxing' };
 
-const MODE_LABEL = { random: 'Random', ladder: 'Ladder', defense: 'Defense' };
+const MODE_LABEL = { random: 'Random', ladder: 'Ladder', defense: 'Defense', footwork: 'Footwork' };
 const MODE_SUB = {
   random: 'Mixed combos',
   ladder: 'Add a strike',
   defense: 'Attack, then defend',
+  footwork: 'Step in, pivot out',
 };
 
 /** 45 → "45s", 60 → "1 min", 90 → "90s", 120 → "2 min". */

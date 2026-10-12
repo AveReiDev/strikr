@@ -3,7 +3,7 @@
   "_comment": "How each spoken strike is classified. Rules are tested in order against the lower-cased strike and the first match wins, so defence comes before the kick it names ('Check rear low kick'). kind: strike | defense | footwork | feint. A feint takes its category from the strike it fakes. level: head | body | leg. range: kicking | punching | close | clinch. category feeds strike balance (config.balance.targets). Boxing uses boxingRange instead of range: first match of inside, then outside. test/strikes.test.js fails on any strike in combos.json that no rule matches.",
   "rules": [
     { "match": "^(check|catch|slip|roll|parry|block|frame|cover)", "kind": "defense", "category": "defense" },
-    { "match": "^(step (in|out|back|left|right)|pivot|circle|angle|switch stance|slide|hop)\\b", "kind": "footwork" },
+    { "match": "^(step (in|out|back|left|right)|pivot|circle|angle|switch stance|slide|shuffle|hop|reset stance)\\b", "kind": "footwork" },
     { "match": " feint$", "kind": "feint" },
     { "match": "^(clinch|long guard)|dump|^sweep", "kind": "strike", "weapon": "clinch", "range": "clinch" },
     { "match": "elbow", "kind": "strike", "weapon": "elbow", "category": "elbow", "level": "head", "range": "close" },

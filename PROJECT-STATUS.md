@@ -29,8 +29,9 @@ Last updated 12 October 2026.
 | 8B — Defense mode (v1.13.0) | **Done**, live, awaiting bag test |
 | 8C — Levels emphasis (v1.14.0) | **Done**, live, awaiting bag test |
 | 8D — Workout plan and guided warm-up (v1.15.0) | **Done**, live, awaiting device test |
-| 8E — Conditioning between rounds (v1.17.0) | **Done**, awaiting device test |
-| 8F–8H — New training modes | Planned, see `PHASE8-PLAN.md` |
+| 8E — Conditioning between rounds (v1.17.0) | **Done**, live, awaiting device test |
+| 8F — Footwork mode (v1.18.0) | **Done**, awaiting bag test |
+| 8G–8H — Range emphasis, heart rate | Planned, see `PHASE8-PLAN.md` |
 
 ### Installing it on your phone
 
@@ -540,6 +541,22 @@ label. The Mode row is Random, Ladder, Defense.
   full count. History, Repeat and Home's pool line show it.
 - Timed segments learned `speak` (say "Go" rather than the step name) and
   `marks` (cues timed from the end).
+
+## Phase 8F: footwork mode, 12 October 2026 (v1.18.0)
+
+- A fourth workout mode again, **Footwork** ("Step in, pivot out"); the Mode
+  grid is two by two. Each combo is called with one move as part of it: an
+  entry before the first strike or an exit after the last, chosen evenly.
+- `footwork` in `data/moves.json`: entries Step in, Slide in, Shuffle in
+  (before a teep or lead kick; not boxing); exits Pivot out (after hooks and
+  close work), Angle off, Circle left/right, Step back, Slide out, Reset
+  stance (after kicks; not boxing). Never the same move twice running.
+  "In"/"Out" alone were avoided as too mushy for text-to-speech.
+- Each move adds execution time (`actions`, 1 or 1.5 for circling) to the
+  gap. The combo keeps its id, so history credits the real combo; combos
+  that already contain footwork are left alone. Finishers stay plain.
+- `src/engine/footwork.js` wraps the normal selector like Defense mode, so
+  focus, weak spots, balance and Levels emphasis all still apply.
 
 ## Still open
 

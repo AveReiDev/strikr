@@ -15,5 +15,18 @@
     { "name": "Step back",  "after": ["kick", "knee"], "sports": ["muaythai", "kickboxing"] },
     { "name": "Lean back",  "after": ["kick-head", "cross"], "sports": ["muaythai", "kickboxing"] },
     { "name": "Frame",      "after": ["clinch", "knee", "elbow"], "sports": ["muaythai"] }
+  ],
+  "_comment_footwork": "Footwork mode adds one move to each combo, said as part of it: an entry before the first strike ('before' keys match the FIRST strike) or an exit after the last ('after' keys match the LAST strike), using the same keys as defense. actions is how much extra execution time the move gets, in strikes (1 = one strike's worth). Every name must be classified as footwork by data/strikes.json.",
+  "footwork": [
+    { "name": "Step in",      "before": ["punching", "close", "outside", "inside"], "actions": 1 },
+    { "name": "Slide in",     "before": ["punching", "outside"], "actions": 1 },
+    { "name": "Shuffle in",   "before": ["teep", "leadKick"], "actions": 1, "sports": ["muaythai", "kickboxing"] },
+    { "name": "Pivot out",    "after": ["hook", "close", "inside"], "actions": 1 },
+    { "name": "Angle off",    "after": ["punching", "close", "outside", "inside"], "actions": 1 },
+    { "name": "Circle left",  "after": ["punching", "close", "kicking", "outside", "inside"], "actions": 1.5 },
+    { "name": "Circle right", "after": ["punching", "close", "kicking", "outside", "inside"], "actions": 1.5 },
+    { "name": "Step back",    "after": ["kicking", "punching", "outside"], "actions": 1 },
+    { "name": "Slide out",    "after": ["punching", "outside", "kick"], "actions": 1 },
+    { "name": "Reset stance", "after": ["kick", "clinch"], "actions": 1, "sports": ["muaythai", "kickboxing"] }
   ]
 }

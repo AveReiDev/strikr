@@ -14,6 +14,9 @@ export const INTENSITIES = ['light', 'medium', 'hard', 'custom'];
 export const ROUND_LENGTHS = [1, 2, 3, 4, 5, 10];
 export const WORKOUT_MODES = ['random', 'ladder', 'pyramid'];
 
+/** Home's collapsible sections, by id. `homeCollapsed` lists the closed ones. */
+export const HOME_SECTIONS = ['sport', 'tier', 'intensity', 'workoutMode', 'focus', 'rounds'];
+
 /**
  * Allowed values for the picker rows on the settings screen.
  *
@@ -87,12 +90,18 @@ export function defaultSettings(config) {
       perActionMs: config.intensity.custom.perActionMs,
     },
     goal: null,
+    homeCollapsed: [],
   };
 }
 
 function sanitiseFocus(raw) {
   if (typeof raw !== 'string' || !raw) return null;
   return raw;
+}
+
+function sanitiseCollapsed(raw) {
+  if (!Array.isArray(raw)) return [];
+  return HOME_SECTIONS.filter((id) => raw.includes(id));
 }
 
 function sanitiseGoal(raw) {
@@ -115,6 +124,7 @@ export function createSettingsStore({ config, storage, onChange }) {
       const out = sanitiseFields(raw, fallback, schema);
       out.focus = sanitiseFocus(raw?.focus);
       out.goal = sanitiseGoal(raw?.goal);
+      out.homeCollapsed = sanitiseCollapsed(raw?.homeCollapsed);
       return out;
     }
   );
@@ -139,9 +149,15 @@ export function createSettingsStore({ config, storage, onChange }) {
         persist();
         return current.focus;
       }
+      if (key === 'homeCollapsed') {
+        current.homeCollapsed = sanitiseCollapsed(value);
+        persist();
+        return current.homeCollapsed;
+      }
       const next = sanitiseFields({ ...current, [key]: value }, defaults, schema);
       next.focus = current.focus;
       next.goal = current.goal;
+      next.homeCollapsed = current.homeCollapsed;
       current = next;
       persist();
       return current[key];
@@ -173,7 +189,7 @@ export function createSettingsStore({ config, storage, onChange }) {
     },
 
     reset() {
-      current = { ...defaults, customIntensity: { ...defaults.customIntensity }, focus: null, goal: null };
+      current = { ...defaults, customIntensity: { ...defaults.customIntensity }, focus: null, goal: null, homeCollapsed: [] };
       persist();
       return current;
     },

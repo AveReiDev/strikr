@@ -4,7 +4,7 @@
  * Every choice writes straight through to settings, so it survives a reload.
  */
 
-import { SPORTS, TIERS, INTENSITIES, ROUND_LENGTHS, WORKOUT_MODES } from '../../store/settings.js';
+import { SPORTS, TIERS, INTENSITIES, ROUND_LENGTHS, WORKOUT_MODES, CHOICES } from '../../store/settings.js';
 import { gapMsFor } from '../../engine/timing.js';
 import { buildPool } from '../../engine/selector.js';
 import { buildLadderPool, LADDER_MODES } from '../../engine/ladder.js';
@@ -22,6 +22,20 @@ const MODE_SUB = {
   pyramid: 'Up, then down',
 };
 
+/**
+ * A collapsible Home section. The header is a button; when the section is
+ * closed it shows the current choice, so a hidden focus is never a surprise.
+ */
+const section = (id, label, body) => `
+  <section class="home-section" data-section="${id}">
+    <button class="section-label section-toggle" aria-expanded="true" aria-controls="sec-${id}">
+      <span>${label}</span>
+      <span class="section-summary"></span>
+      <span class="section-chev" aria-hidden="true">&rsaquo;</span>
+    </button>
+    <div class="section-body" id="sec-${id}">${body}</div>
+  </section>`;
+
 const TIER_SUB = {
   beginner: 'Basic combos',
   intermediate: 'Technical striking',
@@ -38,26 +52,25 @@ export function createHomeScreen({ root, settings, config, library, history, onS
     <div id="feel-prompt"></div>
     <div id="suggestion-card"></div>
 
-    <div class="section-label">Select sport</div>
-    <div class="bars" data-group="sport"></div>
-
-    <div class="section-label">Difficulty</div>
-    <div class="bars" data-group="tier"></div>
-
-    <div class="section-label">Intensity</div>
-    <div class="grid" data-group="intensity"></div>
-    <div class="bars" data-group="intensityCustom" style="margin-top:var(--sp-2)"></div>
-    <div id="custom-controls" hidden></div>
-
-    <div class="section-label">Mode</div>
-    <div class="grid" data-group="workoutMode"></div>
-
-    <div class="section-label">Focus</div>
-    <div class="grid wrap" data-group="focus"></div>
-    <div class="grid" data-group="weakSpots" style="margin-top:var(--sp-2)"></div>
-
-    <div class="section-label">Round length (min)</div>
-    <div class="grid" data-group="roundLengthMin"></div>
+    ${section('sport', 'Select sport', '<div class="bars" data-group="sport"></div>')}
+    ${section('tier', 'Difficulty', '<div class="bars" data-group="tier"></div>')}
+    ${section('intensity', 'Intensity', `
+      <div class="grid" data-group="intensity"></div>
+      <div class="bars" data-group="intensityCustom" style="margin-top:var(--sp-2)"></div>
+      <div id="custom-controls" hidden></div>`)}
+    ${section('workoutMode', 'Mode', '<div class="grid" data-group="workoutMode"></div>')}
+    ${section('focus', 'Focus', `
+      <div class="grid wrap" data-group="focus"></div>
+      <div class="grid" data-group="weakSpots" style="margin-top:var(--sp-2)"></div>`)}
+    ${section('rounds', 'Rounds', `
+      <div class="stepper" data-group="rounds">
+        <button class="chip num" data-step="-1" aria-label="One round fewer">&minus;</button>
+        <div class="stepper-val"><span class="stepper-num" id="rounds-val"></span><span class="stepper-unit" id="rounds-unit"></span></div>
+        <button class="chip num" data-step="1" aria-label="One round more">+</button>
+      </div>
+      <div class="sub-label">Round length (min)</div>
+      <div class="grid" data-group="roundLengthMin"></div>
+      <div class="muted rounds-total" id="rounds-total"></div>`)}
 
     <div class="muted pool-size" id="pool-size"></div>
     <div id="home-notice"></div>
@@ -136,7 +149,9 @@ export function createHomeScreen({ root, settings, config, library, history, onS
       settings.set('focus', null);
       renderFocusPicker();
     }
+    if (group === 'roundLengthMin') renderRounds();
     renderPoolSize();
+    renderSummaries();
   }
 
   /**
@@ -294,6 +309,7 @@ export function createHomeScreen({ root, settings, config, library, history, onS
           el.setAttribute('aria-pressed', String(el.dataset.value === value));
         }
         renderPoolSize();
+        renderSummaries();
       });
       groups.focus.appendChild(b);
     };
@@ -327,6 +343,7 @@ export function createHomeScreen({ root, settings, config, library, history, onS
       for (const el of [...groups.weakSpots.children]) {
         el.setAttribute('aria-pressed', String(el.dataset.value === opt.value));
       }
+      renderSummaries();
     });
     groups.weakSpots.appendChild(b);
   }
@@ -336,6 +353,86 @@ export function createHomeScreen({ root, settings, config, library, history, onS
   }
 
   for (const r of ROUND_LENGTHS) groups.roundLengthMin.appendChild(chip('roundLengthMin', r));
+
+  /* ---- rounds stepper -------------------------------------------------- */
+
+  // A stepper, not chips: fifteen choices would be three rows of buttons.
+  const ROUNDS = CHOICES.roundsPerWorkout;
+  const stepper = root.querySelector('[data-group="rounds"]');
+
+  function renderRounds() {
+    const n = settings.get('roundsPerWorkout');
+    const len = settings.get('roundLengthMin');
+    const rest = settings.get('restBetweenRoundsSec');
+    root.querySelector('#rounds-val').textContent = String(n);
+    root.querySelector('#rounds-unit').textContent = n === 1 ? 'round' : 'rounds';
+    stepper.querySelector('[data-step="-1"]').disabled = n <= ROUNDS[0];
+    stepper.querySelector('[data-step="1"]').disabled = n >= ROUNDS[ROUNDS.length - 1];
+    const total = Math.round(n * len + ((n - 1) * rest) / 60);
+    root.querySelector('#rounds-total').textContent =
+      `About ${total} min with ${rest}s rests`;
+  }
+
+  stepper.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-step]');
+    if (!btn) return;
+    const i = ROUNDS.indexOf(settings.get('roundsPerWorkout'));
+    const next = ROUNDS[Math.min(ROUNDS.length - 1, Math.max(0, i + Number(btn.dataset.step)))];
+    settings.set('roundsPerWorkout', next);
+    renderRounds();
+    renderSummaries();
+  });
+
+  renderRounds();
+
+  /* ---- collapsible sections -------------------------------------------- */
+
+  const sections = [...root.querySelectorAll('.home-section')];
+
+  /** What each closed section shows in its header: the current choice. */
+  function summaryOf(id) {
+    switch (id) {
+      case 'sport': return SPORT_LABEL[settings.get('sport')];
+      case 'tier': return settings.get('tier');
+      case 'intensity': return settings.get('intensity');
+      case 'workoutMode': return MODE_LABEL[settings.get('workoutMode')];
+      case 'focus': {
+        const f = settings.get('focus');
+        const label = f ? TAG_LABEL[f] || f : 'All';
+        return settings.get('focusWeak') ? `${label} · Weak spots` : label;
+      }
+      case 'rounds': return `${settings.get('roundsPerWorkout')} × ${settings.get('roundLengthMin')} min`;
+      default: return '';
+    }
+  }
+
+  function renderSummaries() {
+    for (const sec of sections) {
+      sec.querySelector('.section-summary').textContent = summaryOf(sec.dataset.section);
+    }
+  }
+
+  function applyCollapsed() {
+    const closed = settings.get('homeCollapsed') ?? [];
+    for (const sec of sections) {
+      const open = !closed.includes(sec.dataset.section);
+      sec.classList.toggle('collapsed', !open);
+      sec.querySelector('.section-toggle').setAttribute('aria-expanded', String(open));
+      sec.querySelector('.section-body').hidden = !open;
+    }
+  }
+
+  for (const sec of sections) {
+    sec.querySelector('.section-toggle').addEventListener('click', () => {
+      const id = sec.dataset.section;
+      const closed = settings.get('homeCollapsed') ?? [];
+      settings.set('homeCollapsed', closed.includes(id) ? closed.filter((x) => x !== id) : [...closed, id]);
+      applyCollapsed();
+    });
+  }
+
+  renderSummaries();
+  applyCollapsed();
 
   root.querySelector('#start-round').addEventListener('click', onStart);
   renderCustom();
@@ -467,6 +564,9 @@ export function createHomeScreen({ root, settings, config, library, history, onS
     renderCustom();
     renderSuggestion();
     renderPoolSize();
+    renderRounds();
+    renderSummaries();
+    applyCollapsed();
   }
 
   /* ---- post-workout rating --------------------------------------------- */

@@ -25,6 +25,7 @@ Last updated 12 October 2026.
 | Combo pool expansion and strike balance (v1.9.0) | **Done**, live |
 | Punch-punch-kick and head-kick weighting (v1.10.0) | **Done**, live |
 | 8A — Strike dictionary (v1.11.0) | **Done**, awaiting device test |
+| Collapsible Home, rounds on Home (v1.12.0) | **Done**, awaiting device test |
 | 8B–8H — New training modes | Planned, see `PHASE8-PLAN.md` |
 
 ### Installing it on your phone
@@ -50,7 +51,7 @@ tell that `app.css` is new. **After editing any file in the app, bump
 `CACHE_VERSION` at the top of `sw.js`.** Forget, and an installed phone may keep
 serving the old version. This is written at the top of `sw.js` too.
 
-**248 tests pass.** Run them with `npm test`, or:
+**253 tests pass.** Run them with `npm test`, or:
 
 ```bash
 node --test 'test/*.test.js'
@@ -429,6 +430,17 @@ The foundation for the Phase 8 modes (`PHASE8-PLAN.md`).
 - Home lists focus tags in a fixed order instead of the order combos happen
   to appear in.
 
+## Collapsible Home and rounds on Home, 12 October 2026 (v1.12.0)
+
+- Every Home section (sport, difficulty, intensity, mode, focus, rounds) folds
+  away from its header. A closed section shows the current choice on the
+  right, such as "FOCUS  ALL" or "ROUNDS  6 × 2 MIN", so a hidden focus is
+  never a surprise. The closed ones are stored in `settings.homeCollapsed`,
+  checked against `HOME_SECTIONS`. Everything starts open.
+- Rounds per workout moved onto Home as a − / + stepper above round length,
+  with a line giving the total time including rests. Settings keeps its row
+  too; both write the same setting.
+
 ## Still open
 
 - `gen.py` predates tags and singles — do not re-run it.
@@ -470,7 +482,7 @@ src/
 styles/
   tokens.css          every colour and size; light mode is a token override
   app.css             components only, no raw colours
-test/                 node --test, 248 tests (fixtures.js mirrors main.js config)
+test/                 node --test, 253 tests (fixtures.js mirrors main.js config)
 ```
 
 Three storage keys, independently readable so one corrupt value cannot brick the

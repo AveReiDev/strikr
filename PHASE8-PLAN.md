@@ -383,10 +383,8 @@ Each phase ships on its own: tests, then a browser smoke test, then
 6. **Weekly load:** conditioning counts toward the +10% cap. Warmup does
    not.
 
-Still open:
-
-- "TRX ropes": I've assumed TRX suspension straps and listed battle ropes
-  separately. Correct me if you meant one or the other.
+7. **TRX (12 October):** TRX means the suspension straps. Battle ropes stay
+   in the gym list as their own equipment.
 
 ## Check on the phone before HR Stage 2
 

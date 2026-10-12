@@ -18,7 +18,7 @@ const INTENSITIES = ['light', 'medium', 'hard', 'custom'];
 // is gone from the app but stays here so old records keep their label.
 const MODES = ['ladder', 'pyramid', 'defense', 'footwork'];
 // Likewise only a real emphasis is stored; off is the default.
-const EMPHASES = ['levels'];
+const EMPHASES = ['levels', 'ranges', 'kicking', 'punching', 'close', 'clinch', 'outside', 'inside'];
 
 /**
  * How a session felt, rated once it ends: 1 Easy … 5 Brutal. Unrated

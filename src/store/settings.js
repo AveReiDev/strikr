@@ -13,7 +13,14 @@ export const TIERS = ['beginner', 'intermediate', 'advanced'];
 export const INTENSITIES = ['light', 'medium', 'hard', 'custom'];
 export const ROUND_LENGTHS = [1, 2, 3, 4, 5, 10];
 export const WORKOUT_MODES = ['random', 'ladder', 'defense', 'footwork'];
-export const EMPHASES = ['off', 'levels'];
+// Every emphasis; Home shows only the ranges that apply to the chosen sport
+// (data/strikes.json `ranges`). 'ranges' is range calls.
+export const EMPHASES = ['off', 'levels', 'ranges', 'kicking', 'punching', 'close', 'clinch', 'outside', 'inside'];
+export const EMPHASIS_LABEL = {
+  off: 'Off', levels: 'Levels', ranges: 'Range calls',
+  kicking: 'Kicking', punching: 'Punching', close: 'Close', clinch: 'Clinch',
+  outside: 'Outside', inside: 'Inside',
+};
 
 /** Home's collapsible sections, by id. `homeCollapsed` lists the closed ones. */
 export const HOME_SECTIONS = ['sport', 'tier', 'intensity', 'workoutMode', 'focus', 'emphasis', 'rounds'];

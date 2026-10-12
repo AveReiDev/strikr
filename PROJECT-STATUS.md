@@ -31,7 +31,8 @@ Last updated 12 October 2026.
 | 8D — Workout plan and guided warm-up (v1.15.0) | **Done**, live, awaiting device test |
 | 8E — Conditioning between rounds (v1.17.0) | **Done**, live, awaiting device test |
 | 8F — Footwork mode (v1.18.0) | **Done**, live, awaiting bag test |
-| 8G–8H — Range emphasis, heart rate | Planned, see `PHASE8-PLAN.md` |
+| 8G — Range emphasis and range calls (v1.19.0) | **Done**, awaiting browser smoke test and bag test |
+| 8H — Heart rate | Planned, see `PHASE8-PLAN.md` |
 
 ### Installing it on your phone
 
@@ -56,7 +57,7 @@ tell that `app.css` is new. **After editing any file in the app, bump
 `CACHE_VERSION` at the top of `sw.js`.** Forget, and an installed phone may keep
 serving the old version. This is written at the top of `sw.js` too.
 
-**485 tests pass.** Run them with `npm test`, or:
+**507 tests pass.** Run them with `npm test`, or:
 
 ```bash
 node --test 'test/*.test.js'
@@ -558,6 +559,48 @@ label. The Mode row is Random, Ladder, Defense.
 - `src/engine/footwork.js` wraps the normal selector like Defense mode, so
   focus, weak spots, balance and Levels emphasis all still apply.
 
+## Phase 8G: range emphasis and range calls, 12 October 2026 (v1.19.0)
+
+Built in the first cloud session (no browser pane, no phone): unit tests plus
+a headless-Chromium pass over Home and a short workout. The real smoke test
+and the bag test are still to do.
+
+- **Emphasis** gains the named ranges. Muay Thai: Kicking, Punching, Close,
+  Clinch. Kickboxing: the same without Clinch. Boxing: Outside (jab, cross)
+  and Inside (hooks, uppercuts, body). Home offers only the sport's own, and
+  switching sport drops a range the new sport lacks (back to Off).
+- **A fixed range** is a weight, never a filter, like Levels:
+  1 + `config.emphasis.rangePerShare` (8) × the share of the combo's strikes
+  from that range. It was 3 at first, but strike balance and the tier draw
+  dilute it; at 8 a Close emphasis puts close work in about 62% of Muay Thai
+  advanced calls (from 36%). Clinch only reaches about 1 call in 3 (from
+  10%), because there are 12 clinch combos and the no-repeat window holds 8;
+  Range calls get closer to all-clinch while the clinch is called. Home's pool
+  line says how many combos work the range ("3 work clinch" at Beginner).
+- **Range calls** ("Switches as you go"): each round opens with a range
+  callout ("Kicking range", "Punching range", "Close", "Clinch", "Outside",
+  "Inside" — in `data/strikes.json`), and every 3–5 combos
+  (`rangeCallEvery`) it moves to a different one. After the callout, a fixed
+  800 ms (`rangeCallMoveMs`, the same at every intensity; tune on the bag)
+  to move, then the combo. Combos are drawn mostly from that range: first
+  those with at least half their strikes in it, then any with a strike from
+  it, then anything, so the pool and no-repeat window are untouched. Only
+  ranges with 4+ combos in the pool are called (no clinch at Beginner, no
+  kicking with a Hands focus); the pool line lists them. The workout screen
+  shows the range under each combo.
+- Callout and combo are one unit for the round-end lookahead, so the bell
+  never falls between them. A pause during the callout calls it again on
+  resume. Ladders move range only between climbs. Works with Random, Ladder,
+  Defense and Footwork; finishers stay plain. Only combos count as calls.
+- Knees and elbows after a clinch entry count as clinch work for range
+  purposes ("Clinch – Rear knee – Lead knee" is all clinch).
+- **30 new combos** (Sonnet-authored, checked by the dictionary tests): Muay
+  Thai close and clinch work (8 clinch, 4 close), two range-walking chains
+  ("Lead teep – Cross – Lead hook – Rear knee – Lead elbow"), kickboxing
+  knees and uppercuts, pure teep/kick strings, and five boxing combos that
+  stay inside or outside.
+- History, Repeat and the history list keep the emphasis.
+
 ## Still open
 
 - `gen.py` predates tags and singles — do not re-run it.
@@ -574,7 +617,7 @@ label. The Mode row is Random, Ladder, Defense.
 ```
 index.html            shell: five screen containers plus the tab bar
 data/
-  combos.json         223 combos + 25 singles — shipped, read-only, never written to storage
+  combos.json         283 combos + 25 singles — shipped, read-only, never written to storage
   strikes.json        strike dictionary: level, range and category rules
   moves.json          defense and footwork callouts, paired to strikes
   warmups.json        guided warm-up routines (5 / 8 / 12 min)
@@ -593,7 +636,7 @@ src/
     plan.js             the workout as bag / rest / timed segments
     defense.js          Defense mode wrapper
     footwork.js         Footwork mode wrapper
-    emphasis.js         Levels emphasis weight
+    emphasis.js         Levels and range emphasis weights, range calls
     conditioning.js     picks conditioning stations
   audio/
     speech.js           the ONLY file touching SpeechSynthesis
@@ -607,7 +650,7 @@ src/
 styles/
   tokens.css          every colour and size; light mode is a token override
   app.css             components only, no raw colours
-test/                 node --test, 485 tests (fixtures.js mirrors main.js config)
+test/                 node --test, 507 tests (fixtures.js mirrors main.js config)
 ```
 
 Three storage keys, independently readable so one corrupt value cannot brick the

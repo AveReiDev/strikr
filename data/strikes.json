@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "_comment": "How each spoken strike is classified. Rules are tested in order against the lower-cased strike and the first match wins, so defence comes before the kick it names ('Check rear low kick'). kind: strike | defense | footwork | feint. A feint takes its category from the strike it fakes. level: head | body | leg. range: kicking | punching | close | clinch. category feeds strike balance (config.balance.targets). Boxing uses boxingRange instead of range: first match of inside, then outside. test/strikes.test.js fails on any strike in combos.json that no rule matches.",
+  "_comment": "How each spoken strike is classified. Rules are tested in order against the lower-cased strike and the first match wins, so defence comes before the kick it names ('Check rear low kick'). kind: strike | defense | footwork | feint. A feint takes its category from the strike it fakes. level: head | body | leg. range: kicking | punching | close | clinch. category feeds strike balance (config.balance.targets). Boxing uses boxingRange instead of range: first match of inside, then outside. ranges below lists them per sport for Emphasis. test/strikes.test.js fails on any strike in combos.json that no rule matches.",
   "rules": [
     { "match": "^(check|catch|slip|roll|parry|block|frame|cover)", "kind": "defense", "category": "defense" },
     { "match": "^(step (in|out|back|left|right)|pivot|circle|angle|switch stance|slide|shuffle|hop|reset stance)\\b", "kind": "footwork" },
@@ -25,5 +25,14 @@
     { "match": "cross", "kind": "strike", "weapon": "punch", "category": "cross", "level": "head", "range": "punching" },
     { "match": "back fist", "kind": "strike", "weapon": "punch", "level": "head", "range": "punching" }
   ],
-  "boxingRange": { "inside": "hook|uppercut|to body", "outside": "jab|cross|back fist" }
+  "boxingRange": { "inside": "hook|uppercut|to body", "outside": "jab|cross|back fist" },
+  "_comment_ranges": "The ranges Emphasis can lean toward, in Home order, with the words Range calls says when it moves you there. sports lists where each applies: clinch is Muay Thai only (kickboxing has almost no clinch work), boxing has inside and outside.",
+  "ranges": {
+    "kicking":  { "callout": "Kicking range",  "sports": ["muaythai", "kickboxing"] },
+    "punching": { "callout": "Punching range", "sports": ["muaythai", "kickboxing"] },
+    "close":    { "callout": "Close",          "sports": ["muaythai", "kickboxing"] },
+    "clinch":   { "callout": "Clinch",         "sports": ["muaythai"] },
+    "outside":  { "callout": "Outside",        "sports": ["boxing"] },
+    "inside":   { "callout": "Inside",         "sports": ["boxing"] }
+  }
 }

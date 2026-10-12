@@ -75,10 +75,12 @@ test('emphasis is a setting with a fixed list, off by default', () => {
     write: (k, v) => mem.set(k, JSON.parse(JSON.stringify(v))),
   };
   const settings = createSettingsStore({ config, storage });
-  assert.deepEqual(EMPHASES, ['off', 'levels']);
+  assert.deepEqual(EMPHASES, ['off', 'levels', 'ranges', 'kicking', 'punching', 'close', 'clinch', 'outside', 'inside']);
   assert.equal(settings.get('emphasis'), 'off');
   settings.set('emphasis', 'levels');
   assert.equal(createSettingsStore({ config, storage }).get('emphasis'), 'levels');
+  settings.set('emphasis', 'clinch');
+  assert.equal(settings.get('emphasis'), 'clinch');
   settings.set('emphasis', 'sideways');
   assert.equal(settings.get('emphasis'), 'off');
 });

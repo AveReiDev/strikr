@@ -14,7 +14,7 @@
  */
 
 import { buildPool, selectCombo, weakSpotWeight, composeWeights } from './selector.js';
-import { emphasisWeight } from './emphasis.js';
+import { emphasisWeight, emphasisPrefer } from './emphasis.js';
 
 export const LADDER_MODES = ['ladder'];
 export const MIN_RUNGS = 3;
@@ -79,7 +79,7 @@ export function ladderSequence(combo, { reps = 1 } = {}) {
 }
 
 export function createLadderSelector({
-  combos, sport, tier, config, rng, focusWeak, comboFrequencyMap, focus, emphasis, reps,
+  combos, sport, tier, config, rng, focusWeak, comboFrequencyMap, focus, emphasis, rangeCursor, reps,
 }) {
   const pool = buildLadderPool(combos, { sport, tier, focus });
   const recent = [];          // base combo ids, so the next ladder is a different combo
@@ -87,16 +87,19 @@ export function createLadderSelector({
 
   const weakWeight = composeWeights(
     weakSpotWeight(focusWeak, comboFrequencyMap),
-    emphasisWeight(emphasis, { strikes: config.strikes, config }),
+    emphasisWeight(emphasis, { strikes: config.strikes, config, cursor: rangeCursor }),
   );
+  const prefer = emphasisPrefer(emphasis, { strikes: config.strikes, cursor: rangeCursor });
 
   return {
     pool,
     get recent() { return [...recent]; },
+    /** The next call opens a new ladder; range calls only move here. */
+    get atStart() { return queue.length === 0; },
     startRound() { queue = []; },
     next() {
       if (!queue.length) {
-        const base = selectCombo({ pool, tier, config, rng, recent, weakWeight });
+        const base = selectCombo({ pool, tier, config, rng, recent, weakWeight, prefer });
         if (!base) return null;
         recent.push(base.id);
         queue = ladderSequence(base, { reps });

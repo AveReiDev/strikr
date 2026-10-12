@@ -7,6 +7,7 @@ import {
   formatDuration, formatTotal, formatTime, formatDayHeading, FEEL_LABEL,
 } from '../../store/history.js';
 import { SPORT_LABEL, TAG_LABEL } from '../../store/library.js';
+import { EMPHASIS_LABEL } from '../../store/settings.js';
 import { openPicker } from '../components/picker.js';
 
 export function createHistoryScreen({ root, history, onRepeat }) {
@@ -86,7 +87,7 @@ export function createHistoryScreen({ root, history, onRepeat }) {
 
     el.innerHTML = `
       <div class="session-top">
-        <span class="session-meta">${SPORT_LABEL[r.sport]} &middot; ${r.tier} &middot; ${r.intensity}${r.focus ? ` &middot; ${TAG_LABEL[r.focus] ?? r.focus}` : ''}${r.focusWeak ? ' &middot; weak spots' : ''}${r.mode ? ` &middot; ${r.mode}` : ''}${r.emphasis ? ` &middot; ${r.emphasis}` : ''}${r.rampUp ? ' &middot; ramp' : ''}${r.finisherSec ? ` &middot; ${r.finisherSec}s finisher` : ''}${r.warmupMin ? ` &middot; ${r.warmupMin} min warm-up` : ''}${r.conditioningSec ? ` &middot; ${r.conditioningSec}s conditioning` : ''}${r.feel ? ` &middot; felt ${FEEL_LABEL[r.feel].toLowerCase()}` : ''}</span>
+        <span class="session-meta">${SPORT_LABEL[r.sport]} &middot; ${r.tier} &middot; ${r.intensity}${r.focus ? ` &middot; ${TAG_LABEL[r.focus] ?? r.focus}` : ''}${r.focusWeak ? ' &middot; weak spots' : ''}${r.mode ? ` &middot; ${r.mode}` : ''}${r.emphasis ? ` &middot; ${(EMPHASIS_LABEL[r.emphasis] ?? r.emphasis).toLowerCase()}` : ''}${r.rampUp ? ' &middot; ramp' : ''}${r.finisherSec ? ` &middot; ${r.finisherSec}s finisher` : ''}${r.warmupMin ? ` &middot; ${r.warmupMin} min warm-up` : ''}${r.conditioningSec ? ` &middot; ${r.conditioningSec}s conditioning` : ''}${r.feel ? ` &middot; felt ${FEEL_LABEL[r.feel].toLowerCase()}` : ''}</span>
         <span class="session-time">${formatTime(r.startedAt)}</span>
       </div>
       <div class="session-title">

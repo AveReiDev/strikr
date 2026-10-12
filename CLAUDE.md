@@ -10,7 +10,9 @@ Live at https://avereidev.github.io/strikr/ (GitHub Pages, `main` branch, repo
 root). **`git push` to `main` publishes to the phone** — only push work that has
 passed tests and a browser smoke test, and confirm with the user first. The repo
 is public: never commit personal data, keys, or `reference/` (third-party
-screenshots, gitignored). Commits use the GitHub noreply email.
+screenshots, gitignored). Commits are authored as
+`AveReiDev <332603001+AveReiDev@users.noreply.github.com>` (the SessionStart
+hook sets this per clone; a cloud container's default identity is wrong).
 
 ## Commands
 
@@ -48,12 +50,20 @@ screenshots, gitignored). Commits use the GitHub noreply email.
 When `CLAUDE_CODE_REMOTE=true` you are in a cloud session: a fresh clone, no
 browser pane, no phone, no local notes.
 
-- **Never push to or merge into `main`** — that publishes to the phone. Work on
-  the session's own branch and open a PR; the user merges after testing.
-- The SessionStart hook in `.claude/settings.json` enables the pre-commit hook.
-  Never commit with `--no-verify`.
-- You cannot run the browser smoke test. Run `npm test`, then end the PR body
-  with **"Smoke test: pending"** and the exact screens and taps to check, so
-  nothing is merged untested.
+- **Never push directly to `main`** — that publishes to the phone. Work on the
+  session's own branch and open a PR. The user is a solo developer and Claude is
+  the only code reviewer, so there is no one else to wait for: merge the PR into
+  `main` (rebase merge, keeping the linear history) only when the user says so
+  in that session.
+- The SessionStart hook in `.claude/settings.json` enables the pre-commit hook
+  and sets the commit identity. Check `git config user.email` before the first
+  commit; never commit with `--no-verify`.
+- There is no browser pane, but the container has headless Chromium and a
+  global Playwright. Run `npm test`, then `node tools/smoke.cjs` (it serves the
+  app, fakes speech, clicks through Home, runs a short workout and fails on any
+  console error); extend it for the screens the change touches. Voice, wake
+  lock and service-worker updates can only be checked on the phone, so the PR
+  body still ends with **"Smoke test: pending"** and the exact screens and taps
+  to check there.
 - `PROJECT-STATUS.md` and `PHASE8-PLAN.md` are the record of where the project
   stands; update them in the same PR.

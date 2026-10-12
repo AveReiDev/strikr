@@ -456,3 +456,14 @@ test('a corrupt stored rating is dropped, keeping the record', () => {
   assert.equal(r.id, 'a');
   assert.equal(r.feel, undefined);
 });
+
+test('drill modes survive a reload; random and unknown modes are not stored', () => {
+  const backend = fakeBackend();
+  const h = makeHistory(backend);
+  h.add(record({ mode: 'defense' }));
+  h.add(record({ mode: 'ladder' }));
+  h.add(record({ mode: 'random' }));
+  h.add(record({ mode: 'sparring' }));
+  const modes = makeHistory(backend).all().map((r) => r.mode);
+  assert.deepEqual(modes.sort(), ['defense', 'ladder', undefined, undefined].sort());
+});

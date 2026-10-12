@@ -25,8 +25,9 @@ Last updated 12 October 2026.
 | Combo pool expansion and strike balance (v1.9.0) | **Done**, live |
 | Punch-punch-kick and head-kick weighting (v1.10.0) | **Done**, live |
 | 8A — Strike dictionary (v1.11.0) | **Done**, awaiting device test |
-| Collapsible Home, rounds on Home (v1.12.0) | **Done**, awaiting device test |
-| 8B–8H — New training modes | Planned, see `PHASE8-PLAN.md` |
+| Collapsible Home, rounds on Home (v1.12.0) | **Done**, live |
+| 8B — Defense mode (v1.13.0) | **Done**, awaiting bag test |
+| 8C–8H — New training modes | Planned, see `PHASE8-PLAN.md` |
 
 ### Installing it on your phone
 
@@ -440,6 +441,31 @@ The foundation for the Phase 8 modes (`PHASE8-PLAN.md`).
 - Rounds per workout moved onto Home as a − / + stepper above round length,
   with a line giving the total time including rests. Settings keeps its row
   too; both write the same setting.
+
+## Phase 8B: defense mode, 12 October 2026 (v1.13.0)
+
+- A fourth workout mode, **Defense** ("Attack, then defend"). After each
+  combo the voice calls a defense, as if the opponent fires back. The Mode
+  grid is now two by two.
+- **Timing:** the defense is called once the combo has had its execution time
+  (`perActionMs × actions`) plus `config.defense.delayMs` (300 ms, to tune on
+  the bag). After it, the usual recovery gap for one action, then the next
+  combo. The round-end lookahead treats combo and defense as one unit, so the
+  bell never cuts a defense off.
+- **Pairing:** `data/moves.json` lists 13 defenses, each with the last
+  strikes it answers: a hook → Roll, Cover or Pivot out; a low kick → Check or
+  Step back; a body kick or teep → Block, Catch (Muay Thai only) or Step back;
+  jab/cross → Slip, Parry, Pull back. Boxing gets no kick defenses, Frame and
+  Catch are Muay Thai only. Never the same defense twice running. A combo
+  that already ends in a defense or footwork gets none added.
+- `src/engine/defense.js` wraps the normal selector, so focus, weak spots and
+  strike balance all still apply. The combo keeps its id, `combosCalled`
+  counts combos only, and finisher combos stay plain. An owed defense is
+  dropped on resume after a pause.
+- The workout screen shows the defense in red under the combo. History and
+  Repeat keep the mode.
+- The weak-spots pair on Home is now two half-width buttons; at phone width
+  "All combos" used to break mid-word.
 
 ## Still open
 

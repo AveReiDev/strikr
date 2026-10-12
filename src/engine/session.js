@@ -12,6 +12,7 @@
 
 import { createSelector, buildPool } from './selector.js';
 import { createLadderSelector, LADDER_MODES } from './ladder.js';
+import { createDefenseSelector } from './defense.js';
 import {
   gapMsFor,
   voiceRate,
@@ -54,7 +55,24 @@ export function createSession({ config, settings, combos, rng, intensity: overri
   };
   const selector = LADDER_MODES.includes(settings.workoutMode)
     ? createLadderSelector({ ...selectorArgs, mode: settings.workoutMode, reps: settings.ladderReps ?? 1 })
-    : createSelector(selectorArgs);
+    : settings.workoutMode === 'defense'
+      ? createDefenseSelector(createSelector(selectorArgs), { moves: config.moves?.defense, strikes: config.strikes, rng })
+      : createSelector(selectorArgs);
+
+  // Defense mode: the defense is called once the combo has had time to land
+  // (its per-action time) plus a short beat, like the opponent's return.
+  const defenseDelayMs = config.defense?.delayMs ?? 300;
+  const defenseTiming = (combo) => {
+    const d = combo.defense;
+    if (!d) return null;
+    const text = applyPronunciation(d.speech, config.pronunciation);
+    return {
+      text,
+      beforeMs: intensity.perActionMs * combo.actions + defenseDelayMs,
+      estSpeechMs: estimateSpeechMs(text, rate, config.speechEstimate),
+      afterMs: gapMsFor(d, intensity),
+    };
+  };
 
   // Finisher: the last stretch of each round calls short combos, fast. It has
   // its own selector over just the short combos, so the main one (and a
@@ -100,6 +118,7 @@ export function createSession({ config, settings, combos, rng, intensity: overri
   let currentGapMs = 0;
   let currentCombo = null;
   let pendingCombo = null;       // drawn but held back by the lookahead
+  let pendingDefense = null;     // to call once the current combo's beat is up
 
   let startedAt = null;
   const said = new Set();        // announcements already made this phase
@@ -137,6 +156,7 @@ export function createSession({ config, settings, combos, rng, intensity: overri
     // Give the base gap before the first callout so the bell is not talked over.
     awaitingSpeech = false;
     pendingCombo = null;
+    pendingDefense = null;
     currentCombo = null;
     selector.startRound?.();   // a ladder opens every round on rung one
     gapStart = now;
@@ -187,6 +207,20 @@ export function createSession({ config, settings, combos, rng, intensity: overri
 
     if (awaitingSpeech) return;                       // voice still talking
 
+    // The defense goes before anything else, the finisher included: the
+    // lookahead already reserved its time along with the combo's.
+    if (pendingDefense) {
+      if (now - gapStart < currentGapMs) return;
+      const d = pendingDefense;
+      pendingDefense = null;
+      awaitingSpeech = true;
+      gapStart = null;
+      currentGapMs = d.afterMs;
+      emit({ type: 'defense', defense: currentCombo.defense });
+      emit({ type: 'say', text: d.text, tag: 'defense' });
+      return;
+    }
+
     const finishing = inFinisher(now);
     if (finishing && !finisherAnnounced) {
       // Announce straight away rather than sitting out the rest of the gap,
@@ -212,19 +246,23 @@ export function createSession({ config, settings, combos, rng, intensity: overri
     const text = applyPronunciation(combo.speech, config.pronunciation);
     const gapMs = gapMsFor(combo, finishing ? { ...intensity, baseGapMs: fin.baseGapMs } : intensity);
     const estSpeechMs = estimateSpeechMs(text, rate, config.speechEstimate);
+    // A combo and its defense are one unit: never start a combo whose
+    // defense the bell would cut off, or the drill teaches leaving it out.
+    const def = finishing ? null : defenseTiming(combo);
 
     if (!canStartCallout({
       remainingMs: left,
-      estSpeechMs,
-      gapMs,
+      estSpeechMs: estSpeechMs + (def ? def.estSpeechMs : 0),
+      gapMs: def ? def.beforeMs + def.afterMs : gapMs,
       lookaheadMs: config.roundEndLookaheadMs,
     })) {
       return;   // let the round run out quietly
     }
 
     pendingCombo = null;
+    pendingDefense = def;
     currentCombo = combo;
-    currentGapMs = gapMs;
+    currentGapMs = def ? def.beforeMs : gapMs;
     gapStart = null;
     awaitingSpeech = true;
     combosCalled += 1;
@@ -297,6 +335,8 @@ export function createSession({ config, settings, combos, rng, intensity: overri
       phaseStart += now - pausedAt;
       awaitingSpeech = false;
       gapStart = now;
+      // A defense owed from before the pause would come out of nowhere.
+      if (pendingDefense) { pendingDefense = null; currentGapMs = intensity.baseGapMs; }
       if (currentGapMs <= 0) currentGapMs = intensity.baseGapMs;
       return drain();
     },

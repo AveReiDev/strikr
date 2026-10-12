@@ -38,13 +38,16 @@ const app = {
 };
 
 async function boot() {
-  const [config, library, strikes] = await Promise.all([
+  const [config, library, strikes, moves] = await Promise.all([
     fetch('./data/config.json').then((r) => r.json()),
     fetch('./data/combos.json').then((r) => r.json()),
     fetch('./data/strikes.json').then((r) => r.json()),
+    fetch('./data/moves.json').then((r) => r.json()),
   ]);
-  // The strike dictionary rides on config so every selector can reach it.
+  // The strike dictionary and the defense list ride on config so every
+  // selector can reach them.
   config.strikes = strikes;
+  config.moves = moves;
   app.config = config;
   app.combos = library.combos;
 
@@ -229,7 +232,8 @@ function handle(events) {
     switch (e.type) {
       case 'say':
         app.speech.speak(e.text).then(() => {
-          if (e.tag === 'combo' && app.session) handle(app.session.speechEnded(now()));
+          // A defense is timed like a combo: its gap starts when the voice stops.
+          if ((e.tag === 'combo' || e.tag === 'defense') && app.session) handle(app.session.speechEnded(now()));
         });
         break;
       case 'bell':
@@ -245,6 +249,9 @@ function handle(events) {
         if (!e.combo.ladder || e.combo.ladder.rung === e.combo.ladder.of) {
           app.combosCalledIds.push(e.combo.ladder?.baseId ?? e.combo.id);
         }
+        break;
+      case 'defense':
+        app.screens.workout.showDefense(e.defense.name);
         break;
       case 'finisher':
         app.screens.workout.setCombo('', '');
@@ -292,7 +299,7 @@ function finished(summary) {
     roundsPlanned: summary.roundsPlanned,
     focus: app.workoutFocus ?? undefined,
     focusWeak: app.workoutFocusWeak,
-    mode: LADDER_MODES.includes(app.workoutMode) ? app.workoutMode : undefined,
+    mode: app.workoutMode && app.workoutMode !== 'random' ? app.workoutMode : undefined,
     rampUp: summary.rampUp || undefined,
     finisherSec: summary.finisherSec || undefined,
   });

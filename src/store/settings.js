@@ -12,7 +12,7 @@ export const SPORTS = ['boxing', 'muaythai', 'kickboxing'];
 export const TIERS = ['beginner', 'intermediate', 'advanced'];
 export const INTENSITIES = ['light', 'medium', 'hard', 'custom'];
 export const ROUND_LENGTHS = [1, 2, 3, 4, 5, 10];
-export const WORKOUT_MODES = ['random', 'ladder', 'pyramid'];
+export const WORKOUT_MODES = ['random', 'ladder', 'pyramid', 'defense'];
 
 /** Home's collapsible sections, by id. `homeCollapsed` lists the closed ones. */
 export const HOME_SECTIONS = ['sport', 'tier', 'intensity', 'workoutMode', 'focus', 'rounds'];

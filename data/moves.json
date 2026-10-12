@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "_comment": "Callouts that are not combos. defense: called after a combo in Defense mode, like the opponent's return. 'after' lists what the combo's LAST strike must be for this defense to fit, matched against that strike's category (jab, cross, hook, uppercut, teep, leadKick, rearKick, highKick, knee, elbow), weapon (punch, kick, knee, elbow, clinch), range (kicking, punching, close, clinch; boxing inside, outside), level (head, body, leg), or weapon-level (kick-leg, kick-body, kick-head) — see data/strikes.json. 'sports' limits a move to those sports; leave it out for all three. When nothing fits, any move for the sport is used.",
+  "defense": [
+    { "name": "Slip",       "after": ["jab", "cross"] },
+    { "name": "Parry",      "after": ["jab", "cross"] },
+    { "name": "Pull back",  "after": ["jab", "cross", "uppercut"] },
+    { "name": "Roll",       "after": ["hook"] },
+    { "name": "Cover",      "after": ["hook", "uppercut", "close"] },
+    { "name": "Pivot out",  "after": ["hook", "close"] },
+    { "name": "Circle out", "after": ["close", "clinch", "inside"] },
+    { "name": "Check",      "after": ["kick-leg"], "sports": ["muaythai", "kickboxing"] },
+    { "name": "Block",      "after": ["kick-body"], "sports": ["muaythai", "kickboxing"] },
+    { "name": "Catch",      "after": ["kick-body", "teep"], "sports": ["muaythai"] },
+    { "name": "Step back",  "after": ["kick", "knee"], "sports": ["muaythai", "kickboxing"] },
+    { "name": "Lean back",  "after": ["kick-head", "cross"], "sports": ["muaythai", "kickboxing"] },
+    { "name": "Frame",      "after": ["clinch", "knee", "elbow"], "sports": ["muaythai"] }
+  ]
+}

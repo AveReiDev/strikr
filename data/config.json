@@ -26,6 +26,9 @@
   "_comment_finisher": "Finisher: the last finisherSec of every round switches to 1-2 action combos with this baseGapMs (perActionMs is unchanged, see above). Never more than half the round. callout is spoken once as it begins.",
   "finisher": { "baseGapMs": 300, "maxActions": 2, "callout": "Finisher!" },
 
+  "_comment_defense": "Defense mode: the defense is called this long after the combo's execution time (perActionMs x actions) has passed, so it lands like the opponent's return. Tune on the bag.",
+  "defense": { "delayMs": 300 },
+
   "_comment_load": "Weekly load. A session's load is round minutes x intensityFactor (Custom has no stored gap in history, so it counts as Medium). The week's target is weeklyIncrease x the last normal week. After easyAfterWeeks normal weeks in a row the next is an easy week at easyRatio. A past week at or under easyDetectRatio of normal, or empty, counts as recovery and restarts the count.",
   "load": {
     "intensityFactor": { "light": 1, "medium": 1.25, "hard": 1.5, "custom": 1.25 },

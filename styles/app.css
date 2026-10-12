@@ -235,6 +235,10 @@ body[data-mode="workout"] #tabbar { display: none; }
 .chip.stack .chip-sub { letter-spacing: 0.02em; }
 /* "Pyramid" at full tracking is wider than a third of a phone screen. */
 [data-group="workoutMode"] .chip.stack .chip-title { letter-spacing: 0.02em; }
+/* Two-choice rows split in half: four modes sit two by two, and the weak
+   spots pair no longer breaks "combos" mid-word in a third of the width. */
+[data-group="workoutMode"],
+[data-group="weakSpots"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
 /* ---- primary action -------------------------------------------------- */
 
@@ -438,6 +442,17 @@ input[type="range"] { flex: 1; accent-color: var(--accent); min-height: var(--ta
 }
 /* The finisher is the one moment the screen should shout. */
 .finisher #wk-phase { color: var(--accent); }
+.wk-defense {
+  color: var(--accent);
+  font-size: var(--size-display);
+  font-weight: var(--weight-black);
+  letter-spacing: var(--track-tight);
+  line-height: var(--leading-tight);
+  text-transform: uppercase;
+  margin: calc(-1 * var(--sp-2)) 0 var(--sp-4);
+  min-height: 1em;
+}
+.wk-defense:empty { min-height: 0; margin: 0; }
 .wk-rung {
   color: var(--fg-dim);
   font-size: var(--size-sm);

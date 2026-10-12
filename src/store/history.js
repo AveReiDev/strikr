@@ -15,7 +15,7 @@ const SPORTS = ['boxing', 'muaythai', 'kickboxing'];
 const TIERS = ['beginner', 'intermediate', 'advanced'];
 const INTENSITIES = ['light', 'medium', 'hard', 'custom'];
 // Random workouts store no mode, so only the drill modes are listed.
-const MODES = ['ladder', 'pyramid'];
+const MODES = ['ladder', 'pyramid', 'defense'];
 
 /**
  * How a session felt, rated once it ends: 1 Easy … 5 Brutal. Unrated

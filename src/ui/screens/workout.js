@@ -27,6 +27,7 @@ export function createWorkoutScreen({ root, onPause, onAbort }) {
     <div class="wk-track"><div class="wk-bar" id="wk-bar"></div></div>
     <div class="wk-combo" id="wk-combo"></div>
     <div class="wk-rung" id="wk-rung"></div>
+    <div class="wk-defense" id="wk-defense"></div>
     <div class="wk-actions">
       <button id="wk-pause">Pause</button>
       <button id="wk-abort" class="abort">Abort</button>
@@ -41,6 +42,7 @@ export function createWorkoutScreen({ root, onPause, onAbort }) {
     bar: root.querySelector('#wk-bar'),
     combo: root.querySelector('#wk-combo'),
     rung: root.querySelector('#wk-rung'),
+    defense: root.querySelector('#wk-defense'),
     pause: root.querySelector('#wk-pause'),
     status: root.querySelector('#wk-status'),
   };
@@ -52,10 +54,16 @@ export function createWorkoutScreen({ root, onPause, onAbort }) {
     setCombo(text, sub = '') {
       el.combo.textContent = text;
       el.rung.textContent = sub;
+      el.defense.textContent = '';
+    },
+    /** Defense mode: the return to defend, under the combo just thrown. */
+    showDefense(text) {
+      el.defense.textContent = text;
     },
     clearCombo() {
       el.combo.textContent = '';
       el.rung.textContent = '';
+      el.defense.textContent = '';
     },
     setStatus(text) { el.status.textContent = text ?? ''; },
 

@@ -361,8 +361,8 @@ Each phase ships on its own: tests, then a browser smoke test, then
 
 | Phase | Work | Why here |
 |---|---|---|
-| 8A | Strike dictionary, lint test, `composeWeights`, `knees` tag + retag, data-bug fixes, `PROJECT-STATUS` corrections | Everything else reads from it |
-| 8B | Defense mode | Highest training value; no new combos; small engine change |
+| 8A | **Done, v1.11.0.** Strike dictionary, lint test, `composeWeights`, `knees` tag + retag, data-bug fixes, `PROJECT-STATUS` corrections | Everything else reads from it |
+| 8B | Defense mode — **done, v1.13.0** | Highest training value; no new combos; small engine change |
 | 8C | Levels emphasis + ~30 combos | Cheapest new mode once 8A exists |
 | 8D | Round plan + `TIMED` state + guided warmup | Builds the timed-segment engine on the simpler use |
 | 8E | S&C exercise rounds, bodyweight + gym library, load integration | Reuses 8D |

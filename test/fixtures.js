@@ -2,14 +2,15 @@
  * Shared test setup. Not a test file itself (npm test runs test/*.test.js).
  *
  * loadConfig() mirrors main.js boot(): config.json with the strike dictionary
- * on config.strikes and the defense list on config.moves, as they are live.
+ * on config.strikes, the defense list on config.moves and the warm-up
+ * routines on config.warmups, as they are live.
  */
 import { readFileSync } from 'node:fs';
 
 const read = (name) => JSON.parse(readFileSync(new URL(`../data/${name}`, import.meta.url)));
 
 export function loadConfig() {
-  return { ...read('config.json'), strikes: read('strikes.json'), moves: read('moves.json') };
+  return { ...read('config.json'), strikes: read('strikes.json'), moves: read('moves.json'), warmups: read('warmups.json') };
 }
 
 export const STRIKES = read('strikes.json');

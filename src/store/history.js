@@ -139,6 +139,7 @@ function sanitiseHistory(raw) {
     if (FEELS.includes(r.feel)) rec.feel = r.feel;
     if (r.rampUp === true) rec.rampUp = true;
     if ([15, 20, 30].includes(r.finisherSec)) rec.finisherSec = r.finisherSec;
+    if ([5, 8, 12].includes(r.warmupMin)) rec.warmupMin = r.warmupMin;
     out.push(rec);
   }
   return out;

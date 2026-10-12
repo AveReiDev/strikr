@@ -38,16 +38,18 @@ const app = {
 };
 
 async function boot() {
-  const [config, library, strikes, moves] = await Promise.all([
+  const [config, library, strikes, moves, warmups] = await Promise.all([
     fetch('./data/config.json').then((r) => r.json()),
     fetch('./data/combos.json').then((r) => r.json()),
     fetch('./data/strikes.json').then((r) => r.json()),
     fetch('./data/moves.json').then((r) => r.json()),
+    fetch('./data/warmups.json').then((r) => r.json()),
   ]);
   // The strike dictionary and the defense list ride on config so every
   // selector can reach them.
   config.strikes = strikes;
   config.moves = moves;
+  config.warmups = warmups;
   app.config = config;
   app.combos = library.combos;
 
@@ -253,6 +255,12 @@ function handle(events) {
       case 'defense':
         app.screens.workout.showDefense(e.defense.name);
         break;
+      case 'step':
+        app.screens.workout.setCombo(
+          e.step.name,
+          [e.step.cue, e.next ? `Next: ${e.next.name}` : ''].filter(Boolean).join(' · '),
+        );
+        break;
       case 'finisher':
         app.screens.workout.setCombo('', '');
         break;
@@ -303,6 +311,7 @@ function finished(summary) {
     emphasis: summary.emphasis !== 'off' ? summary.emphasis : undefined,
     rampUp: summary.rampUp || undefined,
     finisherSec: summary.finisherSec || undefined,
+    warmupMin: summary.warmupMin || undefined,
   });
   app.screens.history.refresh();
   if (saved) app.screens.home.askFeel(saved.id);
@@ -338,6 +347,7 @@ function repeatSession(record) {
   app.settings.set('emphasis', record.emphasis ?? 'off');
   app.settings.set('rampUp', record.rampUp === true);
   app.settings.set('finisherSec', record.finisherSec ?? 0);
+  app.settings.set('warmupMin', record.warmupMin ?? 0);
 
   app.screens.home.refresh();
   app.screens.settings.refresh();
@@ -349,6 +359,7 @@ function repeatSession(record) {
     (record.emphasis ? `, ${record.emphasis} emphasis` : '') +
     (record.rampUp ? ', ramp up' : '') +
     (record.finisherSec ? `, ${record.finisherSec}s finisher` : '') +
+    (record.warmupMin ? `, ${record.warmupMin} min warm-up` : '') +
     (record.focus ? `, ${TAG_LABEL[record.focus] ?? record.focus} focus.` : '.')
   );
 }

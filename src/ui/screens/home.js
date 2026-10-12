@@ -176,6 +176,7 @@ export function createHomeScreen({ root, settings, config, library, history, onS
     const noun = ladder ? 'ladder' : 'combo';
     // Ramp and finisher live in Settings, so say here that they are on.
     const extras = [
+      settings.get('warmupMin') ? `${settings.get('warmupMin')} min warm-up` : '',
       settings.get('rampUp') ? 'ramp up' : '',
       settings.get('finisherSec') ? `${settings.get('finisherSec')}s finisher` : '',
     ].filter(Boolean).map((x) => ` · ${x}`).join('');

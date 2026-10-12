@@ -27,8 +27,9 @@ Last updated 12 October 2026.
 | 8A — Strike dictionary (v1.11.0) | **Done**, awaiting device test |
 | Collapsible Home, rounds on Home (v1.12.0) | **Done**, live |
 | 8B — Defense mode (v1.13.0) | **Done**, live, awaiting bag test |
-| 8C — Levels emphasis (v1.14.0) | **Done**, awaiting bag test |
-| 8D–8H — New training modes | Planned, see `PHASE8-PLAN.md` |
+| 8C — Levels emphasis (v1.14.0) | **Done**, live, awaiting bag test |
+| 8D — Workout plan and guided warm-up (v1.15.0) | **Done**, awaiting device test |
+| 8E–8H — New training modes | Planned, see `PHASE8-PLAN.md` |
 
 ### Installing it on your phone
 
@@ -483,6 +484,29 @@ The foundation for the Phase 8 modes (`PHASE8-PLAN.md`).
   gap: boxing had almost no body/head alternation, and Muay Thai and
   kickboxing beginners had no combo with two level changes.
 - History, Repeat and the history list keep the emphasis.
+
+## Phase 8D: workout plan and guided warm-up, 12 October 2026 (v1.15.0)
+
+- **Workout plan.** `src/engine/plan.js` builds the workout as segments
+  (bag, rest, timed) and the session walks them. With no add-ons the plan is
+  bag, rest, … bag, exactly the old behaviour, and every earlier session test
+  still passes unchanged. Round numbers, ramp up and finishers count bag
+  rounds only. S&C rounds (8E) will reuse the timed segment.
+- **Timed segments** have a new `TIMED` state with precomputed cues. Each
+  cue waits until the previous one's estimated speech has finished, because
+  iOS queues overlapping speech and it would run late. If several cues are
+  due on one tick, only the latest is said.
+- **Guided warm-up** (Settings › Guided warm-up: Off, 5, 8, 12 min).
+  Routines in `data/warmups.json`, Sonnet-authored in RAMP order: raise,
+  mobilise (ankles, hips, thoracic, shoulders; neck in 8 and 12), then pogo
+  hops and light → moderate → sharp shadowboxing. No hold over 30 s. The
+  voice says each step's name and a short coaching cue, and "Switch sides"
+  halfway through two-sided moves. The screen shows the step, the cue and
+  the next step.
+- After the warm-up: a 45 s rest (`config.warmup.transitionSec`) opened with
+  "Warm-up done. Gloves on.", then the usual 10 / 3-2-1 into round 1.
+- Warm-up time never counts toward weekly load (load is rounds × round
+  length). History, Repeat and Home's pool line show it.
 
 ## Still open
 

@@ -32,6 +32,7 @@ export const CHOICES = {
   countdownSec: [0, 3, 5, 10],
   ladderReps: [1, 2, 3],
   finisherSec: [0, 15, 20, 30],
+  warmupMin: [0, 5, 8, 12],
 };
 
 export const GOAL_INTENSITIES = ['light', 'medium', 'hard'];
@@ -57,6 +58,7 @@ export function settingsSchema(config) {
     ladderReps: { oneOf: CHOICES.ladderReps },
     rampUp: { type: 'boolean' },
     finisherSec: { oneOf: CHOICES.finisherSec },
+    warmupMin: { oneOf: CHOICES.warmupMin },
     customIntensity: {
       type: 'object',
       defaults: { baseGapMs: custom.baseGapMs, perActionMs: custom.perActionMs },
@@ -87,6 +89,7 @@ export function defaultSettings(config) {
     ladderReps: 1,
     rampUp: false,
     finisherSec: 0,
+    warmupMin: 0,
     focus: null,
     customIntensity: {
       baseGapMs: config.intensity.custom.baseGapMs,

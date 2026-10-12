@@ -53,6 +53,14 @@ export function createSettingsScreen({ root, settings, speech, onReset, onThemeC
         <span class="row-value"><span data-val="countdownSec"></span><span class="chev">&rsaquo;</span></span>
       </button>
 
+      <button class="row" data-pick="warmupMin">
+        <span>
+          <span class="row-title">Guided warm-up</span>
+          <span class="row-sub">Timed steps before round 1</span>
+        </span>
+        <span class="row-value"><span data-val="warmupMin"></span><span class="chev">&rsaquo;</span></span>
+      </button>
+
       <div class="row">
         <span>
           <span class="row-title">Ramp up</span>
@@ -186,6 +194,7 @@ export function createSettingsScreen({ root, settings, speech, onReset, onThemeC
     countdownSec: (v) => (v === 0 ? 'Off' : `${v}s`),
     ladderReps: (v) => `${v}×`,
     finisherSec: (v) => (v === 0 ? 'Off' : `Last ${v}s`),
+    warmupMin: (v) => (v === 0 ? 'Off' : `${v} min`),
   };
 
   const PICKER_TITLE = {
@@ -194,6 +203,7 @@ export function createSettingsScreen({ root, settings, speech, onReset, onThemeC
     countdownSec: 'Countdown timer',
     ladderReps: 'Ladder reps per rung',
     finisherSec: 'Finisher',
+    warmupMin: 'Guided warm-up',
   };
 
   const goalFmt = {

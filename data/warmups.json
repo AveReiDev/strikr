@@ -1,0 +1,294 @@
+{
+  "schemaVersion": 1,
+  "_comment": "Guided warm-up routines played before round 1. Keyed by total minutes (5, 8, 12). Each routine follows RAMP order: raise (skip or bounce, jacks, knees), mobilise (ankles, hips, thoracic spine, shoulders, neck), then potentiate (pogo hops, then shadowboxing light, moderate, sharp so the last step feeds round 1). Rules: step sec is a multiple of 5, at least 20 (at least 30 when sides is true); each routine sums to exactly minutes x 60 seconds; no static hold over 30 seconds; no equipment except an optional rope; no clinch work, so it suits boxing, Muay Thai and kickboxing. Names are 2-4 plain words because they are spoken by text-to-speech; cue is an optional coaching point of at most 6 words; sides:true means the voice says Switch sides at the halfway point.",
+  "routines": {
+    "5": [
+      {
+        "name": "Skip or bounce",
+        "sec": 35,
+        "cue": "Light on your toes",
+        "phase": "raise"
+      },
+      {
+        "name": "Jumping jacks",
+        "sec": 20,
+        "cue": "Stay relaxed and rhythmic",
+        "phase": "raise"
+      },
+      {
+        "name": "Ankle rocks",
+        "sec": 20,
+        "cue": "Knees over toes, heels down",
+        "phase": "mobilise"
+      },
+      {
+        "name": "Leg swings",
+        "sec": 30,
+        "cue": "Tall posture, swing loosely",
+        "sides": true,
+        "phase": "mobilise"
+      },
+      {
+        "name": "Hip circles",
+        "sec": 20,
+        "cue": "Big, slow circles",
+        "phase": "mobilise"
+      },
+      {
+        "name": "Deep squat",
+        "sec": 25,
+        "cue": "Chest up, elbows push knees",
+        "phase": "mobilise"
+      },
+      {
+        "name": "Thoracic rotations",
+        "sec": 25,
+        "cue": "Turn from the upper back",
+        "phase": "mobilise"
+      },
+      {
+        "name": "Arm circles",
+        "sec": 20,
+        "cue": "Start small, get bigger",
+        "phase": "mobilise"
+      },
+      {
+        "name": "Pogo hops",
+        "sec": 20,
+        "cue": "Stiff ankles, quick contacts",
+        "phase": "potentiate"
+      },
+      {
+        "name": "Light shadowboxing",
+        "sec": 25,
+        "cue": "Hands and kicks, easy pace",
+        "phase": "potentiate"
+      },
+      {
+        "name": "Moderate shadowboxing",
+        "sec": 30,
+        "cue": "Add movement and head angles",
+        "phase": "potentiate"
+      },
+      {
+        "name": "Sharp shadowboxing",
+        "sec": 30,
+        "cue": "Fast, snappy, stay balanced",
+        "phase": "potentiate"
+      }
+    ],
+    "8": [
+      {
+        "name": "Skip or bounce",
+        "sec": 50,
+        "cue": "Light on your toes",
+        "phase": "raise"
+      },
+      {
+        "name": "Jumping jacks",
+        "sec": 30,
+        "cue": "Stay relaxed and rhythmic",
+        "phase": "raise"
+      },
+      {
+        "name": "High knees",
+        "sec": 30,
+        "cue": "Drive up, stay tall",
+        "phase": "raise"
+      },
+      {
+        "name": "Ankle rocks",
+        "sec": 30,
+        "cue": "Knees over toes, heels down",
+        "phase": "mobilise"
+      },
+      {
+        "name": "Front leg swings",
+        "sec": 30,
+        "cue": "Tall posture, swing loosely",
+        "sides": true,
+        "phase": "mobilise"
+      },
+      {
+        "name": "Side leg swings",
+        "sec": 30,
+        "cue": "Swing across, hips square",
+        "sides": true,
+        "phase": "mobilise"
+      },
+      {
+        "name": "Hip circles",
+        "sec": 30,
+        "cue": "Big, slow circles",
+        "phase": "mobilise"
+      },
+      {
+        "name": "Deep squat",
+        "sec": 30,
+        "cue": "Chest up, elbows push knees",
+        "phase": "mobilise"
+      },
+      {
+        "name": "Thoracic rotations",
+        "sec": 30,
+        "cue": "Turn from the upper back",
+        "phase": "mobilise"
+      },
+      {
+        "name": "Arm circles",
+        "sec": 30,
+        "cue": "Start small, get bigger",
+        "phase": "mobilise"
+      },
+      {
+        "name": "Neck rolls",
+        "sec": 20,
+        "cue": "Slow and gentle",
+        "phase": "mobilise"
+      },
+      {
+        "name": "Pogo hops",
+        "sec": 20,
+        "cue": "Stiff ankles, quick contacts",
+        "phase": "potentiate"
+      },
+      {
+        "name": "Light shadowboxing",
+        "sec": 30,
+        "cue": "Hands and kicks, easy pace",
+        "phase": "potentiate"
+      },
+      {
+        "name": "Moderate shadowboxing",
+        "sec": 40,
+        "cue": "Add movement and head angles",
+        "phase": "potentiate"
+      },
+      {
+        "name": "Sharp shadowboxing",
+        "sec": 50,
+        "cue": "Fast, snappy, stay balanced",
+        "phase": "potentiate"
+      }
+    ],
+    "12": [
+      {
+        "name": "Skip or bounce",
+        "sec": 60,
+        "cue": "Light on your toes",
+        "phase": "raise"
+      },
+      {
+        "name": "Jumping jacks",
+        "sec": 40,
+        "cue": "Stay relaxed and rhythmic",
+        "phase": "raise"
+      },
+      {
+        "name": "High knees",
+        "sec": 30,
+        "cue": "Drive up, stay tall",
+        "phase": "raise"
+      },
+      {
+        "name": "Butt kicks",
+        "sec": 30,
+        "cue": "Heels to glutes, quick",
+        "phase": "raise"
+      },
+      {
+        "name": "Ankle rocks",
+        "sec": 30,
+        "cue": "Knees over toes, heels down",
+        "phase": "mobilise"
+      },
+      {
+        "name": "Front leg swings",
+        "sec": 40,
+        "cue": "Tall posture, swing loosely",
+        "sides": true,
+        "phase": "mobilise"
+      },
+      {
+        "name": "Side leg swings",
+        "sec": 40,
+        "cue": "Swing across, hips square",
+        "sides": true,
+        "phase": "mobilise"
+      },
+      {
+        "name": "Hip circles",
+        "sec": 40,
+        "cue": "Big, slow circles",
+        "phase": "mobilise"
+      },
+      {
+        "name": "Hip openers",
+        "sec": 40,
+        "cue": "Lift knee, open it out",
+        "sides": true,
+        "phase": "mobilise"
+      },
+      {
+        "name": "Deep squat",
+        "sec": 30,
+        "cue": "Chest up, elbows push knees",
+        "phase": "mobilise"
+      },
+      {
+        "name": "Lunge and twist",
+        "sec": 40,
+        "cue": "Step back, rotate over front knee",
+        "phase": "mobilise"
+      },
+      {
+        "name": "Thoracic rotations",
+        "sec": 40,
+        "cue": "Turn from the upper back",
+        "phase": "mobilise"
+      },
+      {
+        "name": "Arm circles",
+        "sec": 30,
+        "cue": "Start small, get bigger",
+        "phase": "mobilise"
+      },
+      {
+        "name": "Arm swings",
+        "sec": 30,
+        "cue": "Hug yourself, then open wide",
+        "phase": "mobilise"
+      },
+      {
+        "name": "Neck rolls",
+        "sec": 30,
+        "cue": "Slow and gentle",
+        "phase": "mobilise"
+      },
+      {
+        "name": "Pogo hops",
+        "sec": 30,
+        "cue": "Stiff ankles, quick contacts",
+        "phase": "potentiate"
+      },
+      {
+        "name": "Light shadowboxing",
+        "sec": 40,
+        "cue": "Hands and kicks, easy pace",
+        "phase": "potentiate"
+      },
+      {
+        "name": "Moderate shadowboxing",
+        "sec": 50,
+        "cue": "Add movement and head angles",
+        "phase": "potentiate"
+      },
+      {
+        "name": "Sharp shadowboxing",
+        "sec": 50,
+        "cue": "Fast, snappy, stay balanced",
+        "phase": "potentiate"
+      }
+    ]
+  }
+}

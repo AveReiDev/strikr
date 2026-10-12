@@ -32,6 +32,9 @@
   "_comment_emphasis": "Emphasis is a soft weight, never a filter. Levels: a combo's draw weight is multiplied by 1 + levelsPerChange x (number of times adjacent strikes switch between head, body and leg).",
   "emphasis": { "levelsPerChange": 1 },
 
+  "_comment_warmup": "Guided warm-up (routines in data/warmups.json). After it, a rest of transitionSec to glove up, opened with doneCallout, then the usual 10 / 3-2-1 lead-in to round 1. Warm-up time never counts toward weekly load.",
+  "warmup": { "transitionSec": 45, "doneCallout": "Warm-up done. Gloves on." },
+
   "_comment_load": "Weekly load. A session's load is round minutes x intensityFactor (Custom has no stored gap in history, so it counts as Medium). The week's target is weeklyIncrease x the last normal week. After easyAfterWeeks normal weeks in a row the next is an easy week at easyRatio. A past week at or under easyDetectRatio of normal, or empty, counts as recovery and restarts the count.",
   "load": {
     "intensityFactor": { "light": 1, "medium": 1.25, "hard": 1.5, "custom": 1.25 },

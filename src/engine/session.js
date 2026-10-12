@@ -8,11 +8,16 @@
  * itself.
  *
  *   IDLE -> PREPARING -> COUNTDOWN -> ROUND -> REST -> ROUND ... -> COMPLETE
+ *
+ * After the countdown it walks a plan (src/engine/plan.js): bag rounds, rests
+ * and timed segments. A warm-up adds TIMED -> REST before the first round.
+ * Round numbers, ramp up and finishers count bag rounds only.
  */
 
 import { createSelector, buildPool } from './selector.js';
 import { createLadderSelector, LADDER_MODES } from './ladder.js';
 import { createDefenseSelector } from './defense.js';
+import { buildPlan } from './plan.js';
 import {
   gapMsFor,
   voiceRate,
@@ -27,6 +32,7 @@ export const STATES = {
   COUNTDOWN: 'COUNTDOWN',
   ROUND: 'ROUND',
   REST: 'REST',
+  TIMED: 'TIMED',
   COMPLETE: 'COMPLETE',
 };
 
@@ -40,8 +46,17 @@ export function createSession({ config, settings, combos, rng, intensity: overri
   let intensity = peak;   // this round's timing; differs from peak only when ramping
   const rate = voiceRate(settings.voiceSpeedPct, config.voiceRateRange);
   const roundMs = settings.roundLengthMin * 60 * 1000;
-  const restMs = settings.restBetweenRoundsSec * 1000;
   const countdownMs = settings.countdownSec * 1000;
+
+  // No steps (a missing or empty routine) means no warm-up at all.
+  const routine = settings.warmupMin ? config.warmups?.routines?.[String(settings.warmupMin)] : null;
+  const warmupSteps = routine?.length ? routine : null;
+  const plan = buildPlan(settings, { warmup: warmupSteps, rate, config });
+  let segIndex = -1;
+  let restMs = 0;                // the current rest segment's length
+  let timed = null;              // the current timed segment
+  let nextCue = 0;               // index of the next cue not yet due
+  let stepIndex = -1;            // the timed step on screen
 
   const selectorArgs = {
     combos,
@@ -144,8 +159,27 @@ export function createSession({ config, settings, combos, rng, intensity: overri
   function remainingMs(now) {
     if (state === STATES.ROUND) return roundMs - elapsed(now);
     if (state === STATES.REST) return restMs - elapsed(now);
+    if (state === STATES.TIMED) return timed.durationMs - elapsed(now);
     if (state === STATES.COUNTDOWN) return countdownMs - elapsed(now);
     return 0;
+  }
+
+  /** Move on to the next plan segment, or finish after the last. */
+  function advance(now) {
+    segIndex += 1;
+    const seg = plan[segIndex];
+    if (!seg) { finish(now, true); return; }
+    if (seg.type === 'bag') { enterRound(now); return; }
+    if (seg.type === 'rest') {
+      restMs = seg.durationMs;
+      transition(STATES.REST, now);
+      if (seg.enterSay) emit({ type: 'say', text: seg.enterSay, tag: 'rest' });
+      return;
+    }
+    timed = seg;
+    nextCue = 0;
+    stepIndex = -1;
+    transition(STATES.TIMED, now);
   }
 
   function enterRound(now) {
@@ -174,6 +208,7 @@ export function createSession({ config, settings, combos, rng, intensity: overri
       roundsPlanned: settings.roundsPerWorkout,
       mode: settings.workoutMode ?? 'random',
       emphasis: settings.emphasis ?? 'off',
+      warmupMin: warmupSteps ? settings.warmupMin : 0,
       rampUp: Boolean(settings.rampUp),
       finisherSec: finisherSelector ? settings.finisherSec : 0,
       roundLengthSec: settings.roundLengthMin * 60,
@@ -188,7 +223,7 @@ export function createSession({ config, settings, combos, rng, intensity: overri
 
   function tickCountdown(now) {
     const left = countdownMs - elapsed(now);
-    if (left <= 0) { enterRound(now); return; }
+    if (left <= 0) { advance(now); return; }
     const secs = Math.ceil(left / 1000);
     if (!said.has(secs)) {
       said.add(secs);
@@ -202,8 +237,7 @@ export function createSession({ config, settings, combos, rng, intensity: overri
     if (left <= 0) {
       roundsCompleted += 1;
       emit({ type: 'bell' });
-      if (roundIndex >= settings.roundsPerWorkout) finish(now, true);
-      else transition(STATES.REST, now);
+      advance(now);
       return;
     }
 
@@ -272,9 +306,29 @@ export function createSession({ config, settings, combos, rng, intensity: overri
     emit({ type: 'say', text, tag: 'combo' });
   }
 
+  /**
+   * A timed segment: say each cue as its moment arrives. If several are due
+   * at once (a slow tick), only the latest is said; a backlog would queue on
+   * iOS and run late.
+   */
+  function tickTimed(now) {
+    const t = elapsed(now);
+    if (t >= timed.durationMs) { advance(now); return; }
+
+    let due = -1;
+    while (nextCue < timed.cues.length && timed.cues[nextCue].atMs <= t) due = nextCue++;
+    if (due >= 0) emit({ type: 'say', text: applyPronunciation(timed.cues[due].text, config.pronunciation), tag: 'cue' });
+
+    const step = timed.steps.findIndex((s) => t >= s.startMs && t < s.endMs);
+    if (step !== stepIndex && step >= 0) {
+      stepIndex = step;
+      emit({ type: 'step', step: timed.steps[step], next: timed.steps[step + 1] ?? null, index: step, of: timed.steps.length });
+    }
+  }
+
   function tickRest(now) {
     const left = restMs - elapsed(now);
-    if (left <= 0) { enterRound(now); return; }
+    if (left <= 0) { advance(now); return; }
     const secs = Math.ceil(left / 1000);
     if (REST_ANNOUNCE_AT.includes(secs) && !said.has(secs)) {
       said.add(secs);
@@ -291,6 +345,7 @@ export function createSession({ config, settings, combos, rng, intensity: overri
     start(now) {
       if (state !== STATES.IDLE) return drain();
       startedAt = now;
+      segIndex = -1;
       roundIndex = 0;
       roundsCompleted = 0;
       combosCalled = 0;
@@ -311,6 +366,7 @@ export function createSession({ config, settings, combos, rng, intensity: overri
       if (state === STATES.COUNTDOWN) tickCountdown(now);
       else if (state === STATES.ROUND) tickRound(now);
       else if (state === STATES.REST) tickRest(now);
+      else if (state === STATES.TIMED) tickTimed(now);
       return drain();
     },
 
@@ -361,8 +417,13 @@ export function createSession({ config, settings, combos, rng, intensity: overri
         totalMs:
           state === STATES.ROUND ? roundMs
           : state === STATES.REST ? restMs
+          : state === STATES.TIMED ? timed.durationMs
           : state === STATES.COUNTDOWN ? countdownMs
           : 0,
+        segment: plan[segIndex]?.type ?? null,
+        segmentKind: plan[segIndex]?.kind ?? null,
+        step: state === STATES.TIMED && stepIndex >= 0 ? timed.steps[stepIndex] : null,
+        nextStep: state === STATES.TIMED && stepIndex >= 0 ? timed.steps[stepIndex + 1] ?? null : null,
         combo: currentCombo,
         finisher: finisherAnnounced && state === STATES.ROUND,
         intensity: state === STATES.ROUND ? intensity : null,

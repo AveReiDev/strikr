@@ -70,10 +70,13 @@ export function createWorkoutScreen({ root, onPause, onAbort }) {
     render(snap) {
       el.phase.textContent = snap.paused
         ? 'Paused'
-        : snap.finisher ? 'Finisher' : (PHASE_LABEL[snap.state] ?? snap.state);
+        : snap.finisher ? 'Finisher'
+          : snap.segmentKind === 'warmup' ? 'Warm-up'
+            : (PHASE_LABEL[snap.state] ?? snap.state);
       root.classList.toggle('finisher', Boolean(snap.finisher && !snap.paused));
+      // Round 0 is the rest after a warm-up: no round has happened yet.
       el.round.textContent =
-        snap.state === STATES.ROUND || snap.state === STATES.REST
+        (snap.state === STATES.ROUND || snap.state === STATES.REST) && snap.roundIndex > 0
           ? `${snap.roundIndex} / ${snap.roundsPerWorkout}`
           : '';
       el.clock.textContent = formatClock(snap.remainingMs);

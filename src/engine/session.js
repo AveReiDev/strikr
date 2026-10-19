@@ -118,7 +118,9 @@ export function createSession({ config, settings, combos, rng, intensity: overri
   };
 
   // Defense mode: the defense is called once the combo has had time to land
-  // (its per-action time) plus a short beat, like the opponent's return.
+  // (its per-action time) plus a short beat, like the opponent's return. It has
+  // its own per-action time, shorter than the intensity's, so it cuts in on the
+  // combo's tail instead of arriving after it.
   const defenseDelayMs = config.defense?.delayMs ?? 300;
   const defenseTiming = (combo) => {
     const d = combo.defense;
@@ -126,7 +128,7 @@ export function createSession({ config, settings, combos, rng, intensity: overri
     const text = applyPronunciation(d.speech, config.pronunciation);
     return {
       text,
-      beforeMs: intensity.perActionMs * combo.actions + defenseDelayMs,
+      beforeMs: (config.defense?.perActionMs ?? intensity.perActionMs) * combo.actions + defenseDelayMs,
       estSpeechMs: estimateSpeechMs(text, rate, config.speechEstimate),
       afterMs: gapMsFor(d, intensity),
     };

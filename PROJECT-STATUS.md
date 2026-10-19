@@ -457,6 +457,11 @@ The foundation for the Phase 8 modes (`PHASE8-PLAN.md`).
   the bag). After it, the usual recovery gap for one action, then the next
   combo. The round-end lookahead treats combo and defense as one unit, so the
   bell never cuts a defense off.
+- **Tuning (v1.19.1):** the defense felt late and was sometimes inaudible over
+  bag noise. It now has its own `config.defense.perActionMs` (550, was the
+  intensity's 700) and `delayMs` 150 (was 300), so it comes ~600 ms earlier on
+  a 3-strike combo, and its own `config.defense.volume` (1.0; combos stay at
+  `speechVolume` 0.55). All three are in `data/config.json`; tune on the bag.
 - **Pairing:** `data/moves.json` lists 13 defenses, each with the last
   strikes it answers: a hook → Roll, Cover or Pivot out; a low kick → Check or
   Step back; a body kick or teep → Block, Catch (Muay Thai only) or Step back;

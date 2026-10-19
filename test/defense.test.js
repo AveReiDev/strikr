@@ -449,7 +449,7 @@ test('the defense lands after the combo\'s execution time plus the delay', () =>
       const comboSay = log[i + 1];
       const defSay = log.slice(i + 2).find((x) => x.type === 'say' && x.tag === 'defense');
       assert.ok(comboSay.ended !== undefined, 'combo speech ended');
-      const earliest = comboSay.ended + per * e.combo.actions + config.defense.delayMs;
+      const earliest = comboSay.ended + (config.defense.perActionMs ?? per) * e.combo.actions + config.defense.delayMs;
       assert.ok(defSay.t >= earliest, `${intensity}: defense at ${defSay.t}, earliest ${earliest}`);
       // And it is not left hanging: the step size is the only slack.
       assert.ok(defSay.t - earliest <= 50, `${intensity}: defense ${defSay.t - earliest}ms late`);
@@ -560,7 +560,7 @@ test('the round-end lookahead reserves time for the combo and its defense togeth
         const left = (r.end - r.start) - (e.t - r.start);
         const comboMs = estimateSpeechMs(applyPronunciation(e.combo.speech, config.pronunciation), d.rate, config.speechEstimate);
         const defMs = estimateSpeechMs(applyPronunciation(e.combo.defense.speech, config.pronunciation), d.rate, config.speechEstimate);
-        const need = comboMs + defMs + perActionMs * e.combo.actions + config.defense.delayMs + baseGapMs + perActionMs;
+        const need = comboMs + defMs + (config.defense.perActionMs ?? perActionMs) * e.combo.actions + config.defense.delayMs + baseGapMs + perActionMs;
         assert.ok(need <= left + lookahead + 50, `"${e.combo.display}" + ${e.combo.defense.name} needs ${need}ms, round had ${left}ms`);
       }
     }

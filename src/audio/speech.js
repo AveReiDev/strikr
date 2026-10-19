@@ -79,13 +79,14 @@ export function createSpeech({ config, settings }) {
     },
 
     /** Resolves when the voice has finished, or when the watchdog gives up. */
-    speak(text) {
+    speak(text, { volume } = {}) {
       if (!supported) return Promise.resolve('unsupported');
       return new Promise((resolve) => {
         const u = new SpeechSynthesisUtterance(text);
         if (voice) { u.voice = voice; u.lang = voice.lang; }
         u.rate = rate();
-        if (config.speechVolume != null) u.volume = config.speechVolume;
+        const vol = volume ?? config.speechVolume;
+        if (vol != null) u.volume = vol;
         keepAlive.push(u);
         if (keepAlive.length > 40) keepAlive.shift();
 

@@ -26,8 +26,8 @@
   "_comment_finisher": "Finisher: the last finisherSec of every round switches to 1-2 action combos with this baseGapMs (perActionMs is unchanged, see above). Never more than half the round. callout is spoken once as it begins.",
   "finisher": { "baseGapMs": 300, "maxActions": 2, "callout": "Finisher!" },
 
-  "_comment_defense": "Defense mode: the defense is called this long after the combo's execution time (perActionMs x actions) has passed, so it lands like the opponent's return. Tune on the bag.",
-  "defense": { "delayMs": 300 },
+  "_comment_defense": "Defense mode: the defense is called perActionMs x actions + delayMs after the combo's voice stops, so it lands like the opponent's return. perActionMs here is the defense's own, shorter than the intensity one, because the defense is meant to interrupt the combo's tail and iOS speech starts a beat late. volume (0.0-1.0) is for the defense call only: a one-word call over bag noise needs more than speechVolume. Tune on the bag.",
+  "defense": { "perActionMs": 550, "delayMs": 150, "volume": 1.0 },
 
   "_comment_emphasis": "Emphasis is a soft weight, never a filter. Levels: a combo's draw weight is multiplied by 1 + levelsPerChange x (number of times adjacent strikes switch between head, body and leg). A range (kicking, punching, close, clinch; boxing outside, inside): 1 + rangePerShare x the share of the combo's strikes from that range. Range calls: every rangeCallEvery [min, max] combos, and at the start of each round, the voice names a new range, waits rangeCallMoveMs (time to move, the same at every intensity; tune on the bag), then calls a combo with at least one strike from that range, weighted as above. A range is only called when the pool has rangeCallMinCombos combos for it. Ranges and their callouts are in data/strikes.json.",
   "emphasis": {

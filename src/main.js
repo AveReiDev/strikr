@@ -235,7 +235,7 @@ function handle(events) {
   for (const e of events) {
     switch (e.type) {
       case 'say':
-        app.speech.speak(e.text).then(() => {
+        app.speech.speak(e.text, e.tag === 'defense' ? { volume: app.config.defense?.volume } : {}).then(() => {
           // A defense or range call is timed like a combo: its gap starts when the voice stops.
           if ((e.tag === 'combo' || e.tag === 'defense' || e.tag === 'range') && app.session) {
             handle(app.session.speechEnded(now()));
